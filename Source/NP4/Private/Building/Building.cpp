@@ -2,7 +2,7 @@
 
 #include "NP4.h"
 #include "Building.h"
-#include "NP4GameState.h"
+
 
 // Sets default values
 ABuilding::ABuilding()
@@ -21,15 +21,4 @@ void ABuilding::BeginPlay()
 void ABuilding::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
-}
-
-FPlayerData* ABuilding::GetTeamData() const
-{
-	check(GetWorld());
-	ANP4GameState* const MyGame = GetWorld()->GetGameState<ANP4GameState>();
-	if (MyGame != nullptr)
-	{
-		return MyGame->GetPlayerData(MyTeamNum);
-	}
-	return nullptr;
 }

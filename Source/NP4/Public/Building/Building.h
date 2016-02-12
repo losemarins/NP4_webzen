@@ -11,9 +11,6 @@ class NP4_API ABuilding : public AActor
 {
 	GENERATED_BODY()
 	
-protected :
-	uint8 MyTeamNum;
-
 public:	
 	// Sets default values for this actor's properties
 	ABuilding();
@@ -23,7 +20,4 @@ public:
 	
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
-
-public :
-	FPlayerData* GetTeamData() const;
 };
