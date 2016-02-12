@@ -2,14 +2,14 @@
 
 #pragma once
 
-#include "NP4PlayerController.h"
+#include "NP4AIControllerBase.h"
 #include "NP4MinionController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class NP4_API ANP4MinionController : public ANP4PlayerController
+class NP4_API ANP4MinionController : public ANP4AIControllerBase
 {
 	GENERATED_BODY()
 	
