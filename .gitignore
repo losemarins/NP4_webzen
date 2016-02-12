@@ -301,3 +301,4 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+Build/Receipts/NP4Editor-Win64-DebugGame.target.xml
