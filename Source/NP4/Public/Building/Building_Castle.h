@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "Building/Building.h"
+#include "Building/Dungeon_Building.h"
 #include "Define.h"
 #include "Building_Castle.generated.h"
 
@@ -13,7 +13,7 @@
 class ANP4CharacterBase;
 class UAIDirector;
 UCLASS()
-class NP4_API ABuilding_Castle : public ABuilding
+class NP4_API ABuilding_Castle : public ADungeon_Building
 {
 	GENERATED_BODY()
 	

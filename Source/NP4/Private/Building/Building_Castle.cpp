@@ -5,6 +5,7 @@
 #include "AIDirector.h"
 #include "NP4GameState.h"
 ABuilding_Castle::ABuilding_Castle(const FObjectInitializer& ObjectInitializer)
+	:Super(ObjectInitializer)
 {
 	AIDirector = CreateDefaultSubobject<UAIDirector>(TEXT("AIDirectorComp"));
 }
