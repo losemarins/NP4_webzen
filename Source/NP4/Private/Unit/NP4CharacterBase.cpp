@@ -33,3 +33,7 @@ void ANP4CharacterBase::SetupPlayerInputComponent(class UInputComponent* InputCo
 
 }
 
+void ANP4CharacterBase::SetTeamNum(uint8 NewTeamNum)
+{
+	MyTeamNum = NewTeamNum;
+}

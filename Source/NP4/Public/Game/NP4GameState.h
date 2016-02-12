@@ -31,7 +31,8 @@ public:
 	void SetGameplayState(EGameplayState::Type NewState);
 	// 게임의 레벨을 설정(맵)
 	void SetGameMap(EGameMapState::Type NewState);
-
+	//게임의 진영 데이터 리턴
+	FPlayerData* GetPlayerData(uint8 TeamNum) const;
 
 protected:
 	// @todo, get rid of mutable?

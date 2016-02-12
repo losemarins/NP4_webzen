@@ -2,27 +2,34 @@
 
 #include "NP4.h"
 #include "Building.h"
-
+#include "NP4GameState.h"
 
 // Sets default values
 ABuilding::ABuilding()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
 void ABuilding::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
 void ABuilding::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
-
 }
 
+FPlayerData* ABuilding::GetTeamData() const
+{
+	check(GetWorld());
+	ANP4GameState* const MyGame = GetWorld()->GetGameState<ANP4GameState>();
+	if (MyGame != nullptr)
+	{
+		return MyGame->GetPlayerData(MyTeamNum);
+	}
+	return nullptr;
+}

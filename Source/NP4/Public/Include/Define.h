@@ -2,6 +2,19 @@
 
 #pragma once
 
+// 게임의 진영 
+UENUM()
+namespace EGameTeam
+{
+	enum Type
+	{
+		Unknown,
+		Player,
+		Enemy,
+		MAX
+	};
+}
+
 // 게임의 난이도
 UENUM()
 namespace EGameDifficulty
@@ -46,6 +59,8 @@ struct FPlayerData
 	/** total damage done */
 	uint32 DamageDone;
 
+	//각 진영의 최종건물
+	TWeakObjectPtr<class ABuilding_Castle> Castle;
 	///** HQ */
 	//TWeakObjectPtr<class AStrategyBuilding_Brewery> Brewery;
 

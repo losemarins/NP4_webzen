@@ -7,10 +7,12 @@
 #include "NP4HUD.h"
 #include "NP4GameState.h"
 #include "Define.h"
+#include "MySpectatorPawn.h"
 
 ANP4GameMode::ANP4GameMode()
 {
 	PlayerControllerClass = ANP4PlayerController::StaticClass();
+	SpectatorClass = AMySpectatorPawn::StaticClass();
 	DefaultPawnClass = ANP4PlayerHero::StaticClass();
 	GameStateClass = ANP4GameState::StaticClass();
 	HUDClass = ANP4HUD::StaticClass();

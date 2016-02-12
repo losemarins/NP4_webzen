@@ -10,6 +10,9 @@ class NP4_API ANP4CharacterBase : public ACharacter
 {
 	GENERATED_BODY()
 
+protected :
+	uint8 MyTeamNum;
+
 public:
 	// Sets default values for this character's properties
 	ANP4CharacterBase();
@@ -23,6 +26,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
-	
-	
+public :
+	void SetTeamNum(uint8 NewTeamNum);
 };

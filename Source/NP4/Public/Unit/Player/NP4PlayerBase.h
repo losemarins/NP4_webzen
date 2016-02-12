@@ -15,5 +15,4 @@ class NP4_API ANP4PlayerBase : public ANP4CharacterBase
 	
 	
 	
-	
 };
