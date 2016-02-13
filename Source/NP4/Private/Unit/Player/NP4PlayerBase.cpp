@@ -81,8 +81,11 @@ void ANP4PlayerBase::BeginPlay()
 	}
 
 	/* PlayerState에게 Owner를 세팅한다.. */
-	m_pPlayerState = (Cast<ANP4PlayerState>(PlayerState));
-	m_pPlayerState->SetStateOwner(this);
+	if (m_pPlayerState)
+	{
+		m_pPlayerState = (Cast<ANP4PlayerState>(PlayerState));
+		m_pPlayerState->SetStateOwner(this);
+	}
 }
 
 void ANP4PlayerBase::Tick(float DeltaTime)
@@ -270,7 +273,8 @@ void ANP4PlayerBase::CheckState(float _Deltatime)
 
 		else
 		{
-			m_pPlayerState->SetPlayerState(eCharacterState::eWalk);
+			if(m_pPlayerState)
+				m_pPlayerState->SetPlayerState(eCharacterState::eWalk);
 			ExeAnimMontage = (*m_ArrAnimMontage)[eCharacterState::eWalk];
 			ExeAnimMontage_Type = eCharacterState::eWalk;
 		}
@@ -293,7 +297,8 @@ void ANP4PlayerBase::CheckState(float _Deltatime)
 	/* EntryPoint */
 	else if (PlayAnimMontage_CheckCurrent((*m_ArrAnimMontage)[eCharacterState::eIdle], eCharacterState::eIdle) != Animation_Montage_Failed)
 	{
-		m_pPlayerState->SetPlayerState(eCharacterState::eIdle);
+		if(m_pPlayerState)
+			m_pPlayerState->SetPlayerState(eCharacterState::eIdle);
 		return;
 	}
 }
@@ -380,7 +385,8 @@ void ANP4PlayerBase::StartRunning()
 
 	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("Run")));
 	SetRunning(true);
-	m_pPlayerState->SetPlayerState(eCharacterState::eRun);
+	if(m_pPlayerState)
+		m_pPlayerState->SetPlayerState(eCharacterState::eRun);
 }
 
 void ANP4PlayerBase::StopRunning()
@@ -403,7 +409,8 @@ void ANP4PlayerBase::ActionAttack()
 		{
 			fAnimDuationVal = PlayAnimMontage_CheckCurrent(pAttackAnim, eCharacterState::eAttack);
 			SetAttack(true);
-			m_pPlayerState->SetPlayerState(eCharacterState::eAttack);
+			if(m_pPlayerState)
+				m_pPlayerState->SetPlayerState(eCharacterState::eAttack);
 
 			Request_MakeActionCamera(ECameraValue::eAction_1, this, fAnimDuationVal);
 
@@ -452,7 +459,8 @@ void ANP4PlayerBase::ActionHit()
 		{
 			PlayAnimMontage_CheckCurrent(pHitAnim, eCharacterState::eHit);
 			SetHit(true);
-			m_pPlayerState->SetPlayerState(eCharacterState::eHit);
+			if(m_pPlayerState)
+				m_pPlayerState->SetPlayerState(eCharacterState::eHit);
 		}
 
 		else
@@ -491,7 +499,8 @@ void ANP4PlayerBase::ActionSkill_1()
 		SetRunning(false);
 		fAnimDuationVal = PlayAnimMontage_CheckCurrent(pSkill_1_Anim, eCharacterState::eSkilling);
 		SetSkilling(true);
-		m_pPlayerState->SetPlayerState(eCharacterState::eSkilling);
+		if(m_pPlayerState)
+			m_pPlayerState->SetPlayerState(eCharacterState::eSkilling);
 	}
 }
 
@@ -507,7 +516,8 @@ void ANP4PlayerBase::ActionSkill_2()
 		SetRunning(false);
 		PlayAnimMontage_CheckCurrent(pSkill_2_Anim, eCharacterState::eSkilling);
 		SetSkilling(true);
-		m_pPlayerState->SetPlayerState(eCharacterState::eSkilling);
+		if(m_pPlayerState)
+			m_pPlayerState->SetPlayerState(eCharacterState::eSkilling);
 	}
 }
 
