@@ -55,7 +55,8 @@ ANP4PlayerBase::ANP4PlayerBase()
 	}
 
 	//AnimationMontage Initialize
-	InitAnimationMontage();
+	if(m_ArrAnimMontage.Num() <= 0)
+		InitAnimationMontage();
 }
 
 void ANP4PlayerBase::BeginPlay()
@@ -107,26 +108,28 @@ void ANP4PlayerBase::InitAnimationMontage()
 	/* 순서는 FrameWorkPlayerState를 참조*/
 	/* 스킬은 덧셈의 연산이 필요함(여러개의 모션이 있기 때문에 하나의 인덱스에 담을 수 없기 때문, 하지만 스테이트는 Skilling으로 같다. */
 
-	////Idle
-	m_ArrAnimMontage->Insert(FindAnimationMontage_byPath(TEXT("/Game/AnimationMontage/Hero/Hero_Mon_Idle.Hero_Mon_Idle")), (int)eCharacterState::eIdle);
+	m_ArrAnimMontage.Init(NULL, 100);
 
+	////Idle
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT("/Game/AnimationMontage/Hero/Hero_Mon_Idle.Hero_Mon_Idle")), (int)eCharacterState::eIdle);
+	
 	////Walk
-	m_ArrAnimMontage->Insert(FindAnimationMontage_byPath(TEXT("/Game/AnimationMontage/Hero/Hero_Mon_Walk.Hero_Mon_Walk")), (int)eCharacterState::eWalk);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT("/Game/AnimationMontage/Hero/Hero_Mon_Walk.Hero_Mon_Walk")), (int)eCharacterState::eWalk);
 
 	////Run
-	m_ArrAnimMontage->Insert(FindAnimationMontage_byPath(TEXT("/Game/AnimationMontage/Hero/Hero_Mon_Run.Hero_Mon_Run")), (int)eCharacterState::eRun);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT("/Game/AnimationMontage/Hero/Hero_Mon_Run.Hero_Mon_Run")), (int)eCharacterState::eRun);
 
 	////Attack
-	m_ArrAnimMontage->Insert(FindAnimationMontage_byPath(TEXT("/Game/AnimationMontage/Hero/Hero_Mon_Attack.Hero_Mon_Attack")), (int)eCharacterState::eAttack);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT("/Game/AnimationMontage/Hero/Hero_Mon_Attack.Hero_Mon_Attack")), (int)eCharacterState::eAttack);
 
 	////Attack
-	m_ArrAnimMontage->Insert(FindAnimationMontage_byPath(TEXT("/Game/AnimationMontage/Hero/Hero_Mon_Hit.Hero_Mon_Hit")), (int)eCharacterState::eHit);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT("/Game/AnimationMontage/Hero/Hero_Mon_Hit.Hero_Mon_Hit")), (int)eCharacterState::eHit);
 
 	////Skill_1
-	m_ArrAnimMontage->Insert(FindAnimationMontage_byPath(TEXT("/Game/AnimationMontage/Hero/Hero_Mon_Skill_1.Hero_Mon_Skill_1")), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_1);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT("/Game/AnimationMontage/Hero/Hero_Mon_Skill_1.Hero_Mon_Skill_1")), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_1);
 
 	////Skill_2
-	m_ArrAnimMontage->Insert(FindAnimationMontage_byPath(TEXT("/Game/AnimationMontage/Hero/Hero_Mon_Skill_2.Hero_Mon_Skill_2")), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_2);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT("/Game/AnimationMontage/Hero/Hero_Mon_Skill_2.Hero_Mon_Skill_2")), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_2);
 }
 
 void ANP4PlayerBase::SetPlayerController(ANP4HeroController* _pPlayerController)
@@ -165,12 +168,12 @@ void ANP4PlayerBase::SetCameraRotaion(FRotator _Rot)
 
 UAnimMontage* ANP4PlayerBase::GetAnimationMontage_fromArrMontage(eCharacterState _eState, eAnimMontage_Skill_Interpol _eSkill_Interpolation)
 {
-	if (m_ArrAnimMontage->Num() <= (int)_eState)
+	if (m_ArrAnimMontage.Num() <= (int)_eState)
 	{
 		return NULL;
 	}
 
-	return (*m_ArrAnimMontage)[(int)_eState + (int)_eSkill_Interpolation];
+	return (m_ArrAnimMontage)[(int)_eState + (int)_eSkill_Interpolation];
 }
 
 bool ANP4PlayerBase::IsPlayerControllerNull()
@@ -267,7 +270,7 @@ void ANP4PlayerBase::CheckState(float _Deltatime)
 	{
 		if (IsRunning())
 		{
-			ExeAnimMontage = (*m_ArrAnimMontage)[eCharacterState::eRun];
+			ExeAnimMontage = (m_ArrAnimMontage)[eCharacterState::eRun];
 			ExeAnimMontage_Type = eCharacterState::eRun;
 		}
 
@@ -275,14 +278,14 @@ void ANP4PlayerBase::CheckState(float _Deltatime)
 		{
 			if(m_pPlayerState)
 				m_pPlayerState->SetPlayerState(eCharacterState::eWalk);
-			ExeAnimMontage = (*m_ArrAnimMontage)[eCharacterState::eWalk];
+			ExeAnimMontage = (m_ArrAnimMontage)[eCharacterState::eWalk];
 			ExeAnimMontage_Type = eCharacterState::eWalk;
 		}
 	}
 
 	else if (IsRunning())
 	{
-		ExeAnimMontage = (*m_ArrAnimMontage)[eCharacterState::eRun];
+		ExeAnimMontage = (m_ArrAnimMontage)[eCharacterState::eRun];
 		ExeAnimMontage_Type = eCharacterState::eRun;
 	}
 
@@ -295,7 +298,7 @@ void ANP4PlayerBase::CheckState(float _Deltatime)
 		return;
 
 	/* EntryPoint */
-	else if (PlayAnimMontage_CheckCurrent((*m_ArrAnimMontage)[eCharacterState::eIdle], eCharacterState::eIdle) != Animation_Montage_Failed)
+	else if (PlayAnimMontage_CheckCurrent((m_ArrAnimMontage)[eCharacterState::eIdle], eCharacterState::eIdle) != Animation_Montage_Failed)
 	{
 		if(m_pPlayerState)
 			m_pPlayerState->SetPlayerState(eCharacterState::eIdle);
@@ -403,7 +406,7 @@ void ANP4PlayerBase::ActionAttack()
 		SetRunning(false);
 
 		UAnimMontage* pAttackAnim = NULL;
-		pAttackAnim = (*m_ArrAnimMontage)[eCharacterState::eAttack];
+		pAttackAnim = (m_ArrAnimMontage)[eCharacterState::eAttack];
 
 		if (pAttackAnim)
 		{
@@ -428,7 +431,7 @@ void ANP4PlayerBase::ActionAttack()
 void ANP4PlayerBase::StopAttack()
 {
 	UAnimMontage* pAttackAnim = NULL;
-	pAttackAnim = pAttackAnim = (*m_ArrAnimMontage)[eCharacterState::eAttack];
+	pAttackAnim = pAttackAnim = (m_ArrAnimMontage)[eCharacterState::eAttack];
 
 	if (pAttackAnim)
 	{
@@ -453,7 +456,7 @@ void ANP4PlayerBase::ActionHit()
 		SetRunning(false);
 
 		UAnimMontage* pHitAnim = NULL;
-		pHitAnim = (*m_ArrAnimMontage)[eCharacterState::eHit];
+		pHitAnim = (m_ArrAnimMontage)[eCharacterState::eHit];
 
 		if (pHitAnim)
 		{
@@ -473,7 +476,7 @@ void ANP4PlayerBase::ActionHit()
 void ANP4PlayerBase::StopHit()
 {
 	UAnimMontage* pHitAnim = NULL;
-	pHitAnim = (*m_ArrAnimMontage)[eCharacterState::eHit];
+	pHitAnim = (m_ArrAnimMontage)[eCharacterState::eHit];
 
 	if (pHitAnim)
 	{
@@ -490,7 +493,7 @@ void ANP4PlayerBase::StopHit()
 void ANP4PlayerBase::ActionSkill_1()
 {
 	UAnimMontage* pSkill_1_Anim = NULL;
-	pSkill_1_Anim = (*m_ArrAnimMontage)[eCharacterState::eSkilling + eAnimMontage_Skill_Interpol::eSkill_1];
+	pSkill_1_Anim = (m_ArrAnimMontage)[eCharacterState::eSkilling + eAnimMontage_Skill_Interpol::eSkill_1];
 
 	if (pSkill_1_Anim && IsSkilling() == false)
 	{
@@ -507,7 +510,7 @@ void ANP4PlayerBase::ActionSkill_1()
 void ANP4PlayerBase::ActionSkill_2()
 {
 	UAnimMontage* pSkill_2_Anim = NULL;
-	pSkill_2_Anim = (*m_ArrAnimMontage)[eCharacterState::eSkilling + eAnimMontage_Skill_Interpol::eSkill_2];
+	pSkill_2_Anim = (m_ArrAnimMontage)[eCharacterState::eSkilling + eAnimMontage_Skill_Interpol::eSkill_2];
 
 
 	if (pSkill_2_Anim && IsSkilling() == false)
@@ -567,13 +570,13 @@ float ANP4PlayerBase::PlayAnimMontage_CheckCurrent(UAnimMontage* _AnimMontage, e
 		else if (_eAnimType == eCharacterState::eSkilling)
 		{
 			FTimerHandle TimerHandle_StopSkill;
-			if (_AnimMontage == (*m_ArrAnimMontage)[
+			if (_AnimMontage == (m_ArrAnimMontage)[
 				(int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_1])
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("Skill_1")));
 			}
 
-			else if (_AnimMontage == (*m_ArrAnimMontage)[
+			else if (_AnimMontage == (m_ArrAnimMontage)[
 				(int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_2])
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("Skill_2")));
