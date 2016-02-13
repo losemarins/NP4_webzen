@@ -3,6 +3,7 @@
 #include "NP4.h"
 #include "NP4GameMode.h"
 #include "NP4PlayerController.h"
+#include "NP4HeroController.h"
 #include "NP4PlayerHero.h"
 #include "NP4PlayerBase.h"
 #include "NP4HUD.h"
@@ -13,7 +14,7 @@
 
 ANP4GameMode::ANP4GameMode()
 {
-	PlayerControllerClass = ANP4PlayerController::StaticClass();
+	PlayerControllerClass = ANP4HeroController::StaticClass();
 	DefaultPawnClass = ANP4PlayerBase::StaticClass();
 	PlayerStateClass = ANP4PlayerState::StaticClass();
 	GameStateClass = ANP4GameState::StaticClass();

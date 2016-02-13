@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "NP4.h"
-#include "NP4PlayerController.h"
+#include "NP4HeroController.h"
 #include "NP4CameraActor.h"
 #include "NP4PlayerBase.h"
 
@@ -64,7 +64,7 @@ void ANP4PlayerBase::BeginPlay()
 
 	if (IsPlayerControllerNull())
 	{
-		SetPlayerController(Cast<ANP4PlayerController>(GetNP4PlayerController()));
+		SetPlayerController(Cast<ANP4HeroController>(GetNP4PlayerController()));
 	}
 
 	/* 스프링암을 세팅된 값으로 기본 세팅한다. */
@@ -99,7 +99,7 @@ void ANP4PlayerBase::PossessedBy(AController* _pController)
 {
 	Super::PossessedBy(_pController);
 
-	m_pPlayerController = Cast<ANP4PlayerController>(_pController);
+	m_pPlayerController = Cast<ANP4HeroController>(_pController);
 }
 
 void ANP4PlayerBase::InitAnimationMontage()
@@ -129,7 +129,7 @@ void ANP4PlayerBase::InitAnimationMontage()
 	m_ArrAnimMontage->Insert(FindAnimationMontage_byPath(TEXT("/Game/AnimationMontage/Hero/Hero_Mon_Skill_2.Hero_Mon_Skill_2")), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_2);
 }
 
-void ANP4PlayerBase::SetPlayerController(ANP4PlayerController* _pPlayerController)
+void ANP4PlayerBase::SetPlayerController(ANP4HeroController* _pPlayerController)
 {
 	if (IsPlayerControllerNull())
 	{

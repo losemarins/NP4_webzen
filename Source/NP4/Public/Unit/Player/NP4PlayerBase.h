@@ -7,7 +7,7 @@
 #include "NP4CameraManager.h"
 #include "NP4PlayerBase.generated.h"
 
-class ANP4PlayerController;
+class ANP4HeroController;
 class ANP4CameraActor;
 
 enum eAnimMontage_Skill_Interpol
@@ -30,7 +30,7 @@ public:
 	static const FVector msBaseLocation;
 
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "PlayerController")
-	ANP4PlayerController* m_pPlayerController;
+	ANP4HeroController* m_pPlayerController;
 
 	UPROPERTY()
 	ANP4PlayerState* m_pPlayerState;
@@ -66,7 +66,7 @@ public:
 	void InitAnimationMontage();
 
 	/* Set, Get */
-	void SetPlayerController(ANP4PlayerController* _pPlayerController);
+	void SetPlayerController(ANP4HeroController* _pPlayerController);
 	void SetSpringArm(FtCameraLocationInfo _Info);
 	void SetCameraRotaion(FRotator _Rot);
 	UAnimMontage* GetAnimationMontage_fromArrMontage(eCharacterState _eState, eAnimMontage_Skill_Interpol _eSkill_Interpolation = eAnimMontage_Skill_Interpol::eSkill_1);
