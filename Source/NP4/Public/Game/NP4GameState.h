@@ -39,4 +39,7 @@ protected:
 	/** Gameplay information about each player. */
 	mutable TArray<FPlayerData> PlayersData;
 
+public :
+	ANP4GameState(const FObjectInitializer& ObjectInitializer);
+
 };

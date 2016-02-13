@@ -3,8 +3,16 @@
 #include "NP4.h"
 #include "NP4GameState.h"
 #include "Building_Castle.h"
+
+ANP4GameState::ANP4GameState(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer)
+{
+	PlayersData.AddZeroed(EGameTeam::MAX);
+}
+
 void ANP4GameState::SetGameDifficulty(EGameDifficulty::Type NewDifficulty)
 {
+
 }
 
 void ANP4GameState::StartGameplayStateMachine()
@@ -44,4 +52,3 @@ FPlayerData* ANP4GameState::GetPlayerData(uint8 TeamNum) const
 
 	return nullptr;
 }
-

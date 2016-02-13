@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Building/Building.h"
+#include "define.h"
 #include "Dungeon_Building.generated.h"
 
 /**
@@ -15,10 +16,14 @@ class NP4_API ADungeon_Building : public ABuilding
 
 protected:
 	uint8 MyTeamNum;
-	
+
+public :
+	UPROPERTY(EditInstanceOnly, Category = Building)
+	TEnumAsByte<EGameTeam::Type> SpawnTeamNum;
+
 public:
+	virtual void PostInitializeComponents() override;
 	ADungeon_Building(const FObjectInitializer& ObjectInitializer);
+	void SetTeamNum(uint8 NewTeamNum);
 	FPlayerData* GetTeamData() const;
-	
-	
 };

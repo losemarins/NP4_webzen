@@ -32,5 +32,6 @@ public:
 public :
 	void OnGameplayStateChange(EGameplayState::Type NewState);
 	void SpawnMinions();
+	void RequestSpawn();
 	uint8 GetTeamNum() const;
 };

@@ -9,22 +9,14 @@
 UAIDirector::UAIDirector() :
 	MyTeamNum(EGameTeam::Unknown)
 	, CustomScale(1.0)
+	, ProductNum(0)
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	bWantsBeginPlay = true;
 	PrimaryComponentTick.bCanEverTick = true;
 
-	if (EnemyBrewery == nullptr) // 목표지점 설정
-	{
-		/*const EGameTeam::Type EnemyTeamNum = (MyTeamNum == EGameTeam::Player ? EGameTeam::Enemy : EGameTeam::Player);
-		const FPlayerData* const EnemyTeamData = GetWorld()->GetGameState<ANP4GameState>()->GetPlayerData(EnemyTeamNum);
-		
-		if (EnemyTeamData != nullptr && EnemyTeamData->Castle != nullptr)
-		{
-			EnemyBrewery = EnemyTeamData->Castle;
-		}*/
-	}
+	
 	// ...
 }
 
@@ -32,6 +24,16 @@ UAIDirector::UAIDirector() :
 void UAIDirector::BeginPlay()
 {
 	Super::BeginPlay();
+	if (EnemyBrewery == nullptr) // 목표지점 설정
+	{
+		const EGameTeam::Type EnemyTeamNum = (MyTeamNum == EGameTeam::Player ? EGameTeam::Enemy : EGameTeam::Player);
+		const FPlayerData* const EnemyTeamData = GetWorld()->GetGameState<ANP4GameState>()->GetPlayerData(EnemyTeamNum);
+
+		if (EnemyTeamData != nullptr && EnemyTeamData->Castle != nullptr)
+		{
+			EnemyBrewery = EnemyTeamData->Castle;
+		}
+	}
 	// ...
 }
 
@@ -71,6 +73,11 @@ void UAIDirector::SpawnMinions()
 			}
 		}
 	}
+}
+
+void UAIDirector::RequestSpawn()
+{
+	ProductNum++;
 }
 
 void UAIDirector::OnGameplayStateChange(EGameplayState::Type NewState)

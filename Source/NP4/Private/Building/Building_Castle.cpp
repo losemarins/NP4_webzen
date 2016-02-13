@@ -14,7 +14,8 @@ void ABuilding_Castle::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 	FPlayerData* const MyData = GetTeamData();
-	MyData->Castle = this;
+	if(MyData != nullptr)
+		MyData->Castle = this;
 }
 
 void ABuilding_Castle::OnGameplayStateChange(EGameplayState::Type NewState)

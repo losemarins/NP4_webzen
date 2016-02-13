@@ -65,7 +65,7 @@ struct FPlayerData
 	//TWeakObjectPtr<class AStrategyBuilding_Brewery> Brewery;
 
 	///** player owned buildings list */
-	//TArray<TWeakObjectPtr<class AActor>> BuildingsList;
+	TArray<TWeakObjectPtr<class AActor>> BuildingsList;
 };
 
 // 게임 내의 키 타입
