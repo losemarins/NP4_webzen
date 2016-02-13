@@ -44,7 +44,9 @@ public:
 		USpringArmComponent* m_OurCameraSpringArm;
 
 	/* Anim Montage */
-	TArray<UAnimMontage*> m_ArrAnimMontage[100];
+	//TArray<UAnimMontage*> m_ArrAnimMontage[100];
+
+	TArray<UAnimMontage*> m_ArrAnimMontage;
 
 	/* Camera Value */
 	float m_ZoomFactor;
