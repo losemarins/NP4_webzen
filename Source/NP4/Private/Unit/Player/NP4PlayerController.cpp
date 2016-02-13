@@ -5,6 +5,9 @@
 #include "NP4CameraManager.h"
 #include "NP4PlayerController.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "NP4GameState.h"
+#include "AIDirector.h"
+#include "Building_Castle.h"
 
 ANP4PlayerController::ANP4PlayerController()
 {
@@ -22,6 +25,10 @@ ANP4PlayerController::ANP4PlayerController()
 void ANP4PlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
+
+	//몬스터 스폰 임시로
+	InputComponent->BindAction("Spawn_1", IE_Pressed, this, &ANP4PlayerController::PlayerSpawn);
+	InputComponent->BindAction("Spawn_2", IE_Pressed, this, &ANP4PlayerController::EnemySpawn);
 
 	//이동 관련
 	InputComponent->BindAxis(TEXT("MoveForward"), this, &ANP4PlayerController::MoveFoward);
@@ -339,5 +346,21 @@ void ANP4PlayerController::Delete_Camera()
 	else
 	{
 		DoActionCamera();
+	}
+}
+
+void ANP4PlayerController::PlayerSpawn()
+{
+	const FPlayerData* const PlayerTeamData = GetWorld()->GetGameState<ANP4GameState>()->GetPlayerData(EGameTeam::Player);
+	{
+		PlayerTeamData->Castle->GetAIDirector()->RequestSpawn();
+	}
+}
+
+void ANP4PlayerController::EnemySpawn()
+{
+	const FPlayerData* const EnemyTeamData = GetWorld()->GetGameState<ANP4GameState>()->GetPlayerData(EGameTeam::Enemy);
+	{
+		EnemyTeamData->Castle->GetAIDirector()->RequestSpawn();
 	}
 }

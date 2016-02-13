@@ -101,4 +101,8 @@ public:
 		ActionHit();
 	}
 	
+	//몬스터 스폰 임시로
+	void PlayerSpawn();
+	void EnemySpawn();
+
 };
