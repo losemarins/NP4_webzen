@@ -5,8 +5,29 @@
 #include "NP4GameState.h"
 
 ADungeon_Building::ADungeon_Building(const FObjectInitializer& ObjectInitializer)
+	:Super(ObjectInitializer)
 {
 	
+}
+
+void ADungeon_Building::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	if (SpawnTeamNum != EGameTeam::Unknown)
+	{
+		SetTeamNum(SpawnTeamNum);
+	}
+}
+
+void ADungeon_Building::SetTeamNum(uint8 NewTeamNum)
+{
+	MyTeamNum = NewTeamNum;
+	FPlayerData* const PlayerData = GetTeamData();
+
+	if (PlayerData != nullptr)
+	{
+		PlayerData->BuildingsList.Add(this);
+	}
 }
 
 FPlayerData* ADungeon_Building::GetTeamData() const

@@ -29,6 +29,7 @@ public :
 public:
 	ABuilding_Castle(const FObjectInitializer& ObjectInitializer);
 	void OnGameplayStateChange(EGameplayState::Type NewState);
-	void SpawnMinions();
+	UAIDirector* GetAIDirector() const { return AIDirector; }
+	//void SpawnMinions();
 	
 };

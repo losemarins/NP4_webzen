@@ -5,10 +5,12 @@
 
 
 // Sets default values
-ABuilding::ABuilding()
+ABuilding::ABuilding(const FObjectInitializer& ObjectInitializer)
+	:Super(ObjectInitializer)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 }
 
 // Called when the game starts or when spawned
@@ -21,4 +23,9 @@ void ABuilding::BeginPlay()
 void ABuilding::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
+}
+
+void ABuilding::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
 }
