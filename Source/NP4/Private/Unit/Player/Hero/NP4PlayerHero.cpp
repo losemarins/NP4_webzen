@@ -3,6 +3,9 @@
 #include "NP4.h"
 #include "NP4PlayerHero.h"
 
+ANP4PlayerHero::ANP4PlayerHero()
+{
 
+}
 
 

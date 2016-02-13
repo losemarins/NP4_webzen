@@ -3,6 +3,8 @@
 #include "NP4.h"
 #include "NP4HeroController.h"
 
+ANP4HeroController::ANP4HeroController()
+{
 
-
+}
 

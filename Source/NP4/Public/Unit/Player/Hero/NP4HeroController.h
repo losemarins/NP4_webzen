@@ -11,9 +11,10 @@
 UCLASS()
 class NP4_API ANP4HeroController : public ANP4PlayerController
 {
+public:
 	GENERATED_BODY()
-	
-	
-	
+
+public:
+	ANP4HeroController();
 	
 };

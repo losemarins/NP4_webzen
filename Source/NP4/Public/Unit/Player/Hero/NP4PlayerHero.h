@@ -13,6 +13,8 @@ class NP4_API ANP4PlayerHero : public ANP4PlayerBase
 {
 	GENERATED_BODY()
 	
+public:
+	ANP4PlayerHero();
 	
 	
 	

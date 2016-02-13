@@ -1,3 +1,4 @@
+#include "Engine.h"
 #include "Define.generated.h"
 
 #pragma once
@@ -96,3 +97,31 @@ namespace EBossAnim
 		Die,
 	};
 }
+
+//2016-02-13 鬼團遵 熱薑
+/* Enum Value */ 
+UENUM()
+enum class ECameraValue
+{
+	eStartCamera = -1,
+	eDefulatCamera = 0,
+	eAction_1 = 1,
+	eAction_2 = 2,
+	eEndCamera
+};
+
+UENUM()
+enum class eErrorType
+{
+	eSuccess = 1,
+	eFailed = -1
+};
+
+/* Value */
+#define CAMERA_ARR_MAX ECameraValue::eEndCamera
+#define Animation_Montage_Failed -1.f
+
+/* Define Fuctnion */
+#define GetPlayerCameraManager() Cast<ANP4CameraManager>(GEngine->GetFirstLocalPlayerController(GetWorld())->PlayerCameraManager)
+#define GetNP4PlayerController() (GEngine->GetFirstLocalPlayerController(GetWorld()))
+//2016-02-13 鬼團遵 熱薑 End
