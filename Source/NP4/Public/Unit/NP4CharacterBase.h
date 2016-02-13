@@ -28,4 +28,5 @@ public:
 
 public :
 	void SetTeamNum(uint8 NewTeamNum);
+	uint8 GetTeamNum() const;
 };

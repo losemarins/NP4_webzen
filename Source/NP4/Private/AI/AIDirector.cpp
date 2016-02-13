@@ -24,14 +24,14 @@ UAIDirector::UAIDirector() :
 void UAIDirector::BeginPlay()
 {
 	Super::BeginPlay();
-	if (EnemyBrewery == nullptr) // 목표지점 설정
+	if (EnemyCastle == nullptr) // 목표지점 설정
 	{
 		const EGameTeam::Type EnemyTeamNum = (MyTeamNum == EGameTeam::Player ? EGameTeam::Enemy : EGameTeam::Player);
 		const FPlayerData* const EnemyTeamData = GetWorld()->GetGameState<ANP4GameState>()->GetPlayerData(EnemyTeamNum);
 
 		if (EnemyTeamData != nullptr && EnemyTeamData->Castle != nullptr)
 		{
-			EnemyBrewery = EnemyTeamData->Castle;
+			EnemyCastle = EnemyTeamData->Castle;
 		}
 	}
 	// ...
@@ -91,4 +91,9 @@ void UAIDirector::OnGameplayStateChange(EGameplayState::Type NewState)
 uint8 UAIDirector::GetTeamNum() const
 {
 	return MyTeamNum;
+}
+
+ABuilding_Castle* UAIDirector::GetEnemyCastle() const
+{
+	return EnemyCastle.Get();
 }

@@ -15,7 +15,7 @@ class NP4_API UAIDirector : public UActorComponent
 
 private :
 	uint8 MyTeamNum;
-	TWeakObjectPtr<ABuilding_Castle> EnemyBrewery;
+	TWeakObjectPtr<ABuilding_Castle> EnemyCastle;
 	uint8 ProductNum;
 	float CustomScale;
 
@@ -34,4 +34,5 @@ public :
 	void SpawnMinions();
 	void RequestSpawn();
 	uint8 GetTeamNum() const;
+	ABuilding_Castle* GetEnemyCastle() const;
 };

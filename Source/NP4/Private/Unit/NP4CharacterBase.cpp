@@ -37,3 +37,8 @@ void ANP4CharacterBase::SetTeamNum(uint8 NewTeamNum)
 {
 	MyTeamNum = NewTeamNum;
 }
+
+uint8 ANP4CharacterBase::GetTeamNum() const
+{
+	return MyTeamNum;
+}
