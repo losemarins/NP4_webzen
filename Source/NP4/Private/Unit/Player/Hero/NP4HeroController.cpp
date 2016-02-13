@@ -7,6 +7,8 @@
 #include "NP4HeroController.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "NP4GameState.h"
+#include "AIDirector.h"
+#include "Building_Castle.h"
 
 ANP4HeroController::ANP4HeroController()
 {

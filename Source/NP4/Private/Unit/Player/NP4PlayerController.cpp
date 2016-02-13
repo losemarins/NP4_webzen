@@ -6,8 +6,7 @@
 #include "NP4PlayerController.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "NP4GameState.h"
-#include "AIDirector.h"
-#include "Building_Castle.h"
+
 
 ANP4PlayerController::ANP4PlayerController()
 {
