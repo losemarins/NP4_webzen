@@ -107,6 +107,7 @@ enum class ECameraValue
 	eDefulatCamera = 0,
 	eAction_1 = 1,
 	eAction_2 = 2,
+	eTownCamera =10,
 	eEndCamera
 };
 
