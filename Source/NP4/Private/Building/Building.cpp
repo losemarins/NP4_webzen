@@ -24,8 +24,3 @@ void ABuilding::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
 }
-
-void ABuilding::PostInitializeComponents()
-{
-	Super::PostInitializeComponents();
-}

@@ -12,8 +12,5 @@ UCLASS()
 class NP4_API ANP4AIMinion : public ANP4AICharacterBase
 {
 	GENERATED_BODY()
-	
-	
-	
-	
+
 };

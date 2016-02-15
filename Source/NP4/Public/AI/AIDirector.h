@@ -28,6 +28,7 @@ public:
 	
 	// Called every frame
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
+	virtual void SetTeamNum(uint8 inTeamNum);
 
 public :
 	void OnGameplayStateChange(EGameplayState::Type NewState);

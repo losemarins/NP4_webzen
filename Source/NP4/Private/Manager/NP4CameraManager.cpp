@@ -77,7 +77,7 @@ void ANP4CameraManager::PostEditChangeProperty(FPropertyChangedEvent& PropertyCh
 	{
 		if (bApplySpringArm)
 		{
-			ChangeEdit_StructValue(m_SetSpringArm->RelativeLocation, m_SetStructCamera->RelativeRotation, m_SetSpringArm->TargetArmLength);
+			ChangeEdit_StructValue(m_SetSpringArm->RelativeLocation, m_SetSpringArm->RelativeRotation, m_SetSpringArm->TargetArmLength);
 		}
 
 		else
@@ -92,12 +92,14 @@ void ANP4CameraManager::ChangeEdit_CameraValue()
 	if (bApplySpringArm)
 	{
 		m_SetSpringArm->RelativeLocation = m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Location;
+		m_SetSpringArm->RelativeRotation = m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Rotation;
 		m_SetSpringArm->TargetArmLength = m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Init_ArmLength;
 	}
 	else
+	{
 		m_SetStructCamera->RelativeLocation = m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Location;
-
-	m_SetStructCamera->RelativeRotation = m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Rotation;
+		m_SetStructCamera->RelativeRotation = m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Rotation;
+	}
 }
 
 void ANP4CameraManager::ChangeEdit_StructValue(
@@ -107,6 +109,11 @@ void ANP4CameraManager::ChangeEdit_StructValue(
 	m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Location = _ReltaiveLocationVec;
 	m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Rotation = _ReltaiveRocationVec;
 	m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Init_ArmLength = _SpringArmMaxDistance;
+
+	if (m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Max_ArmLength < _SpringArmMaxDistance)
+	{
+		m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Max_ArmLength = _SpringArmMaxDistance;
+	}
 
 }
 
