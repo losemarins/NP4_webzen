@@ -15,7 +15,7 @@
 ANP4TownGameMode::ANP4TownGameMode()
 {
 	PlayerControllerClass = ANP4TownPlayerController::StaticClass();
-	DefaultPawnClass = ANP4TownPlayer::StaticClass();
+	//DefaultPawnClass = ANP4TownPlayer::StaticClass();
 	PlayerStateClass = ANP4PlayerState::StaticClass();
 	GameStateClass = ANP4GameState::StaticClass();
 	HUDClass = ANP4HUD::StaticClass();
