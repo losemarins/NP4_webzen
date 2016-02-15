@@ -193,7 +193,7 @@ void ANP4CameraManager::SetCameraInfoArrayFromBP()
 {
 	UObject* ClassPackage = ANY_PACKAGE;
 	ANP4CameraManager* pBP_CameraManager = NULL;
-	UClass* BPClass = StaticLoadClass(UObject::StaticClass(), NULL, TEXT("/Game/Blueprint/CameraManager.CameraManager_C"), NULL, LOAD_None, NULL);
+	UClass* BPClass = StaticLoadClass(UObject::StaticClass(), NULL, TEXT("/Game/Blueprint/NP4CameraManager.NP4CameraManager_C"), NULL, LOAD_None, NULL);
 
 	if (BPClass)
 	{

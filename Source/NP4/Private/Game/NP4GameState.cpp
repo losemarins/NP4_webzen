@@ -3,6 +3,7 @@
 #include "NP4.h"
 #include "NP4GameState.h"
 #include "Building_Castle.h"
+#include "NP4TownPlayer.h"
 
 ANP4GameState::ANP4GameState(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -36,6 +37,10 @@ void ANP4GameState::SetGameplayState(EGameplayState::Type NewState)
 			PlayersData[i].Castle->OnGameplayStateChange(NewState);
 		}
 	}
+	FRotator Rotation = FRotator( 0, 0, 0);
+	FVector Location = FVector(10, 0, 0);
+
+	//ANP4TownPlayer* pSpawnActor = (ANP4TownPlayer*)GetWorld()->SpawnActor(ANP4TownPlayer::StaticClass(), &Location, &Rotation);
 }
 
 void ANP4GameState::SetGameMap(EGameMapState::Type NewState)
