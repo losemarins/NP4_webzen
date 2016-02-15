@@ -89,7 +89,8 @@ void ANP4HeroController::Tick(float _DeltaTime)
 
 	else
 	{
-		m_pPossessCharacter->ZoomTickFunc(_DeltaTime, m_bZoomingIn);
+		if(m_pPossessCharacter)
+			m_pPossessCharacter->ZoomTickFunc(_DeltaTime, m_bZoomingIn);
 	}
 }
 
