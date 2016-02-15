@@ -40,6 +40,16 @@ void ANP4PlayerState::SetStateOwner(ANP4PlayerBase* _pOwner)
 	}
 }
 
+void ANP4PlayerState::setPlayerHealth(float _Health)
+{
+	m_Health = _Health;
+}
+
+void ANP4PlayerState::setPlayerMaxHealth(float _MaxHealth)
+{
+	m_MaxHealth = _MaxHealth;
+}
+
 eCharacterState ANP4PlayerState::GetPlayerState()
 {
 	return m_ePlayerState;
@@ -49,5 +59,16 @@ AActor* ANP4PlayerState::GetStateOwner()
 {
 	return m_pStateOwner;
 }
+
+float ANP4PlayerState::GetPlayerHealth()
+{
+	return m_Health;
+}
+
+float ANP4PlayerState::GetPlayerMaxHealth()
+{
+	return m_MaxHealth;
+}
+
 
 
