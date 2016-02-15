@@ -435,7 +435,7 @@ void ANP4PlayerBase::StopAttack()
 
 	if (pAttackAnim)
 	{
-		StopAnimMontage(pAttackAnim);
+		StopNP4AnimationMontage(pAttackAnim);
 		SetAttack(false);
 
 		/* Collision no Active */
@@ -480,7 +480,7 @@ void ANP4PlayerBase::StopHit()
 
 	if (pHitAnim)
 	{
-		StopAnimMontage(pHitAnim);
+		StopNP4AnimationMontage(pHitAnim);
 		SetHit(false);
 	}
 
@@ -526,7 +526,7 @@ void ANP4PlayerBase::ActionSkill_2()
 
 void ANP4PlayerBase::StopSkill(UAnimMontage* _pSkillAnim)
 {
-	StopAnimMontage(_pSkillAnim);
+	StopNP4AnimationMontage(_pSkillAnim);
 	SetSkilling(false);
 }
 
@@ -545,7 +545,7 @@ float ANP4PlayerBase::PlayAnimMontage_CheckCurrent(UAnimMontage* _AnimMontage, e
 	{
 		if (_eAnimType == eCharacterState::eHit)
 		{
-			float AnimDuration = PlayAnimMontage(_AnimMontage);
+			float AnimDuration = PlayNP4AnimationMontage(_AnimMontage);
 			reuturnVal = AnimDuration;
 
 			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("HIT")));
@@ -557,7 +557,7 @@ float ANP4PlayerBase::PlayAnimMontage_CheckCurrent(UAnimMontage* _AnimMontage, e
 
 		else if (_eAnimType == eCharacterState::eAttack)
 		{
-			float AnimDuration = PlayAnimMontage(_AnimMontage);
+			float AnimDuration = PlayNP4AnimationMontage(_AnimMontage);
 			reuturnVal = AnimDuration;
 
 			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("ATTACk")));
@@ -582,7 +582,7 @@ float ANP4PlayerBase::PlayAnimMontage_CheckCurrent(UAnimMontage* _AnimMontage, e
 				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("Skill_2")));
 			}
 
-				float AnimDuration = PlayAnimMontage(_AnimMontage);
+				float AnimDuration = PlayNP4AnimationMontage(_AnimMontage);
 				reuturnVal = AnimDuration;
 
 				FTimerDelegate RespawnDelegate =
@@ -593,7 +593,7 @@ float ANP4PlayerBase::PlayAnimMontage_CheckCurrent(UAnimMontage* _AnimMontage, e
 
 		else
 		{
-			reuturnVal = PlayAnimMontage(_AnimMontage);
+			reuturnVal = PlayNP4AnimationMontage(_AnimMontage);
 		}
 	}
 
