@@ -31,7 +31,6 @@ ANP4CameraManager::ANP4CameraManager()
 
 	/* 에디터 세팅 관련 변수 */
 	m_bInfoSetDone = false;
-	bApplySpringArm = false;
 	bEditApplyto_Struct = false;
 	bEditApplyto_Camera = false;
 }
@@ -75,7 +74,7 @@ void ANP4CameraManager::PostEditChangeProperty(FPropertyChangedEvent& PropertyCh
 	/* 에디터 적용 : 테스트용 카메라 값이 구조체에게 */
 	if (bEditApplyto_Struct && IsCameraValueInsideEnum((ECameraValue)m_iHeightStructIdx))
 	{
-		if (bApplySpringArm)
+		if (m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.bApplySpringArm)
 		{
 			ChangeEdit_StructValue(m_SetSpringArm->RelativeLocation, m_SetSpringArm->RelativeRotation, m_SetSpringArm->TargetArmLength);
 		}
@@ -89,7 +88,7 @@ void ANP4CameraManager::PostEditChangeProperty(FPropertyChangedEvent& PropertyCh
 
 void ANP4CameraManager::ChangeEdit_CameraValue()
 {
-	if (bApplySpringArm)
+	if (m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.bApplySpringArm)
 	{
 		m_SetSpringArm->RelativeLocation = m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Location;
 		m_SetSpringArm->RelativeRotation = m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Rotation;

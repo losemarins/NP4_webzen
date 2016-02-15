@@ -77,7 +77,15 @@ void ANP4PlayerBase::BeginPlay()
 		if (eType == eErrorType::eSuccess)
 		{
 			SetSpringArm(LocationInfo);
-			SetCameraRotaion(LocationInfo.Rotation);
+			
+			if (LocationInfo.bApplySpringArm)
+			{
+				SetSpringArmCameraRotation(LocationInfo.Rotation);
+			}
+			else
+			{
+				SetCameraRotaion(LocationInfo.Rotation);
+			}
 		}
 	}
 
@@ -159,6 +167,11 @@ void ANP4PlayerBase::SetSpringArm(FtCameraLocationInfo _Info)
 		}
 		m_MinSpringArmLength = _Info.Min_ArmLength;
 	}
+}
+
+void ANP4PlayerBase::SetSpringArmCameraRotation(FRotator _Rot)
+{
+	m_OurCameraSpringArm->SetRelativeRotation(_Rot);
 }
 
 void ANP4PlayerBase::SetCameraRotaion(FRotator _Rot)
