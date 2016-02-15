@@ -51,7 +51,6 @@ void ANP4HeroController::SetupInputComponent()
 	InputComponent->BindAction("Attack", IE_Pressed, this, &ANP4HeroController::ActionAttack);
 	InputComponent->BindAction("Skill_1", IE_Pressed, this, &ANP4HeroController::ActionSkill_1);
 	InputComponent->BindAction("Skill_2", IE_Pressed, this, &ANP4HeroController::ActionSkill_2);
-
 	InputComponent->BindAction("Test_Hit", IE_Pressed, this, &ANP4HeroController::TestTestTest);
 }
 
