@@ -42,3 +42,13 @@ uint8 ANP4CharacterBase::GetTeamNum() const
 {
 	return MyTeamNum;
 }
+
+float ANP4CharacterBase::PlayNP4AnimationMontage(UAnimMontage* _pAnimMontage)
+{
+	return PlayAnimMontage(_pAnimMontage);
+}
+
+void ANP4CharacterBase::StopNP4AnimationMontage(UAnimMontage* _pAnimMontage)
+{
+	StopAnimMontage(_pAnimMontage);
+}

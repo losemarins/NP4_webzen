@@ -29,6 +29,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float Max_ArmLength;
+
+	/* 디폴트 카메라 세팅용, 체크 시 스프링암에 적용된다. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bApplySpringArm;
 };
 
 /* Camera Struct Create CameraInfo */
@@ -88,10 +92,6 @@ public:
 	/* 에디터 적용 : 테스트용 카메라 값이 구조체에게 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bEditApplyto_Struct;
-
-	/* 디폴트 카메라 세팅용, 체크 시 스프링암에 적용된다. */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bApplySpringArm;
 
 	/* Change Camera Struct Index Value (int Editor) */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
