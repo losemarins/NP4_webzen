@@ -40,7 +40,7 @@ void ANP4GameState::SetGameplayState(EGameplayState::Type NewState)
 	FRotator Rotation = FRotator( 0, 0, 0);
 	FVector Location = FVector(10, 0, 0);
 
-	ANP4TownPlayer* pSpawnActor = (ANP4TownPlayer*)GetWorld()->SpawnActor(ANP4TownPlayer::StaticClass(), &Location, &Rotation);
+	//ANP4TownPlayer* pSpawnActor = (ANP4TownPlayer*)GetWorld()->SpawnActor(ANP4TownPlayer::StaticClass(), &Location, &Rotation);
 }
 
 void ANP4GameState::SetGameMap(EGameMapState::Type NewState)

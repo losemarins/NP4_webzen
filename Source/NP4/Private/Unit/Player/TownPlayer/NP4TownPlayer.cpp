@@ -41,12 +41,20 @@ void ANP4TownPlayer::BeginPlay()
 	{
 		eErrorType eType = m_pTownController->Request_GetDefaultCameraInfo(ECameraValue::eTownCamera, LocationInfo);
 
-		if (eType == eErrorType::eSuccess)
+		SetSpringArm(LocationInfo);
+
+		if (LocationInfo.bApplySpringArm)
 		{
-			SetSpringArm(LocationInfo);
+			SetSpringArmCameraRotation(LocationInfo.Rotation);
+		}
+		else
+		{
 			SetCameraRotaion(LocationInfo.Rotation);
 		}
 	}
+	
+	if(m_pTownController)
+		m_pTownController->SetViewTarget(m_OurCameraSpringArm->GetOwner());
 }
 
 // Called every frame
@@ -77,10 +85,16 @@ void ANP4TownPlayer::SetSpringArm(FtCameraLocationInfo _Info)
 	}
 }
 
+void ANP4TownPlayer::SetSpringArmCameraRotation(FRotator _Rot)
+{
+	m_OurCameraSpringArm->SetRelativeRotation(_Rot);
+}
+
 void ANP4TownPlayer::SetCameraRotaion(FRotator _Rot)
 {
 	m_OurCamera->SetRelativeRotation(_Rot);
 }
+
 
 bool ANP4TownPlayer::IsPlayerControllerNull()
 {
