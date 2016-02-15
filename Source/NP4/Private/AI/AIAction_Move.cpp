@@ -13,6 +13,7 @@ UAIAction_Move::UAIAction_Move(const FObjectInitializer& ObjectInitializer)
 {
 
 }
+
 void UAIAction_Move::Activate()
 {
 	check(MyAIController.IsValid());
