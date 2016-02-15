@@ -26,7 +26,7 @@ protected :
 
 public :
 	AAIController_Base(const FObjectInitializer& ObjectInitializer);
-
+	virtual void Possess(APawn* inPawn) override;
 	uint8 GetTeamNum() const;
 	struct FPlayerData* GetTeamData() const;
 };

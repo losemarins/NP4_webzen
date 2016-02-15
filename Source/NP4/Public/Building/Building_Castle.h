@@ -30,6 +30,7 @@ public:
 	ABuilding_Castle(const FObjectInitializer& ObjectInitializer);
 	void OnGameplayStateChange(EGameplayState::Type NewState);
 	UAIDirector* GetAIDirector() const { return AIDirector; }
+	virtual void SetTeamNum(uint8 NewTeamNum);
 	//void SpawnMinions();
 	
 };

@@ -15,7 +15,6 @@ class NP4_API AAIController_Minion : public AAIController_Base
 	
 public :
 	AAIController_Minion(const FObjectInitializer& ObjectInitializer);
-	virtual void Possess(APawn* inPawn) override;
-	
+	void Tick(float DeltaTime);
 	
 };

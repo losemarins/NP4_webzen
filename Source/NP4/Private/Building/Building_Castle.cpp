@@ -27,3 +27,16 @@ void ABuilding_Castle::OnGameplayStateChange(EGameplayState::Type NewState)
 		AIDirector->OnGameplayStateChange(NewState);
 	}
 }
+
+void ABuilding_Castle::SetTeamNum(uint8 NewTeamNum)
+{
+	Super::SetTeamNum(NewTeamNum);
+
+	if (AIDirector != nullptr)
+	{
+		AIDirector->SetTeamNum(MyTeamNum);
+
+		//if (NewTeamNum == EStrategyTeam::Player)
+		//	AIDirector->WaveSize = 0;
+	}
+}
