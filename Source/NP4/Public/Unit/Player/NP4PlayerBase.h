@@ -71,6 +71,7 @@ public:
 	void SetPlayerController(ANP4HeroController* _pPlayerController);
 	void SetSpringArm(FtCameraLocationInfo _Info);
 	void SetCameraRotaion(FRotator _Rot);
+	void SetSpringArmCameraRotation(FRotator _Rot);
 	UAnimMontage* GetAnimationMontage_fromArrMontage(eCharacterState _eState, eAnimMontage_Skill_Interpol _eSkill_Interpolation = eAnimMontage_Skill_Interpol::eSkill_1);
 
 	/* Bool Check */

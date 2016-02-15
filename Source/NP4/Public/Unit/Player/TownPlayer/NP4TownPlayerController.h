@@ -8,12 +8,20 @@
 /**
  * 
  */
+class UNP4Input;
+
 UCLASS()
 class NP4_API ANP4TownPlayerController : public ANP4PlayerController
 {
 	GENERATED_BODY()
+
+public:
+		ANP4TownPlayerController();
+
+		virtual void SetupInputComponent() override;
 	
-	
-	
+		/** Custom input handler. */
+		UPROPERTY()
+		class UNP4Input* InputHandler;
 	
 };

@@ -97,3 +97,8 @@ ABuilding_Castle* UAIDirector::GetEnemyCastle() const
 {
 	return EnemyCastle.Get();
 }
+
+void UAIDirector::SetTeamNum(uint8 inTeamNum)
+{
+	MyTeamNum = inTeamNum;
+}

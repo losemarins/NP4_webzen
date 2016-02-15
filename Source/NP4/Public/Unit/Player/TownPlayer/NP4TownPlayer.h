@@ -38,6 +38,7 @@ public:
 
 	void SetSpringArm(FtCameraLocationInfo _Info);
 	void SetCameraRotaion(FRotator _Rot);
+	void SetSpringArmCameraRotation(FRotator _Rot);
 
 	bool IsPlayerControllerNull();
 

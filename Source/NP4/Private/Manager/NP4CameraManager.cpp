@@ -31,7 +31,6 @@ ANP4CameraManager::ANP4CameraManager()
 
 	/* 에디터 세팅 관련 변수 */
 	m_bInfoSetDone = false;
-	bApplySpringArm = false;
 	bEditApplyto_Struct = false;
 	bEditApplyto_Camera = false;
 }
@@ -75,9 +74,9 @@ void ANP4CameraManager::PostEditChangeProperty(FPropertyChangedEvent& PropertyCh
 	/* 에디터 적용 : 테스트용 카메라 값이 구조체에게 */
 	if (bEditApplyto_Struct && IsCameraValueInsideEnum((ECameraValue)m_iHeightStructIdx))
 	{
-		if (bApplySpringArm)
+		if (m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.bApplySpringArm)
 		{
-			ChangeEdit_StructValue(m_SetSpringArm->RelativeLocation, m_SetStructCamera->RelativeRotation, m_SetSpringArm->TargetArmLength);
+			ChangeEdit_StructValue(m_SetSpringArm->RelativeLocation, m_SetSpringArm->RelativeRotation, m_SetSpringArm->TargetArmLength);
 		}
 
 		else
@@ -89,15 +88,17 @@ void ANP4CameraManager::PostEditChangeProperty(FPropertyChangedEvent& PropertyCh
 
 void ANP4CameraManager::ChangeEdit_CameraValue()
 {
-	if (bApplySpringArm)
+	if (m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.bApplySpringArm)
 	{
 		m_SetSpringArm->RelativeLocation = m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Location;
+		m_SetSpringArm->RelativeRotation = m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Rotation;
 		m_SetSpringArm->TargetArmLength = m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Init_ArmLength;
 	}
 	else
+	{
 		m_SetStructCamera->RelativeLocation = m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Location;
-
-	m_SetStructCamera->RelativeRotation = m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Rotation;
+		m_SetStructCamera->RelativeRotation = m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Rotation;
+	}
 }
 
 void ANP4CameraManager::ChangeEdit_StructValue(
@@ -107,6 +108,11 @@ void ANP4CameraManager::ChangeEdit_StructValue(
 	m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Location = _ReltaiveLocationVec;
 	m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Rotation = _ReltaiveRocationVec;
 	m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Init_ArmLength = _SpringArmMaxDistance;
+
+	if (m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Max_ArmLength < _SpringArmMaxDistance)
+	{
+		m_tCameraInfo[m_iHeightStructIdx].m_tHeightInfo.Max_ArmLength = _SpringArmMaxDistance;
+	}
 
 }
 
@@ -187,7 +193,7 @@ void ANP4CameraManager::SetCameraInfoArrayFromBP()
 {
 	UObject* ClassPackage = ANY_PACKAGE;
 	ANP4CameraManager* pBP_CameraManager = NULL;
-	UClass* BPClass = StaticLoadClass(UObject::StaticClass(), NULL, TEXT("/Game/Blueprint/CameraManager.CameraManager_C"), NULL, LOAD_None, NULL);
+	UClass* BPClass = StaticLoadClass(UObject::StaticClass(), NULL, TEXT("/Game/Blueprint/NP4CameraManager.NP4CameraManager_C"), NULL, LOAD_None, NULL);
 
 	if (BPClass)
 	{
