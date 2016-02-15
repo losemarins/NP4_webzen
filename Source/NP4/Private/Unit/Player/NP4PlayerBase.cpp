@@ -34,7 +34,7 @@ ANP4PlayerBase::ANP4PlayerBase()
 	//Skeleton Mesh Setting
 	USkeletalMeshComponent* pMesh = GetMesh();
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshLoadAsset(TEXT("/Game/Mannequin/Character/Mesh/hero_body.hero_body"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshLoadAsset(TEXT(MainPlayer_Mesh_PATH));
 	if (MeshLoadAsset.Succeeded())
 	{
 		pMesh->SetSkeletalMesh(MeshLoadAsset.Object);
@@ -45,7 +45,7 @@ ANP4PlayerBase::ANP4PlayerBase()
 	}
 
 	//Anmation BP Setting
-	static ConstructorHelpers::FObjectFinder<UAnimBlueprint> lAnimBlueprint(TEXT("AnimBlueprint'/Game/BluePrint/HeroAnimBP.HeroAnimBP'"));
+	static ConstructorHelpers::FObjectFinder<UAnimBlueprint> lAnimBlueprint(TEXT(MainPlayer_Animation_BP_PATH));
 	if (lAnimBlueprint.Succeeded())
 	{
 		static UClass* lAnimBlueprintClass = (UClass*)lAnimBlueprint.Object->GeneratedClass;
@@ -111,25 +111,25 @@ void ANP4PlayerBase::InitAnimationMontage()
 	m_ArrAnimMontage.Init(NULL, 100);
 
 	////Idle
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT("/Game/AnimationMontage/Hero/Hero_Mon_Idle.Hero_Mon_Idle")), (int)eCharacterState::eIdle);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Idle2_PATH)), (int)eCharacterState::eIdle);
 	
 	////Walk
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT("/Game/AnimationMontage/Hero/Hero_Mon_Walk.Hero_Mon_Walk")), (int)eCharacterState::eWalk);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Walk_PATH)), (int)eCharacterState::eWalk);
 
 	////Run
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT("/Game/AnimationMontage/Hero/Hero_Mon_Run.Hero_Mon_Run")), (int)eCharacterState::eRun);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Run_PATH)), (int)eCharacterState::eRun);
 
 	////Attack
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT("/Game/AnimationMontage/Hero/Hero_Mon_Attack.Hero_Mon_Attack")), (int)eCharacterState::eAttack);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_ComboAttack_PATH)), (int)eCharacterState::eAttack);
 
 	////Attack
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT("/Game/AnimationMontage/Hero/Hero_Mon_Hit.Hero_Mon_Hit")), (int)eCharacterState::eHit);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Hit_PATH)), (int)eCharacterState::eHit);
 
 	////Skill_1
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT("/Game/AnimationMontage/Hero/Hero_Mon_Skill_1.Hero_Mon_Skill_1")), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_1);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_CastingEarthQuake_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_1);
 
 	////Skill_2
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT("/Game/AnimationMontage/Hero/Hero_Mon_Skill_2.Hero_Mon_Skill_2")), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_2);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_TurnAttack_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_2);
 }
 
 void ANP4PlayerBase::SetPlayerController(ANP4HeroController* _pPlayerController)
