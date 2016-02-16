@@ -94,6 +94,10 @@ void ANP4PlayerBase::BeginPlay()
 	{
 		m_pPlayerState = (Cast<ANP4PlayerState>(PlayerState));
 		m_pPlayerState->SetStateOwner(this);
+
+		//hp setting
+		m_pPlayerState->setPlayerHealth(100.f);
+		m_pPlayerState->setPlayerMaxHealth(100.f);
 	}
 }
 
