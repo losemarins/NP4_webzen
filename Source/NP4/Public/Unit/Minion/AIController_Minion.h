@@ -12,7 +12,12 @@ UCLASS()
 class NP4_API AAIController_Minion : public AAIController_Base
 {
 	GENERATED_BODY()
-	
+	UBehaviorTreeComponent* BehaviorComp;
+	UBlackboardComponent* BlackboardComp;
+	FName TargetEnemyKeyName;
+public:
+	void SetTargetEnemy(APawn* NewTarget);
+
 public :
 	AAIController_Minion(const FObjectInitializer& ObjectInitializer);
 	void Tick(float DeltaTime);
