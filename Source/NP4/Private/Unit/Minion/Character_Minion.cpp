@@ -11,8 +11,10 @@ ACharacter_Minion::ACharacter_Minion()
 	GetMesh()->BodyInstance.SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	//AIControllerClass = AAIController_Minion::StaticClass();
 	PawnSensingComp = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensingComp"));
-	PawnSensingComp->SetPeripheralVisionAngle(360.0f);
-	PawnSensingComp->SightRadius = 10000;
+	PawnSensingComp->SetPeripheralVisionAngle(60.0f);
+	PawnSensingComp->SightRadius = 2000;
+	PawnSensingComp->HearingThreshold = 600;
+	PawnSensingComp->LOSHearingThreshold = 1200;
 }
 
 void ACharacter_Minion::BeginPlay()

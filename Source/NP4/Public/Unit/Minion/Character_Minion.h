@@ -12,6 +12,8 @@ UCLASS()
 class NP4_API ACharacter_Minion : public ANP4CharacterBase
 {
 	GENERATED_BODY()
+
+	UPROPERTY(VisibleAnywhere, Category = "AI")
 	class UPawnSensingComponent* PawnSensingComp;
 
 public :
