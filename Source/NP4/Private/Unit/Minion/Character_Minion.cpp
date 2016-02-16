@@ -2,6 +2,8 @@
 
 #include "NP4.h"
 #include "Character_Minion.h"
+#include "AIController_Minion.h"
+#include "Perception/PawnSensingComponent.h"
 
 ACharacter_Minion::ACharacter_Minion()
 {
@@ -13,7 +15,14 @@ ACharacter_Minion::ACharacter_Minion()
 void ACharacter_Minion::BeginPlay()
 {
 	Super::BeginPlay();
-	UpdatePawnData();
+
+	/*if (PawnSensingComp)
+	{
+		PawnSensingComp->OnSeePawn.AddDynamic(this, &ACharacter_Minion::OnSeeEnemy);
+		//PawnSensingComp->OnHearNoise.AddDynamic(this, &ACharacter_Minion::OnHearNoise);
+
+
+	UpdatePawnData();*/
 }
 
 void ACharacter_Minion::Tick(float DeltaSeconds)
@@ -24,4 +33,26 @@ void ACharacter_Minion::Tick(float DeltaSeconds)
 void ACharacter_Minion::UpdatePawnData()
 {
 
+}
+
+void ACharacter_Minion::OnSeeEnemy(APawn* Pawn)
+{
+	if (!IsAlive())
+		return;
+
+	//사운드설정
+	/*if (!bSensedTarget)
+	{
+		BroadcastUpdateAudioLoop(true);
+	}*/
+
+	/*LastSeenTime = GetWorld()->GetTimeSeconds();
+	bSensedTarget = true;*/
+
+	AAIController_Minion* MinionController = Cast<AAIController_Minion>(GetController());
+	ANP4CharacterBase* SensedPawn = Cast<ANP4CharacterBase>(Pawn);
+	if (MinionController && SensedPawn->IsAlive())
+	{
+		MinionController->SetTargetEnemy(SensedPawn);
+	}
 }

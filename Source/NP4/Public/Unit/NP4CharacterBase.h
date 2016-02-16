@@ -12,6 +12,7 @@ class NP4_API ANP4CharacterBase : public ACharacter
 
 protected :
 	uint8 MyTeamNum;
+	float Health;
 
 public:
 	// Sets default values for this character's properties
@@ -35,4 +36,5 @@ public: /* 구영이가 BP에서 호출하기 위해서 만든 애니메이션 몽타쥬 플레이 */
 public :
 	void SetTeamNum(uint8 NewTeamNum);
 	uint8 GetTeamNum() const;
+	bool IsAlive();
 };
