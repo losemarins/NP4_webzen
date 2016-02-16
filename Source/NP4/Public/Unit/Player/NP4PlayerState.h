@@ -29,6 +29,10 @@ class NP4_API ANP4PlayerState : public ANP4PlayerStateBase
 
 	/* 현재 케릭터의 state */
 	eCharacterState m_ePlayerState;
+
+	/* 현재 캐릭터의 HP, 최대 HP */
+	float m_Health;
+	float m_MaxHealth;
 	
 public:
 	virtual void BeginPlay() override;
@@ -38,9 +42,15 @@ public:
 	UFUNCTION()
 	void SetStateOwner(ANP4PlayerBase* _pOwner);
 	void SetPlayerState(eCharacterState _State);
+	void setPlayerHealth(float _Health);
+	void setPlayerMaxHealth(float _MaxHealth);
+
 
 	/* Get */
 	eCharacterState GetPlayerState();
 	AActor* GetStateOwner();
+	float GetPlayerHealth();
+	float GetPlayerMaxHealth();
+
 
 };
