@@ -154,3 +154,11 @@ enum class eErrorType
 #define MainPlayer_Mon_TwoHand_TurnAttack_PATH "/Game/AnimationMontage/MainPlayer/MainPlayer_Mon_TwoHand_TurnAttack.MainPlayer_Mon_TwoHand_TurnAttack"
 #define MainPlayer_Mon_TwoHand_Walk_PATH "AnimMontage'/Game/Characters/MainPlayer/InfinityBladeWarriors/Character/CompleteCharacters/Montage/MainPlayer_Mon_TwoHand_Walk.MainPlayer_Mon_TwoHand_Walk'"
 //2016-02-13 °­¹Î¿í ¼öÁ¤ End
+
+/** when you modify this, please note that this information can be saved with instances
+* also DefaultEngine.ini [/Script/Engine.CollisionProfile] should match with this list  Á¤ÈÆ**/
+#define COLLISION_BUILDING		ECC_GameTraceChannel1
+#define COLLISION_PROJECTILE	ECC_GameTraceChannel2
+#define COLLISION_PANCAMERA		ECC_GameTraceChannel3
+
+>>>>>>> master

@@ -15,13 +15,81 @@ class NP4_API ANP4TownPlayerController : public ANP4PlayerController
 {
 	GENERATED_BODY()
 
-public:
-		ANP4TownPlayerController();
 
-		virtual void SetupInputComponent() override;
+
+protected:
+	/** update input detection */
+	virtual void ProcessPlayerInput(const float DeltaTime, const bool bGamePaused) override;
+	virtual void SetupInputComponent() override;
 	
-		/** Custom input handler. */
-		UPROPERTY()
-		class UNP4Input* InputHandler;
-	
+public:
+	virtual void Possess(APawn* InPawn) override;
+	virtual void Tick(float DeltaSeconds) override;
+	/** fixed rotation */
+	virtual void UpdateRotation(float DeltaTime) override;
+	ANP4TownPlayerController();
+	/** set desired camera position. */
+	void SetCameraTarget(const FVector& CameraTarget);
+
+	/** helper function to toggle input detection. */
+	void SetIgnoreInput(bool bIgnore);
+
+	/** Input handlers. */
+	void OnTapPressed(const FVector2D& ScreenPosition, float DownTime);
+	void OnHoldPressed(const FVector2D& ScreenPosition, float DownTime);
+	void OnHoldReleased(const FVector2D& ScreenPosition, float DownTime);
+	void OnSwipeStarted(const FVector2D& AnchorPosition, float DownTime);
+	void OnSwipeUpdate(const FVector2D& ScreenPosition, float DownTime);
+	void OnSwipeReleased(const FVector2D& ScreenPosition, float DownTime);
+	void OnSwipeTwoPointsStarted(const FVector2D& ScreenPosition1, const FVector2D& ScreenPosition2, float DownTime);
+	void OnSwipeTwoPointsUpdate(const FVector2D& ScreenPosition1, const FVector2D& ScreenPosition2, float DownTime);
+	void OnPinchStarted(const FVector2D& AnchorPosition1, const FVector2D& AnchorPosition2, float DownTime);
+	void OnPinchUpdate(const FVector2D& ScreenPosition1, const FVector2D& ScreenPosition2, float DownTime);
+
+	/** Toggles the ingame menu display. */
+	void OnToggleInGameMenu();
+
+	///** Handler for mouse leaving the minimap. */
+	//void MouseLeftMinimap();
+
+	///** Handler for mouse pressed over minimap. */
+	//void MousePressedOverMinimap();
+
+	///** Handler for mouse release over minimap. */
+	//void MouseReleasedOverMinimap();
+
+public:
+	// Ä«¸Þ¶ó
+	UCameraComponent* GetCameraComponent() const;
+	bool AreCoordsInNoScrollZone(const FVector2D& SwipePosition);
+	void EndSwipeNow();
+	AActor* GetFriendlyTarget(const FVector2D& ScreenPoint, FVector& WorldPoint) const;
+	void SetSelectedActor(AActor* NewSelectedActor, const FVector& NewPosition);
+	void OnZoomIn();
+	void OnZoomOut();
+	void UpdateCamera(float DeltaTime);
+
+	/* List of zones to exclude from scrolling during the camera movement update. */
+	TArray<FBox>	m_NoScrollZones;
+	/** The initial position of the swipe/drag. */
+	FVector m_vStartSwipeCoords;
+	FVector2D m_vPrevSwipeScreenPosition;
+	/** currently selected actor */
+	TWeakObjectPtr<AActor> m_SelectedActor;
+	/** Previous swipe mid point. */
+	FVector2D m_vPrevSwipeMidPoint;
+	/** Current amount of camera zoom. */
+	float m_ZoomFactor;
+	float m_fMaxZoomLevel;
+	float m_fMinZoomLevel;
+	float m_bZoomingIn;
+	float m_ZoomDistance;
+
+protected:
+	/** if set, input and camera updates will be ignored */
+	uint8 bIgnoreInput : 1;
+
+	UPROPERTY()
+	class UNP4Input* InputHandler;
+
 };

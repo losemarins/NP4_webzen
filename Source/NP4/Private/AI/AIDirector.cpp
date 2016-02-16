@@ -6,6 +6,7 @@
 #include "Building_Castle.h"
 #include "NP4CharacterBase.h"
 // Sets default values for this component's properties
+
 UAIDirector::UAIDirector() :
 	MyTeamNum(EGameTeam::Unknown)
 	, CustomScale(1.0)
@@ -59,6 +60,12 @@ void UAIDirector::SpawnMinions()
 			const FVector X = Owner->GetTransform().GetScaledAxis(EAxis::X);
 			const FVector Y = Owner->GetTransform().GetScaledAxis(EAxis::Y);
 			Loc += X + Y;
+
+			if (MyTeamNum == EGameTeam::Player)
+				Loc += FVector(100, 100, 0);
+				
+			else
+				Loc += FVector(-100, -100, 0);
 
 			const FVector Scale(CustomScale);
 			FActorSpawnParameters SpawnInfo;

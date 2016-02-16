@@ -52,3 +52,8 @@ void ANP4CharacterBase::StopNP4AnimationMontage(UAnimMontage* _pAnimMontage)
 {
 	StopAnimMontage(_pAnimMontage);
 }
+
+bool ANP4CharacterBase::IsAlive()
+{
+	return Health > 0;
+}

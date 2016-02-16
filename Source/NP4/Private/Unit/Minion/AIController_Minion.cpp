@@ -4,6 +4,9 @@
 #include "AIController_Minion.h"
 #include "AIAction_Move.h"
 #include "Character_Minion.h"
+#include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BehaviorTreeComponent.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 AAIController_Minion::AAIController_Minion(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -23,5 +26,13 @@ void AAIController_Minion::Tick(float DeltaTime)
 		{
 			CurrentAction->Activate();
 		}
+	}
+}
+
+void AAIController_Minion::SetTargetEnemy(APawn* NewTarget)
+{
+	if (BlackboardComp)
+	{
+		BlackboardComp->SetValueAsObject(TargetEnemyKeyName, NewTarget);
 	}
 }
