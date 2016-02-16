@@ -44,4 +44,5 @@ public:
 
 	/* bool Check */
 	bool IsCameraMangerNull();
+
 };

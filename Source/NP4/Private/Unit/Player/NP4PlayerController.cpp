@@ -63,6 +63,7 @@ bool ANP4PlayerController::IsCameraMangerNull()
 	return m_pCameraManager == NULL ? true : false;
 }
 
+
 eErrorType ANP4PlayerController::Request_GetDefaultCameraInfo(ECameraValue _CameraValue, FtCameraLocationInfo& _rInfo)
 {
 	if (IsCameraMangerNull())

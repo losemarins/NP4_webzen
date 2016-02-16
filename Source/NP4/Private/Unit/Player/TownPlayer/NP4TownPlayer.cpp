@@ -13,7 +13,6 @@ ANP4TownPlayer::ANP4TownPlayer()
 
 	//Spring Arm 세팅(부드러운 카메라 연출을 위해 사용)
 	m_OurCameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraSpringArm"));
-	m_OurCameraSpringArm->bUsePawnControlRotation = true;
 	m_OurCameraSpringArm->AttachTo(RootComponent);
 	m_MaxSpringArmLength = 400.0f;
 	m_MinSpringArmLength = 300.0f;
@@ -23,6 +22,24 @@ ANP4TownPlayer::ANP4TownPlayer()
 	m_OurCamera->AttachTo(m_OurCameraSpringArm, USpringArmComponent::SocketName);
 
 
+}
+
+USpringArmComponent* ANP4TownPlayer::GetSpringArm()
+{
+	return m_OurCameraSpringArm;
+}
+void ANP4TownPlayer::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	//CheckState(DeltaTime);
+}
+
+void ANP4TownPlayer::PossessedBy(AController* _pController)
+{
+	Super::PossessedBy(_pController);
+
+	m_pPlayerController = Cast<ANP4TownPlayerController>(_pController);
 }
 
 // Called when the game starts or when spawned
@@ -52,22 +69,11 @@ void ANP4TownPlayer::BeginPlay()
 			SetCameraRotaion(LocationInfo.Rotation);
 		}
 	}
-	
-	if(m_pTownController)
-		m_pTownController->SetViewTarget(m_OurCameraSpringArm->GetOwner());
 }
 
-// Called every frame
-void ANP4TownPlayer::Tick( float DeltaTime )
-{
-	Super::Tick( DeltaTime );
-
-}
 
 void ANP4TownPlayer::SetSpringArm(FtCameraLocationInfo _Info)
 {
-	m_OurCameraSpringArm->SetRelativeLocation(_Info.Location);
-
 	if (_Info.Init_ArmLength > _Info.Max_ArmLength)
 	{
 		_Info.Init_ArmLength = _Info.Max_ArmLength;
@@ -95,6 +101,11 @@ void ANP4TownPlayer::SetCameraRotaion(FRotator _Rot)
 	m_OurCamera->SetRelativeRotation(_Rot);
 }
 
+
+UCameraComponent * ANP4TownPlayer::GetCamera()
+{
+	return m_OurCamera;
+}
 
 bool ANP4TownPlayer::IsPlayerControllerNull()
 {
