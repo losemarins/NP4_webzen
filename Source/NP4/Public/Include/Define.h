@@ -160,5 +160,3 @@ enum class eErrorType
 #define COLLISION_BUILDING		ECC_GameTraceChannel1
 #define COLLISION_PROJECTILE	ECC_GameTraceChannel2
 #define COLLISION_PANCAMERA		ECC_GameTraceChannel3
-
->>>>>>> master
