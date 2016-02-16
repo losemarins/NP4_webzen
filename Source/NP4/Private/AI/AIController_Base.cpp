@@ -8,7 +8,7 @@
 AAIController_Base::AAIController_Base(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
-	AllowedActions.Add(UAIAction_Move::StaticClass());
+	//AllowedActions.Add(UAIAction_Move::StaticClass());
 }
 
 uint8 AAIController_Base::GetTeamNum() const

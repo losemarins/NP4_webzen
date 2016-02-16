@@ -21,7 +21,6 @@ public :
 	void UpdatePawnData(); // 나중에 base에서 virtual로 할수도있음
 	UFUNCTION()
 	void OnSeeEnemy(APawn* Pawn);
-	
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
 };
