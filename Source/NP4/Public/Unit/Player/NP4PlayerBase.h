@@ -47,6 +47,7 @@ public:
 	//TArray<UAnimMontage*> m_ArrAnimMontage[100];
 
 	TArray<UAnimMontage*> m_ArrAnimMontage;
+	TArray<float> m_fAnimationMoveSpeed;
 
 	/* Camera Value */
 	float m_ZoomFactor;
@@ -89,7 +90,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "PlayerCheckState")
 		bool IsSomeAction(); //만약 공격이나 스킬이나 히트나 어떠한 행동패턴의 애니메이션 중인가?
 
-							 /* Find */
+	/* Find */
 	UAnimMontage* FindAnimationMontage_byPath(const TCHAR* _ObjectToFindPath);
 
 	/* Camera */
@@ -99,7 +100,7 @@ public:
 
 	/* check StateMachine */
 	UFUNCTION()
-		void CheckState(float _Deltatime);
+	void CheckState(float _Deltatime);
 
 	/* Set StateMachine */
 	void SetRunning(bool _bRunning);
@@ -120,4 +121,8 @@ public:
 	void ActionSkill_1();
 	void ActionSkill_2();
 	void StopSkill(UAnimMontage* _pSkillAnim);
+
+	/* Animation Moving */
+	void CheckMovingAnimation();
+	void WhileAnimationMoveCharacter(int _CurState);
 };

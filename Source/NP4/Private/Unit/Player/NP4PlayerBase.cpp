@@ -116,10 +116,11 @@ void ANP4PlayerBase::InitAnimationMontage()
 	/* 순서는 FrameWorkPlayerState를 참조*/
 	/* 스킬은 덧셈의 연산이 필요함(여러개의 모션이 있기 때문에 하나의 인덱스에 담을 수 없기 때문, 하지만 스테이트는 Skilling으로 같다. */
 
-	m_ArrAnimMontage.Init(NULL, 100);
+	m_ArrAnimMontage.Init(NULL, 100); /* 애니메이션몬티지 Init */
+	m_fAnimationMoveSpeed.Init(0.f, 100); /* 애니메이션 MoveSpeed Init */
 
 	////Idle
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Idle2_PATH)), (int)eCharacterState::eIdle);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Idle1_PATH)), (int)eCharacterState::eIdle);
 	
 	////Walk
 	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Walk_PATH)), (int)eCharacterState::eWalk);
@@ -128,9 +129,10 @@ void ANP4PlayerBase::InitAnimationMontage()
 	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Run_PATH)), (int)eCharacterState::eRun);
 
 	////Attack
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_ComboAttack_PATH)), (int)eCharacterState::eAttack);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Attack_PATH)), (int)eCharacterState::eAttack);
+	m_fAnimationMoveSpeed.Insert(150.f, (int)eCharacterState::eAttack);
 
-	////Attack
+	////HIT
 	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Hit_PATH)), (int)eCharacterState::eHit);
 
 	////Skill_1
@@ -289,8 +291,13 @@ void ANP4PlayerBase::CheckState(float _Deltatime)
 
 		else
 		{
+			/* Change State */
 			if(m_pPlayerState)
 				m_pPlayerState->SetPlayerState(eCharacterState::eWalk);
+			/* Change Speed */
+			if (GetCharacterMovement())
+				GetCharacterMovement()->MaxWalkSpeed = 150;
+
 			ExeAnimMontage = (m_ArrAnimMontage)[eCharacterState::eWalk];
 			ExeAnimMontage_Type = eCharacterState::eWalk;
 		}
@@ -401,8 +408,14 @@ void ANP4PlayerBase::StartRunning()
 
 	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("Run")));
 	SetRunning(true);
+	
+	/* Change State */
 	if(m_pPlayerState)
 		m_pPlayerState->SetPlayerState(eCharacterState::eRun);
+
+	/* Change Speed */
+	if (GetCharacterMovement())
+		GetCharacterMovement()->MaxWalkSpeed = 600;
 }
 
 void ANP4PlayerBase::StopRunning()
@@ -428,7 +441,7 @@ void ANP4PlayerBase::ActionAttack()
 			if(m_pPlayerState)
 				m_pPlayerState->SetPlayerState(eCharacterState::eAttack);
 
-			Request_MakeActionCamera(ECameraValue::eAction_1, this, fAnimDuationVal);
+			//Request_MakeActionCamera(ECameraValue::eAction_1, this, fAnimDuationVal);
 
 			///* Collision Active */
 			//SetColliderEnabled(true);
@@ -611,4 +624,22 @@ float ANP4PlayerBase::PlayAnimMontage_CheckCurrent(UAnimMontage* _AnimMontage, e
 	}
 
 	return reuturnVal;
+}
+
+void ANP4PlayerBase::CheckMovingAnimation()
+{
+	if (m_pPlayerState)
+	{
+		int CurState = (int)m_pPlayerState->GetPlayerState();
+
+		if (m_ArrAnimMontage[CurState] && m_fAnimationMoveSpeed[CurState] != 0.0f)
+		{
+			WhileAnimationMoveCharacter(CurState);
+		}
+	}
+}
+
+void ANP4PlayerBase::WhileAnimationMoveCharacter(int _CurState)
+{
+	//FRotator ActorRotation = 
 }
