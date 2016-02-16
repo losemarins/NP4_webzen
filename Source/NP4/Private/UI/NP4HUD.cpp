@@ -62,10 +62,15 @@ void ANP4HUD::DrawActorsHealth()
 		if (CastPlayer)
 		{
 			//Staff
-			temHealth = CastPlayer->m_pPlayerState->GetPlayerHealth();
-			temMaxHealth = CastPlayer->m_pPlayerState->GetPlayerMaxHealth();
+			ANP4PlayerState* pState = CastPlayer->m_pPlayerState;
+			
+			if (pState)
+			{
+				temHealth = pState->GetPlayerHealth();
+				temMaxHealth = CastPlayer->m_pPlayerState->GetPlayerMaxHealth();
 
-			DrawHealthBar(CastPlayer, temHealth / temMaxHealth, 18 * UIScale);
+				DrawHealthBar(CastPlayer, temHealth / temMaxHealth, 18 * UIScale);
+			}
 		}
 	}
 	
