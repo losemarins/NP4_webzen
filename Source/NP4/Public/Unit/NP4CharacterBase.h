@@ -16,6 +16,7 @@ protected :
 	uint8 MyTeamNum;
 	float Health;
 
+
 public:
 	TArray<AWeaponBase*> m_pItemInven_Temp; //임시
 
@@ -25,6 +26,7 @@ public:
 	/* 무기 붙이는 곳 */ //추후에 CharacterBase로 올려야할 수도 있음.
 	FName WeaponAttachPoint;
 	
+
 public:
 	// Sets default values for this character's properties
 	ANP4CharacterBase();

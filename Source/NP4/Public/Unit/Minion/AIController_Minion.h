@@ -15,8 +15,6 @@ class NP4_API AAIController_Minion : public AAIController_Base
 	UBehaviorTreeComponent* BehaviorComp;
 	UBlackboardComponent* BlackboardComp;
 	FName TargetEnemyKeyName;
-	bool isMove;
-
 public:
 	void SetTargetEnemy(APawn* NewTarget);
 
