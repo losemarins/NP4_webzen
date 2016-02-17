@@ -8,13 +8,14 @@
 ACharacter_Minion::ACharacter_Minion()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	
 	GetMesh()->BodyInstance.SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	//AIControllerClass = AAIController_Minion::StaticClass();
+	AIControllerClass = AAIController_Minion::StaticClass();
 	PawnSensingComp = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensingComp"));
-	PawnSensingComp->SetPeripheralVisionAngle(60.0f);
-	PawnSensingComp->SightRadius = 2000;
-	PawnSensingComp->HearingThreshold = 600;
-	PawnSensingComp->LOSHearingThreshold = 1200;
+	PawnSensingComp->SetPeripheralVisionAngle(50);
+	PawnSensingComp->SightRadius = 100;
+	PawnSensingComp->bOnlySensePlayers = 0;
+	PawnSensingComp->SensingInterval = 0.1f;
 }
 
 void ACharacter_Minion::BeginPlay()
@@ -27,6 +28,10 @@ void ACharacter_Minion::BeginPlay()
 		//PawnSensingComp->OnHearNoise.AddDynamic(this, &ACharacter_Minion::OnHearNoise);
 	}
 	UpdatePawnData();
+
+	FRotator Rot = GetActorRotation();
+	Rot.Yaw += 90;
+	SetActorRotation(Rot);
 }
 
 void ACharacter_Minion::Tick(float DeltaSeconds)
@@ -58,7 +63,7 @@ void ACharacter_Minion::OnSeeEnemy(APawn* Pawn)
 	ANP4CharacterBase* SensedPawn = Cast<ANP4CharacterBase>(Pawn);
 	if (MinionController && SensedPawn->IsAlive())
 	{
-		//MinionController->SetTargetEnemy(SensedPawn);
+		MinionController->SetTargetEnemy(SensedPawn);
 		MinionController->StopMovement();
 	}
 }

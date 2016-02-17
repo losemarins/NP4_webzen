@@ -36,7 +36,7 @@ ANP4PlayerBase::ANP4PlayerBase()
 
 	//Skeleton Mesh Setting
 	USkeletalMeshComponent* pMesh = GetMesh();
-
+	
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshLoadAsset(TEXT(MainPlayer_Mesh_PATH));
 	if (MeshLoadAsset.Succeeded())
 	{
