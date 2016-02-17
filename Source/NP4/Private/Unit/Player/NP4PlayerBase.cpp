@@ -25,6 +25,7 @@ ANP4PlayerBase::ANP4PlayerBase()
 	m_OurCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("OurCamera"));
 	m_OurCamera->AttachTo(m_OurCameraSpringArm, USpringArmComponent::SocketName);
 
+	
 	//케릭터 매쉬가 회전을 먹도록 Setting
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationYaw = false;

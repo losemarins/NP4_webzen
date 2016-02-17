@@ -38,9 +38,9 @@ public:
 	void OnTapPressed(const FVector2D& ScreenPosition, float DownTime);
 	void OnHoldPressed(const FVector2D& ScreenPosition, float DownTime);
 	void OnHoldReleased(const FVector2D& ScreenPosition, float DownTime);
-	void OnSwipeStarted(const FVector2D& AnchorPosition, float DownTime);
-	void OnSwipeUpdate(const FVector2D& ScreenPosition, float DownTime);
-	void OnSwipeReleased(const FVector2D& ScreenPosition, float DownTime);
+	void OnSwipeStarted();
+	void OnSwipeUpdate();
+	void OnSwipeReleased();
 	void OnSwipeTwoPointsStarted(const FVector2D& ScreenPosition1, const FVector2D& ScreenPosition2, float DownTime);
 	void OnSwipeTwoPointsUpdate(const FVector2D& ScreenPosition1, const FVector2D& ScreenPosition2, float DownTime);
 	void OnPinchStarted(const FVector2D& AnchorPosition1, const FVector2D& AnchorPosition2, float DownTime);
@@ -82,8 +82,9 @@ public:
 	float m_ZoomFactor;
 	float m_fMaxZoomLevel;
 	float m_fMinZoomLevel;
-	float m_bZoomingIn;
+	bool m_bZoomingIn;
 	float m_ZoomDistance;
+	bool m_bIsSwipe;
 
 protected:
 	/** if set, input and camera updates will be ignored */

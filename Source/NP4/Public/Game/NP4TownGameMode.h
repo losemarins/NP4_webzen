@@ -8,6 +8,7 @@
 /**
  * 
  */
+
 UCLASS()
 class NP4_API ANP4TownGameMode : public AGameMode
 {
@@ -28,6 +29,8 @@ public:
 
 private:
 	ANP4TownGameMode();
+
+
 	
 	
 	
