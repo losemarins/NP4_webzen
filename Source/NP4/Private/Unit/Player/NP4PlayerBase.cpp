@@ -57,6 +57,9 @@ ANP4PlayerBase::ANP4PlayerBase()
 	//AnimationMontage Initialize
 	if(m_ArrAnimMontage.Num() <= 0)
 		InitAnimationMontage();
+
+	/* Combo Init */
+	m_ComboStep = Combo_None;
 }
 
 void ANP4PlayerBase::BeginPlay()
@@ -106,6 +109,17 @@ void ANP4PlayerBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	CheckState(DeltaTime);
+
+	/* 애니메이션 남은 시간 체크 ! (임시)*/
+	USkeletalMeshComponent* mesh = GetMesh();
+	UAnimInstance* AnimInstance = mesh->AnimScriptInstance;
+	float AnimLength = 0.0f;
+	float CurPos = 0.0f;
+	if (AnimInstance != NULL)
+	{
+		AnimLength = AnimInstance->GetCurrentActiveMontage()->GetPlayLength();
+		CurPos = AnimInstance->Montage_GetPosition(AnimInstance->GetCurrentActiveMontage());
+	}
 }
 
 void ANP4PlayerBase::PossessedBy(AController* _pController)
@@ -402,6 +416,11 @@ bool ANP4PlayerBase::IsSomeAction()
 	return false;
 }
 
+bool ANP4PlayerBase::IsCombonOn()
+{
+	return m_bComboClkOn;
+}
+
 //////////////////////////////////////////////////* Character Action */
 void ANP4PlayerBase::StartRunning()
 {
@@ -455,6 +474,13 @@ void ANP4PlayerBase::ActionAttack()
 		{
 			//Hit Motion Animation is not vaild
 		}
+	}
+
+	//Combo System
+	else if (m_bComboNotifyEnter && IsAttack() == true && 
+		GetMesh()->AnimScriptInstance->Montage_IsPlaying((m_ArrAnimMontage)[eCharacterState::eAttack]))
+	{
+		m_bComboClkOn = true;
 	}
 }
 
@@ -646,4 +672,14 @@ void ANP4PlayerBase::CheckMovingAnimation()
 void ANP4PlayerBase::WhileAnimationMoveCharacter(int _CurState)
 {
 	//FRotator ActorRotation = 
+}
+
+void ANP4PlayerBase::SetbComboClkOnOff(bool _bOnOff)
+{
+
+}
+
+void ANP4PlayerBase::SetbNotifyEnter(bool _bEnter)
+{
+
 }
