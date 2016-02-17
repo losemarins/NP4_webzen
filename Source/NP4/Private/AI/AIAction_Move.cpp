@@ -31,4 +31,3 @@ void UAIAction_Move::Activate()
 		}
 	}
 }
-
