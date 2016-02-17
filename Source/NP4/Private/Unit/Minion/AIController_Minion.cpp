@@ -11,7 +11,7 @@
 AAIController_Minion::AAIController_Minion(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
-	isMove = true;
+	
 }
 
 void AAIController_Minion::Tick(float DeltaTime)
@@ -22,7 +22,7 @@ void AAIController_Minion::Tick(float DeltaTime)
 	for (int32 Idx = 0; Idx < AllActions.Num(); Idx++)
 	{
 		CurrentAction = AllActions[Idx];
-		if (CurrentAction != NULL && isMove)
+		if (CurrentAction != NULL)
 		{
 			CurrentAction->Activate();
 		}
@@ -31,7 +31,6 @@ void AAIController_Minion::Tick(float DeltaTime)
 
 void AAIController_Minion::SetTargetEnemy(APawn* NewTarget)
 {
-	isMove = false;
 	if (BlackboardComp)
 	{
 		BlackboardComp->SetValueAsObject(TargetEnemyKeyName, NewTarget);

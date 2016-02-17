@@ -93,7 +93,7 @@ void ANP4PlayerBase::BeginPlay()
 	}
 
 	/* PlayerState에게 Owner를 세팅한다.. */
-	if (!m_pPlayerState)
+	if (m_pPlayerState)
 	{
 		m_pPlayerState = (Cast<ANP4PlayerState>(PlayerState));
 		m_pPlayerState->SetStateOwner(this);

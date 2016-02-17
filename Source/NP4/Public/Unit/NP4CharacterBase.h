@@ -13,7 +13,7 @@ class NP4_API ANP4CharacterBase : public ACharacter
 protected :
 	uint8 MyTeamNum;
 	float Health;
-	
+
 public:
 	// Sets default values for this character's properties
 	ANP4CharacterBase();
