@@ -17,6 +17,13 @@ enum eAnimMontage_Skill_Interpol
 	eSkill_3 = 2,
 };
 
+enum eCombo_Interpol
+{
+	Combo_None = 0,
+	Combo_DownAttack = 1,
+	Combo_Kick = 2
+};
+
 UCLASS()
 class NP4_API ANP4PlayerBase : public ANP4CharacterBase
 {
@@ -60,6 +67,12 @@ public:
 	bool m_bIsHit;
 	bool m_bIsSkilling;
 
+	/* Notify Combo */
+	bool m_bComboNotifyEnter;
+	bool m_bComboClkOn;
+	eCombo_Interpol m_ComboStep;
+	
+
 public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
@@ -89,6 +102,8 @@ public:
 		bool IsSkilling();
 	UFUNCTION(BlueprintCallable, Category = "PlayerCheckState")
 		bool IsSomeAction(); //만약 공격이나 스킬이나 히트나 어떠한 행동패턴의 애니메이션 중인가?
+	bool IsCombonOn();
+	bool IsNotifyEnter();
 
 	/* Find */
 	UAnimMontage* FindAnimationMontage_byPath(const TCHAR* _ObjectToFindPath);
@@ -125,4 +140,8 @@ public:
 	/* Animation Moving */
 	void CheckMovingAnimation();
 	void WhileAnimationMoveCharacter(int _CurState);
+
+	/* Notify Combo */
+	void SetbComboClkOnOff(bool _bSet);
+	void SetbNotifyEnter(bool _bEnter);
 };

@@ -8,7 +8,7 @@ ABuilding_Castle::ABuilding_Castle(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
 	AIDirector = CreateDefaultSubobject<UAIDirector>(TEXT("AIDirectorComp"));
-	static ConstructorHelpers::FClassFinder<ANP4CharacterBase> BPClass(TEXT("/Game/Blueprint/Minion"));
+	static ConstructorHelpers::FClassFinder<ANP4CharacterBase> BPClass(TEXT("/Game/Blueprint/Minion2"));
 	CharClass = BPClass.Class;
 }
 
