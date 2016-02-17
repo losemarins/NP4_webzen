@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "Building/Dungeon_Building.h"
+#include "Building/Dungeon/Dungeon_Building.h"
 #include "Define.h"
 #include "Building_Castle.generated.h"
 
