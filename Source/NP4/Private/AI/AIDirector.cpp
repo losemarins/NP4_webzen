@@ -16,8 +16,6 @@ UAIDirector::UAIDirector() :
 	// off to improve performance if you don't need them.
 	bWantsBeginPlay = true;
 	PrimaryComponentTick.bCanEverTick = true;
-
-	
 	// ...
 }
 
@@ -70,12 +68,12 @@ void UAIDirector::SpawnMinions()
 			const FVector Scale(CustomScale);
 			FActorSpawnParameters SpawnInfo;
 			SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-			ANP4CharacterBase* const Char = GetWorld()->SpawnActor<ANP4CharacterBase>(Owner->CharClass, Loc, Owner->GetActorRotation(), SpawnInfo);
+			ANP4CharacterBase* const SpawnChar = GetWorld()->SpawnActor<ANP4CharacterBase>(Owner->CharClass, Loc, Owner->GetActorRotation(), SpawnInfo);
 
-			if ((Char != nullptr))
+			if ((SpawnChar != nullptr))
 			{
-				Char->SetTeamNum(GetTeamNum());
-				Char->SpawnDefaultController();
+				SpawnChar->SetTeamNum(GetTeamNum());
+				SpawnChar->SpawnDefaultController();
 				ProductNum -= 1;
 			}
 		}
