@@ -11,6 +11,10 @@
 AAIController_Minion::AAIController_Minion(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
+	BehaviorComp = ObjectInitializer.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorComp"));
+	BlackboardComp = ObjectInitializer.CreateDefaultSubobject<UBlackboardComponent>(this, TEXT("BlackboardComp"));
+	TargetEnemyKeyName = "TargetEnemy";
+
 	isMove = true;
 }
 

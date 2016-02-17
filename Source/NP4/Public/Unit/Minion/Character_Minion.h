@@ -15,12 +15,31 @@ class NP4_API ACharacter_Minion : public ANP4CharacterBase
 
 	UPROPERTY(VisibleAnywhere, Category = "AI")
 	class UPawnSensingComponent* PawnSensingComp;
+	FTimerHandle TimerHandle_MeleeAttack;
+	float MeleeStrikeCooldown;
+	float LastMeleeAttackTime;
+	float MeleeDamage;
+	TSubclassOf<UDamageType> PunchDamageType;
+	
+protected :
+	UCapsuleComponent* MeleeCollisionComp;
+	
+public :
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = State)
+	bool IsAttack;
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+	class UBehaviorTree* BehaviorTree;
 
 public :
 	ACharacter_Minion();
 	void UpdatePawnData(); // 나중에 base에서 virtual로 할수도있음
 	UFUNCTION()
 	void OnSeeEnemy(APawn* Pawn);
+
+	UFUNCTION()
+	void OnMeleeCompBeginOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+	void PerformMeleeStrike(AActor* HitActor);
+	void OnRetriggerMeleeStrike();
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
 };
