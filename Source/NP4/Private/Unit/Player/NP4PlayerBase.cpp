@@ -31,6 +31,8 @@ ANP4PlayerBase::ANP4PlayerBase()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
 
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel2, ECR_Ignore);
+
 	//Skeleton Mesh Setting
 	USkeletalMeshComponent* pMesh = GetMesh();
 
@@ -102,6 +104,11 @@ void ANP4PlayerBase::BeginPlay()
 		m_pPlayerState->setPlayerHealth(100.f);
 		m_pPlayerState->setPlayerMaxHealth(100.f);
 	}
+
+	/* 무기 소켓을 세팅한다. */
+	Super::SetAttachWeaponSocketPoint();
+	//임시로 무기를 인벤토리에 생성한다.
+	Super::InitWeapon_TempFunction();
 }
 
 void ANP4PlayerBase::Tick(float DeltaTime)
@@ -467,7 +474,7 @@ void ANP4PlayerBase::ActionAttack()
 			//Request_MakeActionCamera(ECameraValue::eAction_1, this, fAnimDuationVal);
 
 			///* Collision Active */
-			//SetColliderEnabled(true);
+			Super::SetColliderEnabled(true);
 		}
 
 		else
@@ -495,7 +502,7 @@ void ANP4PlayerBase::StopAttack()
 		SetAttack(false);
 
 		/* Collision no Active */
-		//SetColliderEnabled(false);
+		Super::SetColliderEnabled(false);
 	}
 
 	else

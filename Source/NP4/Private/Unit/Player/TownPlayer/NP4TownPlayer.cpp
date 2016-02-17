@@ -20,8 +20,6 @@ ANP4TownPlayer::ANP4TownPlayer()
 	////朝五虞 実特
 	m_OurCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("OurCamera"));
 	m_OurCamera->AttachTo(m_OurCameraSpringArm, USpringArmComponent::SocketName);
-
-
 }
 
 USpringArmComponent* ANP4TownPlayer::GetSpringArm()
