@@ -15,6 +15,7 @@ ANP4TownPlayerController::ANP4TownPlayerController()
 	m_fMinZoomLevel = 0.4f;
 	m_fMaxZoomLevel = 1.0f;
 	m_ZoomDistance = 2000;
+	m_bIsSwipe = false;
 }
 
 void ANP4TownPlayerController::Possess(APawn* InPawn)
@@ -25,7 +26,12 @@ void ANP4TownPlayerController::Possess(APawn* InPawn)
 
 void ANP4TownPlayerController::Tick(float DeltaSeconds)
 {
-	UpdateCamera(DeltaSeconds);
+	UpdateCamera(DeltaSeconds);	
+
+	if (m_bIsSwipe)
+	{
+		OnSwipeUpdate();
+	}
 }
 
 
@@ -33,22 +39,29 @@ void ANP4TownPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	InputHandler = NewObject<UNP4Input>(this);
+	//InputHandler = NewObject<UNP4Input>(this);
 	//BIND_1P_ACTION(InputHandler, EGameKey::Tap, IE_Pressed, &ANP4TownPlayerController::OnTapPressed);
 	//BIND_1P_ACTION(InputHandler, EGameKey::Hold, IE_Pressed, &ANP4TownPlayerController::OnHoldPressed);
 	//BIND_1P_ACTION(InputHandler, EGameKey::Hold, IE_Released, &ANP4TownPlayerController::OnHoldReleased);
-	BIND_1P_ACTION(InputHandler, EGameKey::Swipe, IE_Pressed, &ANP4TownPlayerController::OnSwipeStarted);
+	/*BIND_1P_ACTION(InputHandler, EGameKey::Swipe, IE_Pressed, &ANP4TownPlayerController::OnSwipeStarted);
 	BIND_1P_ACTION(InputHandler, EGameKey::Swipe, IE_Repeat, &ANP4TownPlayerController::OnSwipeUpdate);
-	BIND_1P_ACTION(InputHandler, EGameKey::Swipe, IE_Released, &ANP4TownPlayerController::OnSwipeReleased);
+	BIND_1P_ACTION(InputHandler, EGameKey::Swipe, IE_Released, &ANP4TownPlayerController::OnSwipeReleased);*/
 	//BIND_2P_ACTION(InputHandler, EGameKey::SwipeTwoPoints, IE_Pressed, &ANP4TownPlayerController::OnSwipeTwoPointsStarted);
 	//BIND_2P_ACTION(InputHandler, EGameKey::SwipeTwoPoints, IE_Repeat, &ANP4TownPlayerController::OnSwipeTwoPointsUpdate);
 	//BIND_2P_ACTION(InputHandler, EGameKey::Pinch, IE_Pressed, &ANP4TownPlayerController::OnPinchStarted);
 	//BIND_2P_ACTION(InputHandler, EGameKey::Pinch, IE_Repeat, &ANP4TownPlayerController::OnPinchUpdate);
+	
+	//InputComponent->BindAction("MouseLClick", IE_Pressed, this, &ANP4TownPlayerController::OnSwipeStarted);
+	//InputComponent->BindAction("MouseLClick", IE_Repeat, this, &ANP4TownPlayerController::OnSwipeUpdate);
+	//InputComponent->BindAction("MouseLClick", IE_Released, this, &ANP4TownPlayerController::OnSwipeReleased);
+	InputComponent->BindAction("MouseLClick", IE_Pressed, this, &ANP4TownPlayerController::OnSwipeStarted);
+	InputComponent->BindAction("MouseLClick", IE_Released, this, &ANP4TownPlayerController::OnSwipeReleased);
+
 	InputComponent->BindAction("ZoomOut", IE_Pressed, this, &ANP4TownPlayerController::OnZoomOut);
 	InputComponent->BindAction("ZoomIn", IE_Pressed, this, &ANP4TownPlayerController::OnZoomIn);
 
-	FInputActionBinding& ToggleInGameMenuBinding = InputComponent->BindAction("InGameMenu", IE_Pressed, this, &ANP4TownPlayerController::OnToggleInGameMenu);
-	ToggleInGameMenuBinding.bExecuteWhenPaused = true;
+	//FInputActionBinding& ToggleInGameMenuBinding = InputComponent->BindAction("InGameMenu", IE_Pressed, this, &ANP4TownPlayerController::OnToggleInGameMenu);
+	//ToggleInGameMenuBinding.bExecuteWhenPaused = true;
 }
 
 void ANP4TownPlayerController::OnZoomOut()
@@ -60,12 +73,6 @@ void ANP4TownPlayerController::OnZoomOut()
 
 void ANP4TownPlayerController::UpdateCamera(float DeltaTime)
 {
-	/*if (m_bZoomingIn)
-		m_ZoomFactor += DeltaTime / 0.5;
-	else
-		m_ZoomFactor -= DeltaTime / 0.25;
-
-	m_ZoomFactor = FMath::Clamp<float>(m_ZoomFactor, 0.0f, 1.0f);*/
 	Cast<ANP4TownPlayer>(m_pPossessPawn)->GetCamera()->FieldOfView = FMath::Lerp<float>(90.0f, 60.0f, m_ZoomFactor);
 	Cast<ANP4TownPlayer>(m_pPossessPawn)->GetSpringArm()->TargetArmLength = FMath::Lerp<float>(m_ZoomDistance, m_ZoomDistance, 1);
 }
@@ -102,14 +109,14 @@ void ANP4TownPlayerController::UpdateRotation(float DeltaTime)
 
 void ANP4TownPlayerController::ProcessPlayerInput(const float DeltaTime, const bool bGamePaused)
 {
-	if (!bGamePaused && PlayerInput && InputHandler && !bIgnoreInput)
-	{
-		InputHandler->UpdateDetection(DeltaTime);
-	}
+	//if (!bGamePaused && PlayerInput && InputHandler && !bIgnoreInput)
+	//{
+	//	//InputHandler->UpdateDetection(DeltaTime);
+	//}
 
 	Super::ProcessPlayerInput(DeltaTime, bGamePaused);
 
-	if (!bIgnoreInput)
+	//if (!bIgnoreInput)
 	{
 		//const ULocalPlayer* LocalPlayer = Cast<ULocalPlayer>(Player);
 		//AStrategySpectatorPawn* StrategyPawn = GetStrategySpectatorPawn();
@@ -206,45 +213,69 @@ void ANP4TownPlayerController::OnHoldReleased(const FVector2D& ScreenPosition, f
 	}*/
 }
 
-void ANP4TownPlayerController::OnSwipeStarted(const FVector2D& AnchorPosition, float DownTime)
+void ANP4TownPlayerController::OnSwipeStarted(/*const FVector2D& AnchorPosition, float DownTime*/)
 {
+	m_bIsSwipe = true;
+	const ULocalPlayer* LP = Cast<ULocalPlayer>(Player);
+	FVector2D MousePos = LP->ViewportClient->GetMousePosition();
+	FVector WorldOrigin, WorldDirection, TraceEnd; // 마우스 커서의 월드 위치, 가리키는 방향, 트레이스 끝지점
+	FVector MouseWorldPosition_3D;
+	FHitResult TraceHitResult;
+	FCollisionObjectQueryParams TraceObjectParam; // 충돌이 어떤 유형의 오브젝트에 유효할것인지
+	FCollisionQueryParams TraceParam;
+	TraceObjectParam.AddObjectTypesToQuery(ECollisionChannel::ECC_WorldStatic);
+	TraceObjectParam.AddObjectTypesToQuery(ECollisionChannel::ECC_WorldDynamic);
+	TraceObjectParam.AddObjectTypesToQuery(ECollisionChannel::ECC_Pawn);
+
+	TraceParam.bTraceComplex = true;
+	TraceParam.bTraceAsyncScene = true;
+	TraceParam.bReturnPhysicalMaterial = false;
+	DeprojectScreenPositionToWorld(MousePos.X, MousePos.Y, WorldOrigin, WorldDirection);
+
+	TraceEnd = WorldOrigin + WorldDirection * 65536.0f;
+
+	GetWorld()->LineTraceSingle(TraceHitResult, WorldOrigin, TraceEnd, TraceParam, TraceObjectParam);
+	MouseWorldPosition_3D = TraceHitResult.ImpactPoint;
+
+	m_vStartSwipeCoords = TraceHitResult.ImpactPoint;
+	m_vPrevSwipeScreenPosition = MousePos;
 	
-	if (GetCameraComponent())
-	{
-		bool bResult = false;
-		if (AreCoordsInNoScrollZone(AnchorPosition) == false)
-		{
-			
-			// Get intersection point with the plan used to move around
-			FHitResult Hit;
-			if (GetHitResultAtScreenPosition(AnchorPosition, COLLISION_PANCAMERA, true, Hit))
-			{
-				m_vStartSwipeCoords = Hit.ImpactPoint;
-				bResult = true;
-			}
-		}
-		else
-		{
-			EndSwipeNow();
-		}
-	}
+	//if (GetCameraComponent())
+	//{
+	//	bool bResult = false;
+	//	if (AreCoordsInNoScrollZone(AnchorPosition) == false)
+	//	{
+	//		
+	//		// Get intersection point with the plan used to move around
+	//		FHitResult Hit;
+	//		if (GetHitResultAtScreenPosition(AnchorPosition, COLLISION_PANCAMERA, true, Hit))
+	//		{
+	//			m_vStartSwipeCoords = Hit.ImpactPoint;
+	//			bResult = true;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		EndSwipeNow();
+	//	}
+	//}
 
-	FVector WorldPosition(0.0f);
-	AActor* const HitActor = GetFriendlyTarget(AnchorPosition, WorldPosition);
-	SetSelectedActor(HitActor, WorldPosition);
+	//FVector WorldPosition(0.0f);
+	//AActor* const HitActor = GetFriendlyTarget(AnchorPosition, WorldPosition);
+	//SetSelectedActor(HitActor, WorldPosition);
 
-	///** Get our position in 3d space */
-	/*if (SelectedActor.IsValid())
-	{
-		SwipeAnchor3D = SelectedActor->GetActorLocation();
-	}*/
+	/////** Get our position in 3d space */
+	///*if (SelectedActor.IsValid())
+	//{
+	//	SwipeAnchor3D = SelectedActor->GetActorLocation();
+	//}*/
 
-	m_vPrevSwipeScreenPosition = AnchorPosition;
+	//m_vPrevSwipeScreenPosition = AnchorPosition;
 }
 
-void ANP4TownPlayerController::OnSwipeUpdate(const FVector2D& ScreenPosition, float DownTime)
+void ANP4TownPlayerController::OnSwipeUpdate(/*const FVector2D& ScreenPosition, float DownTime*/)
 {
-	AActor* const Selected = m_SelectedActor.Get();
+	//AActor* const Selected = m_SelectedActor.Get();
 	//if (Selected && Selected->GetClass()->ImplementsInterface(UStrategyInputInterface::StaticClass()))
 	//{
 	//	ULocalPlayer* const MyPlayer = Cast<ULocalPlayer>(Player);
@@ -257,16 +288,41 @@ void ANP4TownPlayerController::OnSwipeUpdate(const FVector2D& ScreenPosition, fl
 	//	IStrategyInputInterface::Execute_OnInputSwipeUpdate(Selected, ScreenPosition3D - SwipeAnchor3D);
 	//}
 	//else
-	if (GetCameraComponent() != NULL)
-	{
-		if (m_vStartSwipeCoords.IsNearlyZero() == false)
-		{
-			FHitResult Hit;
-			if (GetHitResultAtScreenPosition(ScreenPosition, COLLISION_PANCAMERA, true, Hit))
-			{
-				FVector NewSwipeCoords = Hit.ImpactPoint;
+	//if (GetCameraComponent() != NULL)
+	//{
+	//	if (m_vStartSwipeCoords.IsNearlyZero() == false)
+	//	{
+	//		FHitResult Hit;
+	//		if (GetHitResultAtScreenPosition(ScreenPosition, COLLISION_PANCAMERA, true, Hit))
+	//		{
+
+	const ULocalPlayer* LP = Cast<ULocalPlayer>(Player);
+	FVector2D MousePos = LP->ViewportClient->GetMousePosition();
+	FVector WorldOrigin, WorldDirection, TraceEnd; // 마우스 커서의 월드 위치, 가리키는 방향, 트레이스 끝지점
+	FVector MouseWorldPosition_3D;
+	FHitResult TraceHitResult;
+	FCollisionObjectQueryParams TraceObjectParam; // 충돌이 어떤 유형의 오브젝트에 유효할것인지
+	FCollisionQueryParams TraceParam;
+	TraceObjectParam.AddObjectTypesToQuery(ECollisionChannel::ECC_WorldStatic);
+	TraceObjectParam.AddObjectTypesToQuery(ECollisionChannel::ECC_WorldDynamic);
+	TraceObjectParam.AddObjectTypesToQuery(ECollisionChannel::ECC_Pawn);
+
+	TraceParam.bTraceComplex = true;
+	TraceParam.bTraceAsyncScene = true;
+	TraceParam.bReturnPhysicalMaterial = false;
+	DeprojectScreenPositionToWorld(MousePos.X, MousePos.Y, WorldOrigin, WorldDirection);
+
+	TraceEnd = WorldOrigin + WorldDirection * 65536.0f;
+
+	GetWorld()->LineTraceSingle(TraceHitResult, WorldOrigin, TraceEnd, TraceParam, TraceObjectParam);
+	MouseWorldPosition_3D = TraceHitResult.ImpactPoint;
+
+	//m_vStartSwipeCoords = MouseWorldPosition_3D;
+	//m_vPrevSwipeScreenPosition = MousePos;
+
+				FVector NewSwipeCoords = TraceHitResult.ImpactPoint;
 				FVector Delta = m_vStartSwipeCoords - NewSwipeCoords;
-				// Flatten Z axis - we are not interested in that.
+	//			// Flatten Z axis - we are not interested in that.
 				Delta.Z = 0.0f;
 
 				if (Delta.IsNearlyZero() == false)
@@ -277,15 +333,16 @@ void ANP4TownPlayerController::OnSwipeUpdate(const FVector2D& ScreenPosition, fl
 						m_pPossessPawn->SetActorRelativeLocation(vLocation);
 					}
 				}
-			}
-		}
-	}
+	//		}
+	//	}
+	//}
 
-	m_vPrevSwipeScreenPosition = ScreenPosition;
+	//m_vPrevSwipeScreenPosition = ScreenPosition;
 }
 
-void ANP4TownPlayerController::OnSwipeReleased(const FVector2D& ScreenPosition, float DownTime)
+void ANP4TownPlayerController::OnSwipeReleased(/*const FVector2D& ScreenPosition, float DownTime*/)
 {
+	m_bIsSwipe = false;
 	/*AActor* const Selected = m_SelectedActor.Get();
 	if (Selected && Selected->GetClass()->ImplementsInterface(UStrategyInputInterface::StaticClass()))
 	{
@@ -299,7 +356,7 @@ void ANP4TownPlayerController::OnSwipeReleased(const FVector2D& ScreenPosition, 
 		IStrategyInputInterface::Execute_OnInputSwipeReleased(Selected, ScreenPosition3D - SwipeAnchor3D, DownTime);
 	}
 	else*/
-	{
+	/*{
 		if (GetCameraComponent() != NULL)
 		{
 			if (m_vStartSwipeCoords.IsNearlyZero() == false)
@@ -312,7 +369,8 @@ void ANP4TownPlayerController::OnSwipeReleased(const FVector2D& ScreenPosition, 
 				EndSwipeNow();
 			}
 		}
-	}
+	}*/
+	int a = 0;
 }
 
 void ANP4TownPlayerController::OnSwipeTwoPointsStarted(const FVector2D& ScreenPosition1, const FVector2D& ScreenPosition2, float DownTime)

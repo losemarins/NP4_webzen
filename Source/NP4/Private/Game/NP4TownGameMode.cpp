@@ -11,13 +11,14 @@
 #include "Define.h"
 #include "MySpectatorPawn.h"
 #include "NP4PlayerState.h"
+#include "NP4TownGameState.h"
 
 ANP4TownGameMode::ANP4TownGameMode()
 {
 	PlayerControllerClass = ANP4TownPlayerController::StaticClass();
 	DefaultPawnClass = ANP4TownPlayer::StaticClass();
 	PlayerStateClass = ANP4PlayerState::StaticClass();
-	GameStateClass = ANP4GameState::StaticClass();
+	GameStateClass = ANP4TownGameState::StaticClass();
 	HUDClass = ANP4HUD::StaticClass();
 
 	if ((GEngine != nullptr) && (GEngine->GameViewport != nullptr))
@@ -32,7 +33,7 @@ void ANP4TownGameMode::InitGameState()
 {
 	Super::InitGameState();
 
-	ANP4GameState* const GameState = GetGameState<ANP4GameState>();
+	ANP4TownGameState* const GameState = GetGameState<ANP4TownGameState>();
 	if (GameState)
 	{
 		// 난이도 설정
