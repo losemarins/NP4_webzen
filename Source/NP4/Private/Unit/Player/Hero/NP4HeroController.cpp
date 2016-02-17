@@ -63,6 +63,9 @@ void ANP4HeroController::BeginPlay()
 	{
 		InitializeActionCameraArray();
 	}
+
+	/*PlayerSpawn();
+	EnemySpawn();*/
 }
 
 void ANP4HeroController::BeginDestroy()

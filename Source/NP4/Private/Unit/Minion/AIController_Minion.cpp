@@ -11,7 +11,11 @@
 AAIController_Minion::AAIController_Minion(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
-	
+	BehaviorComp = ObjectInitializer.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorComp"));
+	BlackboardComp = ObjectInitializer.CreateDefaultSubobject<UBlackboardComponent>(this, TEXT("BlackboardComp"));
+	TargetEnemyKeyName = "TargetEnemy";
+
+	isMove = true;
 }
 
 void AAIController_Minion::Tick(float DeltaTime)
@@ -22,7 +26,7 @@ void AAIController_Minion::Tick(float DeltaTime)
 	for (int32 Idx = 0; Idx < AllActions.Num(); Idx++)
 	{
 		CurrentAction = AllActions[Idx];
-		if (CurrentAction != NULL)
+		if (CurrentAction != NULL && isMove)
 		{
 			CurrentAction->Activate();
 		}
@@ -31,6 +35,7 @@ void AAIController_Minion::Tick(float DeltaTime)
 
 void AAIController_Minion::SetTargetEnemy(APawn* NewTarget)
 {
+	isMove = false;
 	if (BlackboardComp)
 	{
 		BlackboardComp->SetValueAsObject(TargetEnemyKeyName, NewTarget);
