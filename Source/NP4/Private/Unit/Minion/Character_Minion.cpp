@@ -16,15 +16,6 @@ ACharacter_Minion::ACharacter_Minion()
 	PawnSensingComp->SightRadius = 100;
 	PawnSensingComp->bOnlySensePlayers = 0;
 	PawnSensingComp->SensingInterval = 0.1f;
-	GetCharacterMovement()->MaxWalkSpeed = 150;
-	
-	/*USkeletalMeshComponent* pMesh = GetMesh();
-	pMesh->SetWorldRotation(GetControlRotation());
-	pMesh->SetRelativeRotation(FRotator(0, 90, 0));*/
-	//GetController()->SetActorRotation(FQuat(0, 1, 0, 90));
-	FRotator Rot = GetActorRotation();
-	Rot.Yaw += 90;
-	SetActorRotation(Rot);
 }
 
 void ACharacter_Minion::BeginPlay()
@@ -37,6 +28,10 @@ void ACharacter_Minion::BeginPlay()
 		//PawnSensingComp->OnHearNoise.AddDynamic(this, &ACharacter_Minion::OnHearNoise);
 	}
 	UpdatePawnData();
+
+	FRotator Rot = GetActorRotation();
+	Rot.Yaw += 90;
+	SetActorRotation(Rot);
 }
 
 void ACharacter_Minion::Tick(float DeltaSeconds)
