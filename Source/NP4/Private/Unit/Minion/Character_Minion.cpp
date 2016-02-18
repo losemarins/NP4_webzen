@@ -21,11 +21,14 @@ ACharacter_Minion::ACharacter_Minion()
 
 	AIControllerClass = AAIController_Minion::StaticClass();
 	PawnSensingComp = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensingComp"));
-	PawnSensingComp->SetPeripheralVisionAngle(50);
-	PawnSensingComp->SightRadius = 100;
+	PawnSensingComp->SetPeripheralVisionAngle(70);
+	PawnSensingComp->SightRadius = 300;
 	PawnSensingComp->bOnlySensePlayers = 0;
 	PawnSensingComp->SensingInterval = 0.1f;
+
+	SenseTimeOut = 0.1f;
 	IsAttack = false;
+	bSensedTarget = false;
 }
 
 void ACharacter_Minion::BeginPlay()
@@ -43,6 +46,7 @@ void ACharacter_Minion::BeginPlay()
 		MeleeCollisionComp->OnComponentBeginOverlap.AddDynamic(this, &ACharacter_Minion::OnMeleeCompBeginOverlap);
 	}
 
+	AAIController_Minion* MinionController = Cast<AAIController_Minion>(GetController());
 	UpdatePawnData();
 
 	GetCharacterMovement()->MaxWalkSpeed = 100;
@@ -54,6 +58,16 @@ void ACharacter_Minion::BeginPlay()
 void ACharacter_Minion::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+
+	if (bSensedTarget && (GetWorld()->TimeSeconds - LastSeenTime) > SenseTimeOut)
+	{
+		AAIController_Minion* MinionController = Cast<AAIController_Minion>(GetController());
+		if (MinionController)
+		{
+			MinionController->SetTargetEnemy(nullptr);
+			IsAttack = false;
+		}
+	}
 }
 
 void ACharacter_Minion::UpdatePawnData()
@@ -73,8 +87,8 @@ void ACharacter_Minion::OnSeeEnemy(APawn* Pawn)
 		BroadcastUpdateAudioLoop(true);
 	}*/
 
-	/*LastSeenTime = GetWorld()->GetTimeSeconds();
-	bSensedTarget = true;*/
+	LastSeenTime = GetWorld()->GetTimeSeconds();
+	bSensedTarget = true;
 
 	AAIController_Minion* MinionController = Cast<AAIController_Minion>(GetController());
 	ANP4CharacterBase* SensedPawn = Cast<ANP4CharacterBase>(Pawn);
@@ -82,7 +96,7 @@ void ACharacter_Minion::OnSeeEnemy(APawn* Pawn)
 	if (MinionController && SensedPawn->IsAlive())
 	{
 		MinionController->SetTargetEnemy(SensedPawn);
-		MinionController->StopMovement();
+		//MinionController->StopMovement();
 	}
 }
 
@@ -160,4 +174,9 @@ void ACharacter_Minion::PerformMeleeStrike(AActor* HitActor)
 		//	}
 		}
 	}
+}
+
+void ACharacter_Minion::SetEnemyCastle(ABuilding_Castle* Castle)
+{
+	Cast<AAIController_Minion>(GetController())->SetEnemyCastle(Castle);
 }

@@ -40,3 +40,4 @@ FPlayerData* ADungeon_Building::GetTeamData() const
 	}
 	return nullptr;
 }
+
