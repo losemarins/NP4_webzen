@@ -5,9 +5,21 @@
 #include "Object/Item/ItemBase.h"
 #include "WeaponBase.generated.h"
 
-/**
- * 
- */
+//UEnum eWeaponType
+//{
+//	eType_1 = 0,
+//	eType_2 = 21,
+//	eType_3 = 41
+//};
+
+UENUM(BlueprintType)		//"BlueprintType" is essential to include
+enum class eWeaponType : uint8
+{
+	eType_1 = 0,
+	eType_2 = 21,
+	eType_3 = 41
+};
+
 class ANP4CharacterBase;
 
 UCLASS()
@@ -25,6 +37,9 @@ protected:
 	/* Collision Value */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCapsuleComponent* m_pCollisionCapsule;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		eWeaponType m_iWeaponType;
 
 public:
 	AWeaponBase();
@@ -51,4 +66,5 @@ public:
 	/* Collider ! */
 	void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
+	eWeaponType GetWeaponType_byInt();
 };
