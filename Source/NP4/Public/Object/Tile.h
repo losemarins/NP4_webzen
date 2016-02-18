@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "Define.h"
 #include "Tile.generated.h"
 
 UCLASS()
@@ -31,7 +32,9 @@ public:
 	bool GetBuilding();
 
 	UFUNCTION(BlueprintCallable, Category = "Tile")
-		void SetBuilding(bool NewBuildState);
+	void SetBuilding(bool NewBuildState);
+
+	void SetMeshMetarial(EColor::Type EColor);
 
 protected:
 	// 건설 여부
@@ -40,6 +43,11 @@ protected:
 private:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Tile", meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* TileMesh;
+
+	UMaterial* m_RadMaterial;
+	UMaterial* m_GreenMaterial;
+	UMaterial* m_OriginalMaterial;
+
 
 
 	

@@ -3,10 +3,31 @@
 
 #pragma once
 
-const int TileSizeX = 370;
-const int TileSizeY = 320;
-const int TileX = 12;
-const int TileY = 12;
+namespace EBuilding
+{
+	enum Type
+	{
+		Barrack,
+		Laboratory,
+		HeroManagement,
+	};
+}
+// Color
+namespace EColor
+{
+	enum Type
+	{
+		Red,
+		Green,
+		Original,
+	};
+}
+
+//Tile
+const int TileSizeX = 1280	;
+const int TileSizeY = 1110;
+const int TileX = 6;
+const int TileY = 6;
 // 게임의 진영 
 UENUM()
 namespace EGameTeam

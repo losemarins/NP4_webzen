@@ -16,8 +16,9 @@ ANP4TownPlayerController::ANP4TownPlayerController()
 	m_fMaxZoomLevel = 1.0f;
 	m_ZoomDistance = 2000;
 	m_bIsSwipe = false;
-	m_bBuildMode = false;
+	m_bBuildMode = true;
 	m_bIsBuildpossibility = false;
+	m_OldSelectActor = NULL;
 }
 
 void ANP4TownPlayerController::Possess(APawn* InPawn)
@@ -37,7 +38,8 @@ void ANP4TownPlayerController::Tick(float DeltaSeconds)
 
 	if (m_bBuildMode)
 	{
-		ANP4TownGameState const* const MyGameState = GetWorld()->GetGameState<ANP4TownGameState>();
+		TileDetecting();
+		
 	}
 }
 
@@ -84,15 +86,64 @@ void ANP4TownPlayerController::UpdateCamera(float DeltaTime)
 	Cast<ANP4TownPlayer>(m_pPossessPawn)->GetSpringArm()->TargetArmLength = FMath::Lerp<float>(m_ZoomDistance, m_ZoomDistance, 1);
 }
 
-AActor* ANP4TownPlayerController::GetSelectActor(FVector2D MousePos)
+FHitResult ANP4TownPlayerController::GetSelectActor(FVector2D MousePos)
 {
-	return NULL;
+	FVector WorldOrigin, WorldDirection, TraceEnd; // 마우스 커서의 월드 위치, 가리키는 방향, 트레이스 끝지점
+	FVector MouseWorldPosition_3D;
+	FHitResult TraceHitResult;
+	FCollisionObjectQueryParams TraceObjectParam; // 충돌이 어떤 유형의 오브젝트에 유효할것인지
+	FCollisionQueryParams TraceParam;
+	TraceObjectParam.AddObjectTypesToQuery(ECollisionChannel::ECC_WorldStatic);
+	TraceObjectParam.AddObjectTypesToQuery(ECollisionChannel::ECC_WorldDynamic);
+	TraceObjectParam.AddObjectTypesToQuery(ECollisionChannel::ECC_Pawn);
+
+	TraceParam.bTraceComplex = true;
+	TraceParam.bTraceAsyncScene = true;
+	TraceParam.bReturnPhysicalMaterial = false;
+	DeprojectScreenPositionToWorld(MousePos.X, MousePos.Y, WorldOrigin, WorldDirection);
+
+	TraceEnd = WorldOrigin + WorldDirection * 65536.0f;
+	GetWorld()->LineTraceSingle(TraceHitResult, WorldOrigin, TraceEnd, TraceParam, TraceObjectParam);
+
+	return TraceHitResult;
 }
 
-FVector2D ANP4TownPlayerController::GetMousePose()
+FVector2D ANP4TownPlayerController::GetMousePos()
 {
-	FVector2D a( 0, 0);
-	return a;
+	const ULocalPlayer* LP = Cast<ULocalPlayer>(Player);
+	FVector2D MousePos = LP->ViewportClient->GetMousePosition();
+	
+	return MousePos;
+}
+
+void ANP4TownPlayerController::TileDetecting()
+{
+	FVector2D MousePos = GetMousePos();
+	FHitResult HitResult = GetSelectActor(MousePos);
+	
+	ATile* pTile = Cast<ATile>(HitResult.GetActor());
+
+	if (!pTile)
+		return;
+
+	if (!m_OldSelectActor)
+		m_OldSelectActor = pTile;
+	else
+		Cast<ATile>(m_OldSelectActor)->SetMeshMetarial(EColor::Original);
+		
+
+	if (pTile->GetBuilding())
+	{
+		//타일에 이미 건물이 건설되어있으면 Red로 변경
+		pTile->SetMeshMetarial(EColor::Red);
+	}
+	else
+	{
+		// 타일에 건물이 없으면 Green으로 변경.
+		pTile->SetMeshMetarial(EColor::Green);
+	}
+
+	m_OldSelectActor = pTile;
 }
 
 void ANP4TownPlayerController::OnZoomIn()
@@ -235,39 +286,51 @@ void ANP4TownPlayerController::OnSwipeStarted(/*const FVector2D& AnchorPosition,
 {
 	// 마우스 클릭시 
 	// 건설 모드인지 검사
+	FVector2D MousePos = GetMousePos();
+	FHitResult HitResult = GetSelectActor(MousePos);
+
 	if (m_bBuildMode)
 	{
-		//if()
-	}
-	else
-	{
+		// 건설모드일 경우 마우스 위치에 있는 액터를 얻어온다.
+		// 해당 액터가 타일일 경우 타일에 건물이 건설되어 있는지 판단.
+		ATile* pTile = Cast<ATile>(HitResult.GetActor());
+		if (!pTile)
+			return;
 
+		if (pTile->GetBuilding())
+		{
+			//건물이 건설되어 있을경우 눌러도 아무 반응도 하면안됨.
+			// 삐빅! 이런 싸운드를 출력하게한다.
+		
+		}
+		else
+		{
+			// 건물이 건설되어있지 않을 경우 
+			// 타일의 위치에 건물이 생성되야한다. 어떤 건물인지는 UI에서 받아와야하고.
+			// State 를 얻어온 후 building해주는 로직을 만들어야함.
+			FVector TilePos = pTile->GetActorLocation();
+			ANP4TownGameState* MyGameState = GetWorld()->GetGameState<ANP4TownGameState>();
+			MyGameState->CreateBuilding(TilePos, EBuilding::HeroManagement);
+			
+
+		}
+	}
+	else 
+	{
+		// 건설모드가 아닐경우 카메라 이동처리만 해주면된다.
+		
+		if (HitResult.bBlockingHit)
+			m_vStartSwipeCoords = HitResult.ImpactPoint;
+		/*else
+		{
+			FVector WorldLocation, WorldDirection;
+			DeprojectScreenPositionToWorld(MousePos.X, MousePos.Y, WorldLocation, WorldDirection);
+			WorldLocation.Z = m_pPossessPawn->GetActorLocation().Z;
+			m_vStartSwipeCoords = WorldLocation;
+		}*/
 	}
 	m_bIsSwipe = true;
-	const ULocalPlayer* LP = Cast<ULocalPlayer>(Player);
-	FVector2D MousePos = LP->ViewportClient->GetMousePosition();
-	FVector WorldOrigin, WorldDirection, TraceEnd; // 마우스 커서의 월드 위치, 가리키는 방향, 트레이스 끝지점
-	FVector MouseWorldPosition_3D;
-	FHitResult TraceHitResult;
-	FCollisionObjectQueryParams TraceObjectParam; // 충돌이 어떤 유형의 오브젝트에 유효할것인지
-	FCollisionQueryParams TraceParam;
-	TraceObjectParam.AddObjectTypesToQuery(ECollisionChannel::ECC_WorldStatic);
-	TraceObjectParam.AddObjectTypesToQuery(ECollisionChannel::ECC_WorldDynamic);
-	TraceObjectParam.AddObjectTypesToQuery(ECollisionChannel::ECC_Pawn);
-
-	TraceParam.bTraceComplex = true;
-	TraceParam.bTraceAsyncScene = true;
-	TraceParam.bReturnPhysicalMaterial = false;
-	DeprojectScreenPositionToWorld(MousePos.X, MousePos.Y, WorldOrigin, WorldDirection);
-
-	TraceEnd = WorldOrigin + WorldDirection * 65536.0f;
-
-	GetWorld()->LineTraceSingle(TraceHitResult, WorldOrigin, TraceEnd, TraceParam, TraceObjectParam);
 	
-	if (TraceHitResult.bBlockingHit)
-		m_vStartSwipeCoords = TraceHitResult.ImpactPoint;
-	else
-		m_vStartSwipeCoords = WorldOrigin;
 	//m_vPrevSwipeScreenPosition = MousePos;
 	
 	//if (GetCameraComponent())
@@ -326,43 +389,39 @@ void ANP4TownPlayerController::OnSwipeUpdate(/*const FVector2D& ScreenPosition, 
 	//		if (GetHitResultAtScreenPosition(ScreenPosition, COLLISION_PANCAMERA, true, Hit))
 	//		{
 
-	const ULocalPlayer* LP = Cast<ULocalPlayer>(Player);
-	FVector2D MousePos = LP->ViewportClient->GetMousePosition();
-	FVector WorldOrigin, WorldDirection, TraceEnd; // 마우스 커서의 월드 위치, 가리키는 방향, 트레이스 끝지점
-	FVector MouseWorldPosition_3D;
-	FHitResult TraceHitResult;
-	FCollisionObjectQueryParams TraceObjectParam; // 충돌이 어떤 유형의 오브젝트에 유효할것인지
-	FCollisionQueryParams TraceParam;
-	TraceObjectParam.AddObjectTypesToQuery(ECollisionChannel::ECC_WorldStatic);
-	TraceObjectParam.AddObjectTypesToQuery(ECollisionChannel::ECC_WorldDynamic);
-	TraceObjectParam.AddObjectTypesToQuery(ECollisionChannel::ECC_Pawn);
-
-	TraceParam.bTraceComplex = true;
-	TraceParam.bTraceAsyncScene = true;
-	TraceParam.bReturnPhysicalMaterial = false;
-	DeprojectScreenPositionToWorld(MousePos.X, MousePos.Y, WorldOrigin, WorldDirection);
-
-	TraceEnd = WorldOrigin + WorldDirection * 65536.0f;
-
-	GetWorld()->LineTraceSingle(TraceHitResult, WorldOrigin, TraceEnd, TraceParam, TraceObjectParam);
-	MouseWorldPosition_3D = TraceHitResult.ImpactPoint;
 
 	//m_vStartSwipeCoords = MouseWorldPosition_3D;
 	//m_vPrevSwipeScreenPosition = MousePos;
 
-				FVector NewSwipeCoords = TraceHitResult.ImpactPoint;
-				FVector Delta = m_vStartSwipeCoords - NewSwipeCoords;
-	//			// Flatten Z axis - we are not interested in that.
-				Delta.Z = 0.0f;
+	FVector2D MousePos = GetMousePos();
+	FHitResult TraceHitResult = GetSelectActor(MousePos);
 
-				if (Delta.IsNearlyZero() == false)
-				{
-					{
-						FVector vLocation = m_pPossessPawn->GetActorLocation();
-						vLocation += Delta;
-						m_pPossessPawn->SetActorRelativeLocation(vLocation);
-					}
-				}
+	
+	FVector Delta;
+	if (TraceHitResult.bBlockingHit)
+	{
+		FVector NewSwipeCoords = TraceHitResult.ImpactPoint;
+		Delta = m_vStartSwipeCoords - NewSwipeCoords;
+		Delta.Z = 0.0f;
+	}
+	//else
+	//{
+	//	FVector WorldLocation, WorldDirection;
+	//	DeprojectScreenPositionToWorld(MousePos.X, MousePos.Y, WorldLocation, WorldDirection);
+	//	WorldLocation.Z = m_pPossessPawn->GetActorLocation().Z;
+	//	FVector NewSwipeCoords = WorldLocation;
+	//	Delta = m_vStartSwipeCoords - NewSwipeCoords;
+	//}
+
+	
+	if (Delta.IsNearlyZero() == false && TraceHitResult.bBlockingHit)
+	{
+		{
+			FVector vLocation = m_pPossessPawn->GetActorLocation();
+			vLocation += Delta;
+			m_pPossessPawn->SetActorRelativeLocation(vLocation);
+		}
+	}
 	//		}
 	//	}
 	//}

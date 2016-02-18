@@ -2,6 +2,7 @@
 
 #include "NP4.h"
 #include "NP4TownGameState.h"
+#include "HeroManagementBuilding.h"
 #include "Tile.h"
 
 
@@ -65,4 +66,26 @@ void ANP4TownGameState::InitTile()
 			m_TileArray.Add(pTile);
 		}		
 	}
+}
+
+void ANP4TownGameState::CreateBuilding(FVector SpawnPos, EBuilding::Type BuildingType)
+{
+
+	ABuilding* pBuilding = NULL;
+	FVector Location = SpawnPos;
+	Location.Z += 200;
+	FRotator Rotation = FRotator(0, 90, 0);
+	switch (BuildingType)
+	{
+	case EBuilding::Barrack:
+		break;
+	case EBuilding::HeroManagement:
+		pBuilding = (AHeroManagementBuilding*)GetWorld()->SpawnActor(AHeroManagementBuilding::StaticClass(), &Location, &Rotation);
+		break;
+	case EBuilding::Laboratory:
+		break;
+	}
+
+	m_BuildingArray.Add(pBuilding);
+	
 }

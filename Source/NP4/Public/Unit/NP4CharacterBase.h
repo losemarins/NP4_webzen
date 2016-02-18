@@ -16,10 +16,12 @@ protected:
 	uint8 MyTeamNum;
 
 	//Juhe UI Add 
-	UPROPERTY(BlueprintReadOnly, Category="PlayerHPBar")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="PlayerHPBar")
 	float Health;
 	UPROPERTY(BlueprintReadOnly, Category = "PlayerHPBar")
 	float HealthMax;
+
+
 
 public:
 	TArray<AWeaponBase*> m_pItemInven_Temp; //юс╫ц

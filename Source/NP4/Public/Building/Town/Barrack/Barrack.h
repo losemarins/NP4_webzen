@@ -2,17 +2,18 @@
 
 #pragma once
 
-#include "Building.h"
+#include "TownBuilding.h"
 #include "Barrack.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class NP4_API ABarrack : public ABuilding
+class NP4_API ABarrack : public ATownBuilding
 {
 	GENERATED_BODY()
-	
+public:
+	virtual void Init() override;
 	
 	
 	
