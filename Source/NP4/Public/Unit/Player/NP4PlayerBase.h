@@ -71,8 +71,8 @@ public:
 	bool m_bComboNotifyEnter;
 	bool m_bComboClkOn;
 	eCombo_Interpol m_ComboStep;
-	
 
+	
 public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
@@ -144,4 +144,5 @@ public:
 	/* Notify Combo */
 	void SetbComboClkOnOff(bool _bSet);
 	void SetbNotifyEnter(bool _bEnter);
+	
 };

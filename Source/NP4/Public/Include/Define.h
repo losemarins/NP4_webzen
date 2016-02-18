@@ -130,6 +130,7 @@ enum class eErrorType
 /* Define Fuctnion */
 #define GetPlayerCameraManager() Cast<ANP4CameraManager>(GEngine->GetFirstLocalPlayerController(GetWorld())->PlayerCameraManager)
 #define GetNP4PlayerController() (GEngine->GetFirstLocalPlayerController(GetWorld()))
+//#define GetMeshLoadManager() ANP4MeshLoadManager::StaticClass()
 
 /* Animation Path */
 
