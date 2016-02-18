@@ -25,9 +25,8 @@ ACharacter_Minion::ACharacter_Minion()
 	PawnSensingComp->SightRadius = 300;
 	PawnSensingComp->bOnlySensePlayers = 0;
 	PawnSensingComp->SensingInterval = 0.1f;
-
-	SenseTimeOut = 0.1f;
-	IsAttack = false;
+	MeleeStrikeCooldown = 1.f;
+	SenseTimeOut = 1.f;
 	bSensedTarget = false;
 }
 
@@ -51,6 +50,7 @@ void ACharacter_Minion::BeginPlay()
 
 	GetCharacterMovement()->MaxWalkSpeed = 100;
 	FRotator Rot = GetActorRotation();
+	
 	Rot.Yaw += 90;
 	SetActorRotation(Rot);
 }
@@ -65,7 +65,6 @@ void ACharacter_Minion::Tick(float DeltaSeconds)
 		if (MinionController)
 		{
 			MinionController->SetTargetEnemy(nullptr);
-			IsAttack = false;
 		}
 	}
 }
@@ -96,7 +95,6 @@ void ACharacter_Minion::OnSeeEnemy(APawn* Pawn)
 	if (MinionController && SensedPawn->IsAlive())
 	{
 		MinionController->SetTargetEnemy(SensedPawn);
-		//MinionController->StopMovement();
 	}
 }
 
@@ -162,15 +160,15 @@ void ACharacter_Minion::PerformMeleeStrike(AActor* HitActor)
 				/* Set to prevent a zombie to attack multiple times in a very short time */
 				LastMeleeAttackTime = GetWorld()->GetTimeSeconds();
 
-				FPointDamageEvent DmgEvent;
-				DmgEvent.DamageTypeClass = PunchDamageType;
-				DmgEvent.Damage = MeleeDamage;
+				//FPointDamageEvent DmgEvent;
+				//DmgEvent.DamageTypeClass = PunchDamageType;
+				//DmgEvent.Damage = MeleeDamage;
 
-				HitActor->TakeDamage(DmgEvent.Damage, DmgEvent, GetController(), this);
-				IsAttack = true;
-				AAIController_Minion* MinionController = Cast<AAIController_Minion>(GetController());
-				MinionController->StopMovement();
-				//SimulateMeleeStrike();
+				//HitActor->TakeDamage(DmgEvent.Damage, DmgEvent, GetController(), this);
+		
+				//AAIController_Minion* MinionController = Cast<AAIController_Minion>(GetController());
+				//MinionController->StopMovement();
+				SimulateMeleeStrike();
 		//	}
 		}
 	}
@@ -179,4 +177,11 @@ void ACharacter_Minion::PerformMeleeStrike(AActor* HitActor)
 void ACharacter_Minion::SetEnemyCastle(ABuilding_Castle* Castle)
 {
 	Cast<AAIController_Minion>(GetController())->SetEnemyCastle(Castle);
+}
+
+void ACharacter_Minion::SimulateMeleeStrike_Implementation()
+{
+	UAnimInstance* AnimInstance = GetMesh()->AnimScriptInstance;
+	if(!AnimInstance->Montage_IsPlaying(MeleeAnimMontage))
+		PlayAnimMontage(MeleeAnimMontage);
 }
