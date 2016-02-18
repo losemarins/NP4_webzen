@@ -5,6 +5,7 @@
 #include "NP4CharacterBase.h"
 #include "NP4PlayerState.h"
 #include "NP4CameraManager.h"
+#include "WeaponBase.h"
 #include "NP4PlayerBase.generated.h"
 
 class ANP4HeroController;
@@ -54,7 +55,6 @@ public:
 	//TArray<UAnimMontage*> m_ArrAnimMontage[100];
 
 	TArray<UAnimMontage*> m_ArrAnimMontage;
-	TArray<float> m_fAnimationMoveSpeed;
 
 	/* Camera Value */
 	float m_ZoomFactor;
@@ -72,7 +72,6 @@ public:
 	bool m_bComboClkOn;
 	eCombo_Interpol m_ComboStep;
 
-	
 public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
@@ -135,10 +134,6 @@ public:
 	void ActionSkill_2();
 	void StopSkill(UAnimMontage* _pSkillAnim);
 
-	/* Animation Moving */
-	void CheckMovingAnimation();
-	void WhileAnimationMoveCharacter(int _CurState);
-
 	/* Notify Combo */
 	void SetbNotifyEnter(bool _bEnter);
 	void SetbComboOn(bool _bActive);
@@ -146,6 +141,4 @@ public:
 	bool GetbComboOn();
 	eCombo_Interpol GetCurrentComboStep();
 	void SetCurrentComboStep(eCombo_Interpol _newStep);
-	
-
 };

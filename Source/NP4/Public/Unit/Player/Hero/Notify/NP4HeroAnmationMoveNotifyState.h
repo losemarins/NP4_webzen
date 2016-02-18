@@ -4,25 +4,22 @@
 
 #include "Animation/AnimNotifies/AnimNotifyState.h"
 #include "NP4PlayerBase.h"
-#include "NP4HeroMeleeAttackNotify.generated.h"
+#include "NP4HeroAnmationMoveNotifyState.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class NP4_API UNP4HeroMeleeAttackNotify : public UAnimNotifyState
+class NP4_API UNP4HeroAnmationMoveNotifyState : public UAnimNotifyState
 {
 	GENERATED_BODY()
 
 public:
-	eCombo_Interpol m_eCurrentComboNum;
-	bool m_bNextSectionReady;
+	UPROPERTY(EditAnyWhere,BluePrintReadWrite, Category = "MyMove")
+	float m_fMoveSpeed;
 
 public:
 	virtual void NotifyBegin(USkeletalMeshComponent * MeshComp, UAnimSequenceBase * Animation, float TotalDuration) override;
 	virtual void NotifyTick(USkeletalMeshComponent * MeshComp, UAnimSequenceBase * Animation, float FrameDeltaTime) override;
-	virtual void NotifyEnd(USkeletalMeshComponent * MeshComp, UAnimSequenceBase * Animation) override;
 	
-	
-
 };

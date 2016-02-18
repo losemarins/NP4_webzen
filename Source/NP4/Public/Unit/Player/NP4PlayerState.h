@@ -10,11 +10,11 @@ class ANP4PlayerBase;
 enum eCharacterState
 {
 	eIdle = 0,
-	eWalk = 10,
-	eRun = 20,
-	eAttack = 30,
-	eHit = 40,
-	eSkilling = 50,
+	eWalk = 2,
+	eRun = 4,
+	eAttack = 6,
+	eHit = 10,
+	eSkilling = 12,
 	eEnd
 };
 

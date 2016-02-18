@@ -118,3 +118,8 @@ void AWeaponBase::NotifyActorBeginOverlap(AActor* OtherActor)
 		m_pCollisionCapsule->SetVisibility(true);
 	}
 }
+
+eWeaponType AWeaponBase::GetWeaponType()
+{
+	return m_iWeaponType;
+}
