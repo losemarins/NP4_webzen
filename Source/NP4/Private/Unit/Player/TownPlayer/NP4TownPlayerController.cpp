@@ -16,6 +16,8 @@ ANP4TownPlayerController::ANP4TownPlayerController()
 	m_fMaxZoomLevel = 1.0f;
 	m_ZoomDistance = 2000;
 	m_bIsSwipe = false;
+	m_bBuildMode = false;
+	m_bIsBuildpossibility = false;
 }
 
 void ANP4TownPlayerController::Possess(APawn* InPawn)
@@ -28,9 +30,14 @@ void ANP4TownPlayerController::Tick(float DeltaSeconds)
 {
 	UpdateCamera(DeltaSeconds);	
 
-	if (m_bIsSwipe)
+	if (!m_bBuildMode && m_bIsSwipe)
 	{
 		OnSwipeUpdate();
+	}
+
+	if (m_bBuildMode)
+	{
+		ANP4TownGameState const* const MyGameState = GetWorld()->GetGameState<ANP4TownGameState>();
 	}
 }
 
@@ -75,6 +82,17 @@ void ANP4TownPlayerController::UpdateCamera(float DeltaTime)
 {
 	Cast<ANP4TownPlayer>(m_pPossessPawn)->GetCamera()->FieldOfView = FMath::Lerp<float>(90.0f, 60.0f, m_ZoomFactor);
 	Cast<ANP4TownPlayer>(m_pPossessPawn)->GetSpringArm()->TargetArmLength = FMath::Lerp<float>(m_ZoomDistance, m_ZoomDistance, 1);
+}
+
+AActor* ANP4TownPlayerController::GetSelectActor(FVector2D MousePos)
+{
+	return NULL;
+}
+
+FVector2D ANP4TownPlayerController::GetMousePose()
+{
+	FVector2D a( 0, 0);
+	return a;
 }
 
 void ANP4TownPlayerController::OnZoomIn()
@@ -215,6 +233,16 @@ void ANP4TownPlayerController::OnHoldReleased(const FVector2D& ScreenPosition, f
 
 void ANP4TownPlayerController::OnSwipeStarted(/*const FVector2D& AnchorPosition, float DownTime*/)
 {
+	// 마우스 클릭시 
+	// 건설 모드인지 검사
+	if (m_bBuildMode)
+	{
+		//if()
+	}
+	else
+	{
+
+	}
 	m_bIsSwipe = true;
 	const ULocalPlayer* LP = Cast<ULocalPlayer>(Player);
 	FVector2D MousePos = LP->ViewportClient->GetMousePosition();
@@ -235,10 +263,12 @@ void ANP4TownPlayerController::OnSwipeStarted(/*const FVector2D& AnchorPosition,
 	TraceEnd = WorldOrigin + WorldDirection * 65536.0f;
 
 	GetWorld()->LineTraceSingle(TraceHitResult, WorldOrigin, TraceEnd, TraceParam, TraceObjectParam);
-	MouseWorldPosition_3D = TraceHitResult.ImpactPoint;
-
-	m_vStartSwipeCoords = TraceHitResult.ImpactPoint;
-	m_vPrevSwipeScreenPosition = MousePos;
+	
+	if (TraceHitResult.bBlockingHit)
+		m_vStartSwipeCoords = TraceHitResult.ImpactPoint;
+	else
+		m_vStartSwipeCoords = WorldOrigin;
+	//m_vPrevSwipeScreenPosition = MousePos;
 	
 	//if (GetCameraComponent())
 	//{
@@ -442,16 +472,16 @@ void ANP4TownPlayerController::EndSwipeNow()
 
 AActor* ANP4TownPlayerController::GetFriendlyTarget(const FVector2D& ScreenPoint, FVector& WorldPoint) const
 {
-	FHitResult Hit;
-	if (GetHitResultAtScreenPosition(ScreenPoint, COLLISION_BUILDING, true, Hit))
-	{
-		//if (!ANP4TownPlayerController::OnEnemyTeam(Hit.GetActor(), this))
-		{
-			WorldPoint = Hit.ImpactPoint;
-			return Hit.GetActor();
-		}
-	}
-
+//	FHitResult Hit;
+//	if (GetHitResultAtScreenPosition(ScreenPoint, COLLISION_BUILDING, true, Hit))
+//	{
+//		//if (!ANP4TownPlayerController::OnEnemyTeam(Hit.GetActor(), this))
+//		{
+//			WorldPoint = Hit.ImpactPoint;
+//			return Hit.GetActor();
+//		}
+//	}
+//
 	return NULL;
 }
 

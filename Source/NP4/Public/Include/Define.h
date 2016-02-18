@@ -3,6 +3,10 @@
 
 #pragma once
 
+const int TileSizeX = 370;
+const int TileSizeY = 320;
+const int TileX = 12;
+const int TileY = 12;
 // 게임의 진영 
 UENUM()
 namespace EGameTeam
@@ -118,6 +122,7 @@ enum class eErrorType
 	eFailed = -1
 };
 
+
 /* Value */
 #define CAMERA_ARR_MAX ECameraValue::eEndCamera
 #define Animation_Montage_Failed -1.f
@@ -155,9 +160,3 @@ enum class eErrorType
 #define MainPlayer_Mon_TwoHand_TurnAttack_PATH "/Game/AnimationMontage/MainPlayer/MainPlayer_Mon_TwoHand_TurnAttack.MainPlayer_Mon_TwoHand_TurnAttack"
 #define MainPlayer_Mon_TwoHand_Walk_PATH "AnimMontage'/Game/Characters/MainPlayer/InfinityBladeWarriors/Character/CompleteCharacters/Montage/MainPlayer_Mon_TwoHand_Walk.MainPlayer_Mon_TwoHand_Walk'"
 //2016-02-13 강민욱 수정 End
-
-/** when you modify this, please note that this information can be saved with instances
-* also DefaultEngine.ini [/Script/Engine.CollisionProfile] should match with this list  정훈**/
-#define COLLISION_BUILDING		ECC_GameTraceChannel1
-#define COLLISION_PROJECTILE	ECC_GameTraceChannel2
-#define COLLISION_PANCAMERA		ECC_GameTraceChannel3
