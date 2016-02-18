@@ -14,8 +14,10 @@
 
 ANP4GameMode::ANP4GameMode()
 {
-	PlayerControllerClass = ANP4HeroController::StaticClass();
-	DefaultPawnClass = ANP4PlayerBase::StaticClass();
+	PlayerControllerClass = ANP4HeroController::StaticClass();		
+	//DefaultPawnClass = ANP4PlayerBase::StaticClass();
+	static ConstructorHelpers::FClassFinder<ANP4PlayerBase> BPClass(TEXT("/Game/blueprint/PlayerBaseBP"));
+	DefaultPawnClass = BPClass.Class;
 	PlayerStateClass = ANP4PlayerState::StaticClass();
 	GameStateClass = ANP4GameState::StaticClass();
 	HUDClass = ANP4HUD::StaticClass();
