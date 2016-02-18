@@ -91,6 +91,7 @@ public:
 	FVector2D GetMousePose();
 private:
 	bool m_bBuildMode;
+	bool m_bIsBuildpossibility;
 
 protected:
 	/** if set, input and camera updates will be ignored */
