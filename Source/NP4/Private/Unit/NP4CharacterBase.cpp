@@ -13,6 +13,7 @@ ANP4CharacterBase::ANP4CharacterBase()
 	PrimaryActorTick.bCanEverTick = true;
 	GetMesh()->AttachTo(RootComponent);
 	Health = 100;
+	HealthMax = 100;
 
 	m_pCurrentEquipWeapon = NULL;
 	WeaponAttachPoint = "";
