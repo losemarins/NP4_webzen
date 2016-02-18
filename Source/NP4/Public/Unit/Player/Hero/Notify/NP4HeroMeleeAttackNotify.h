@@ -14,7 +14,7 @@ class NP4_API UNP4HeroMeleeAttackNotify : public UAnimNotifyState
 {
 	GENERATED_BODY()
 
-private:
+public:
 	eCombo_Interpol m_eCurrentComboNum;
 	bool m_bNextSectionReady;
 

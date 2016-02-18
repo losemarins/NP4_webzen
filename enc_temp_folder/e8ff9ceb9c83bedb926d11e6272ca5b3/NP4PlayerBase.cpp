@@ -474,6 +474,7 @@ void ANP4PlayerBase::ActionAttack()
 			Super::SetColliderEnabled(true);
 		}
 
+
 		else
 		{
 			//Hit Motion Animation is not vaild
@@ -481,8 +482,8 @@ void ANP4PlayerBase::ActionAttack()
 	}
 
 	//Combo System
-	else if (m_bComboNotifyEnter && IsAttack() == true && 
-		GetMesh()->AnimScriptInstance->Montage_IsPlaying((m_ArrAnimMontage)[eCharacterState::eAttack]))
+	else if (m_bComboNotifyEnter && IsAttack() == true /*&& 
+		GetMesh()->AnimScriptInstance->Montage_IsPlaying((m_ArrAnimMontage)[eCharacterState::eAttack])*/)
 	{
 		m_bComboClkOn = true;
 	}
@@ -497,6 +498,8 @@ void ANP4PlayerBase::StopAttack()
 	{
 		StopNP4AnimationMontage(pAttackAnim);
 		SetAttack(false);
+		m_bComboClkOn = false;
+		m_ComboStep = eCombo_Interpol::Combo_None;
 
 		/* Collision no Active */
 		Super::SetColliderEnabled(false);
@@ -622,9 +625,9 @@ float ANP4PlayerBase::PlayAnimMontage_CheckCurrent(UAnimMontage* _AnimMontage, e
 
 			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("ATTACk")));
 
-			FTimerHandle TimerHandle_StopAttack;
-			GetWorldTimerManager().SetTimer(TimerHandle_StopAttack, this,
-				&ANP4PlayerBase::StopAttack, AnimDuration - 0.2f, false);
+			//FTimerHandle TimerHandle_StopAttack;
+			//GetWorldTimerManager().SetTimer(TimerHandle_StopAttack, this,
+			//	&ANP4PlayerBase::StopAttack, AnimDuration - 0.2f, false);
 		}
 
 		else if (_eAnimType == eCharacterState::eSkilling)

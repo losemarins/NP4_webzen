@@ -59,35 +59,35 @@ void UNP4HeroMeleeAttackNotify::NotifyEnd(USkeletalMeshComponent * MeshComp, UAn
 		if (pOwnerActor)
 		{
 			ANP4PlayerBase* pPlayerCast = Cast<ANP4PlayerBase>(pOwnerActor);
+			UAnimInstance* AnimInstance = MeshComp->AnimScriptInstance;
 
-			if (pPlayerCast)
+			if (pPlayerCast && AnimInstance)
 			{
 				if (m_bNextSectionReady == true)
 				{
 					if (m_eCurrentComboNum == eCombo_Interpol::Combo_None)
 					{
 						pPlayerCast->SetCurrentComboStep(eCombo_Interpol::Combo_DownAttack);
-						MeshComp->GetAnimInstance()->Montage_JumpToSection(TEXT("Combo_DownAttack"), pPlayerCast->GetCurrentMontage());
-
+						MeshComp->GetAnimInstance()->Montage_JumpToSection(TEXT("Combo_DownAttack"));
 					}
 
-					else if (m_eCurrentComboNum == eCombo_Interpol::Combo_DownAttack)
+					/*else if (m_eCurrentComboNum == eCombo_Interpol::Combo_DownAttack)
 					{
 						pPlayerCast->SetCurrentComboStep(eCombo_Interpol::Combo_Kick);
-						MeshComp->GetAnimInstance()->Montage_JumpToSection(TEXT("Combo_Kick"), pPlayerCast->GetCurrentMontage());
+						MeshComp->GetAnimInstance()->Montage_JumpToSection(TEXT("Combo_Kick"));
 					}
 
 
 					else if (m_eCurrentComboNum == eCombo_Interpol::Combo_Kick)
 					{
 
-					}
+					}*/
 
 					m_bNextSectionReady = false;
 				}
 				else
 				{
-					//pPlayerCast->StopAttack();
+					pPlayerCast->StopAttack();
 				}
 
 				pPlayerCast->SetbComboOn(false);
