@@ -8,6 +8,7 @@
 /**
  * 
  */
+
 UCLASS()
 class NP4_API ACharacter_Minion : public ANP4CharacterBase
 {
@@ -19,6 +20,9 @@ class NP4_API ACharacter_Minion : public ANP4CharacterBase
 	float MeleeStrikeCooldown;
 	float LastMeleeAttackTime;
 	float MeleeDamage;
+	float SenseTimeOut;
+	float LastSeenTime;
+	bool bSensedTarget;
 	TSubclassOf<UDamageType> PunchDamageType;
 	
 protected :
@@ -27,15 +31,17 @@ protected :
 public :
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = State)
 	bool IsAttack;
+
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	class UBehaviorTree* BehaviorTree;
 
 public :
 	ACharacter_Minion();
 	void UpdatePawnData(); // 나중에 base에서 virtual로 할수도있음
+
 	UFUNCTION()
 	void OnSeeEnemy(APawn* Pawn);
-
+	void SetEnemyCastle(ABuilding_Castle* Castle);
 	UFUNCTION()
 	void OnMeleeCompBeginOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 	void PerformMeleeStrike(AActor* HitActor);

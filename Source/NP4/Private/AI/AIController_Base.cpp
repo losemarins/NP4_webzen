@@ -8,7 +8,7 @@
 AAIController_Base::AAIController_Base(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
 {
-	AllowedActions.Add(UAIAction_Move::StaticClass());
+	//AllowedActions.Add(UAIAction_Move::StaticClass());
 }
 
 uint8 AAIController_Base::GetTeamNum() const
@@ -20,7 +20,6 @@ uint8 AAIController_Base::GetTeamNum() const
 struct FPlayerData* AAIController_Base::GetTeamData() const
 {
 	return GetWorld()->GetGameState<ANP4GameState>()->GetPlayerData(GetTeamNum());
-	
 }
 
 void AAIController_Base::Possess(APawn* inPawn)
