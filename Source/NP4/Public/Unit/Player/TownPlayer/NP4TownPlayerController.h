@@ -87,12 +87,13 @@ public:
 	bool m_bIsSwipe;
 	
 public:
-	AActor* GetSelectActor(FVector2D MousePos);
-	FVector2D GetMousePose();
+	FHitResult GetSelectActor(FVector2D MousePos);
+	FVector2D GetMousePos();
+	void TileDetecting();
 private:
 	bool m_bBuildMode;
 	bool m_bIsBuildpossibility;
-
+	AActor* m_OldSelectActor;
 protected:
 	/** if set, input and camera updates will be ignored */
 	uint8 bIgnoreInput : 1;

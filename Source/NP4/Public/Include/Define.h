@@ -3,6 +3,26 @@
 
 #pragma once
 
+namespace EBuilding
+{
+	enum Type
+	{
+		Barrack,
+		Laboratory,
+	};
+}
+// Color
+namespace EColor
+{
+	enum Type
+	{
+		Red,
+		Green,
+		Original,
+	};
+}
+
+//Tile
 const int TileSizeX = 370;
 const int TileSizeY = 320;
 const int TileX = 12;

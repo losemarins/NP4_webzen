@@ -10,6 +10,7 @@
 /**
  * 
  */
+class ABuilding;
 class ATile;
 UCLASS()
 class NP4_API ANP4TownGameState : public AGameState
@@ -36,6 +37,7 @@ public:
 public:
 	// tile
 	void InitTile();
+	void CreateBuilding(FVector SpawnPos);
 	
 private:
 	ANP4TownGameState();
@@ -43,6 +45,7 @@ private:
 
 private:
 	TArray<ATile*> m_TileArray;
+	TArray<ABuilding*> m_BuildingArray;
 	TSubclassOf<ATile> m_CharClass;
 
 	

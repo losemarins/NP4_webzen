@@ -66,3 +66,8 @@ void ANP4TownGameState::InitTile()
 		}		
 	}
 }
+
+void ANP4TownGameState::CreateBuilding(FVector SpawnPos )
+{
+
+}
