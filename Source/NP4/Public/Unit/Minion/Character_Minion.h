@@ -19,19 +19,16 @@ class NP4_API ACharacter_Minion : public ANP4CharacterBase
 	FTimerHandle TimerHandle_MeleeAttack;
 	float MeleeStrikeCooldown;
 	float LastMeleeAttackTime;
-	float MeleeDamage;
 	float SenseTimeOut;
 	float LastSeenTime;
 	bool bSensedTarget;
-	TSubclassOf<UDamageType> PunchDamageType;
 	
 protected :
 	UCapsuleComponent* MeleeCollisionComp;
-	
-public :
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = State)
-	bool IsAttack;
+	UPROPERTY(EditDefaultsOnly, Category = "Attacking")
+	UAnimMontage* MeleeAnimMontage;
 
+public :
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	class UBehaviorTree* BehaviorTree;
 
@@ -39,6 +36,9 @@ public :
 	ACharacter_Minion();
 	void UpdatePawnData(); // 나중에 base에서 virtual로 할수도있음
 
+	UFUNCTION(Reliable, NetMulticast)
+	void SimulateMeleeStrike();
+	void SimulateMeleeStrike_Implementation();
 	UFUNCTION()
 	void OnSeeEnemy(APawn* Pawn);
 	void SetEnemyCastle(ABuilding_Castle* Castle);
