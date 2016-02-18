@@ -119,7 +119,7 @@ void ANP4PlayerBase::Tick(float DeltaTime)
 	CheckState(DeltaTime);
 
 	/* 애니메이션 남은 시간 체크 ! (임시)*/
-	USkeletalMeshComponent* mesh = GetMesh();
+	/*USkeletalMeshComponent* mesh = GetMesh();
 	UAnimInstance* AnimInstance = mesh->AnimScriptInstance;
 	float AnimLength = 0.0f;
 	float CurPos = 0.0f;
@@ -127,7 +127,7 @@ void ANP4PlayerBase::Tick(float DeltaTime)
 	{
 		AnimLength = AnimInstance->GetCurrentActiveMontage()->GetPlayLength();
 		CurPos = AnimInstance->Montage_GetPosition(AnimInstance->GetCurrentActiveMontage());
-	}
+	}*/
 }
 
 void ANP4PlayerBase::PossessedBy(AController* _pController)
@@ -424,10 +424,6 @@ bool ANP4PlayerBase::IsSomeAction()
 	return false;
 }
 
-bool ANP4PlayerBase::IsCombonOn()
-{
-	return m_bComboClkOn;
-}
 
 //////////////////////////////////////////////////* Character Action */
 void ANP4PlayerBase::StartRunning()
@@ -682,12 +678,33 @@ void ANP4PlayerBase::WhileAnimationMoveCharacter(int _CurState)
 	//FRotator ActorRotation = 
 }
 
-void ANP4PlayerBase::SetbComboClkOnOff(bool _bOnOff)
-{
-
-}
-
 void ANP4PlayerBase::SetbNotifyEnter(bool _bEnter)
 {
-
+	m_bComboNotifyEnter = _bEnter;
 }
+
+void ANP4PlayerBase::SetbComboOn(bool _bActive)
+{
+	m_bComboClkOn = _bActive;
+}
+
+bool ANP4PlayerBase::GetbNotifyEnter()
+{
+	return m_bComboNotifyEnter;
+}
+
+bool ANP4PlayerBase::GetbComboOn()
+{
+	return m_bComboClkOn;
+}
+
+eCombo_Interpol ANP4PlayerBase::GetCurrentComboStep()
+{
+	return m_ComboStep;
+}
+
+void ANP4PlayerBase::SetCurrentComboStep(eCombo_Interpol _newStep)
+{
+	m_ComboStep = _newStep;
+}
+
