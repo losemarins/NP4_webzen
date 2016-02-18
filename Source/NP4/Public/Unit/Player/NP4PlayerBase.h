@@ -5,6 +5,7 @@
 #include "NP4CharacterBase.h"
 #include "NP4PlayerState.h"
 #include "NP4CameraManager.h"
+#include "WeaponBase.h"
 #include "NP4PlayerBase.generated.h"
 
 class ANP4HeroController;
@@ -72,7 +73,6 @@ public:
 	bool m_bComboClkOn;
 	eCombo_Interpol m_ComboStep;
 
-	
 public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
@@ -146,6 +146,4 @@ public:
 	bool GetbComboOn();
 	eCombo_Interpol GetCurrentComboStep();
 	void SetCurrentComboStep(eCombo_Interpol _newStep);
-	
-
 };
