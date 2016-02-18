@@ -2,26 +2,86 @@
 
 #include "NP4.h"
 #include "NP4PlayerBase.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "NP4HeroSlowNotifyState.h"
 
 void UNP4HeroSlowNotifyState::NotifyTick(USkeletalMeshComponent * MeshComp, UAnimSequenceBase * Animation, float FrameDeltaTime)
 {
 	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime);
 
-	if (MeshComp)
+	if (m_OnlySlowMe)
 	{
-		AActor* pOwnerActor = MeshComp->GetOwner();
-		if (pOwnerActor)
+		if (MeshComp)
 		{
-			ANP4PlayerBase* pPlayerCast = Cast<ANP4PlayerBase>(pOwnerActor);
-
-			if (pPlayerCast)
+			AActor* pOwnerActor = MeshComp->GetOwner();
+			if (pOwnerActor)
 			{
-				//pPlayerCast->
+				ANP4PlayerBase* pPlayerCast = Cast<ANP4PlayerBase>(pOwnerActor);
+
+				if (pPlayerCast)
+				{
+					//pPlayerCast->
+					UGameplayStatics::SetGlobalTimeDilation(pPlayerCast, 0.2f);
+				}
 			}
 		}
 	}
 
+	else
+	{
+		if (MeshComp)
+		{
+			AActor* pOwnerActor = MeshComp->GetOwner();
+			if (pOwnerActor)
+			{
+				ANP4PlayerBase* pPlayerCast = Cast<ANP4PlayerBase>(pOwnerActor);
+
+				if (pPlayerCast)
+				{
+					pPlayerCast->GetWorld()->GetWorldSettings()->TimeDilation = 0.2f;
+				}
+			}
+		}
+	}	
 }
+
+void UNP4HeroSlowNotifyState::NotifyEnd(USkeletalMeshComponent * MeshComp, UAnimSequenceBase * Animation)
+{
+	if (m_OnlySlowMe)
+	{
+		if (MeshComp)
+		{
+			AActor* pOwnerActor = MeshComp->GetOwner();
+			if (pOwnerActor)
+			{
+				ANP4PlayerBase* pPlayerCast = Cast<ANP4PlayerBase>(pOwnerActor);
+
+				if (pPlayerCast)
+				{
+					//pPlayerCast->
+					UGameplayStatics::SetGlobalTimeDilation(pPlayerCast, 1.0f);
+				}
+			}
+		}
+	}
+
+	else
+	{
+		if (MeshComp)
+		{
+			AActor* pOwnerActor = MeshComp->GetOwner();
+			if (pOwnerActor)
+			{
+				ANP4PlayerBase* pPlayerCast = Cast<ANP4PlayerBase>(pOwnerActor);
+
+				if (pPlayerCast)
+				{
+					pPlayerCast->GetWorld()->GetWorldSettings()->TimeDilation = 1.0f;
+				}
+			}
+		}
+	}
+}
+
 
 

@@ -17,7 +17,11 @@ public:
 	UPROPERTY(EditAnyWhere, BluePrintReadWrite, Category = "MySlow")
 	float m_fSlowRatio;
 
+	UPROPERTY(EditAnyWhere, BluePrintReadWrite, Category = "MySlow")
+	bool m_OnlySlowMe;
+
+
 	void NotifyTick(USkeletalMeshComponent * MeshComp, UAnimSequenceBase * Animation, float FrameDeltaTime) override;
-	
+	void NotifyEnd(USkeletalMeshComponent * MeshComp, UAnimSequenceBase * Animation) override;
 	
 };
