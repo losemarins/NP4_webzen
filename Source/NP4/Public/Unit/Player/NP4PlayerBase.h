@@ -147,4 +147,5 @@ public:
 	eCombo_Interpol GetCurrentComboStep();
 	void SetCurrentComboStep(eCombo_Interpol _newStep);
 	
+
 };

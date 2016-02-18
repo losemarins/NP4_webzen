@@ -46,6 +46,7 @@ void UNP4HeroMeleeAttackNotify::NotifyTick(USkeletalMeshComponent * MeshComp, UA
 			}
 		}
 	}
+
 }
 
 void UNP4HeroMeleeAttackNotify::NotifyEnd(USkeletalMeshComponent * MeshComp, UAnimSequenceBase * Animation)
