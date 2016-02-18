@@ -44,19 +44,19 @@ void ANP4TownGameState::SetGameMap(EGameMapState::Type NewState)
 void ANP4TownGameState::InitTile()
 {
 	// Tile Size = 350;
-	for (int y = -12; y < 12; ++y)
+	for (int y = -TileY; y < TileY; ++y)
 	{
-		for (int x = -12; x < 12; ++x)
+		for (int x = -TileX; x < TileX; ++x)
 		{
 			FVector Location;
 
 			if (abs(y) % 2 == 0)
 			{				
-				Location = FVector(y * 320, x * 370, 0);
+				Location = FVector(y * TileSizeY, x * TileSizeX, 0);
 			}
 			else
 			{
-				Location = FVector(y * 320, x * 370 + 370/2, 0);
+				Location = FVector(y * TileSizeY, x * TileSizeX + TileSizeX /2, 0);
 			}
 			FRotator Rotation = FRotator(0, 0, 0);
 

@@ -85,6 +85,12 @@ public:
 	bool m_bZoomingIn;
 	float m_ZoomDistance;
 	bool m_bIsSwipe;
+	
+public:
+	AActor* GetSelectActor(FVector2D MousePos);
+	FVector2D GetMousePose();
+private:
+	bool m_bBuildMode;
 
 protected:
 	/** if set, input and camera updates will be ignored */

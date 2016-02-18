@@ -23,6 +23,7 @@ void ATile::BeginPlay()
 {
 	Super::BeginPlay();
 	TileMesh->SetRelativeRotation(FRotator(0, 0, 90));
+	//TileMesh->SetMaterial()
 }
 
 // Called every frame
