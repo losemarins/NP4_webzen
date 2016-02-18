@@ -2,7 +2,7 @@
 
 #include "NP4.h"
 #include "NP4CharacterBase.h"
-
+#include "Building_Castle.h"
 
 // Sets default values
 ANP4CharacterBase::ANP4CharacterBase()

@@ -5,6 +5,7 @@
 #include "NP4GameState.h"
 #include "Building_Castle.h"
 #include "NP4CharacterBase.h"
+#include "Character_Minion.h"
 // Sets default values for this component's properties
 
 UAIDirector::UAIDirector() :
@@ -69,11 +70,13 @@ void UAIDirector::SpawnMinions()
 			FActorSpawnParameters SpawnInfo;
 			SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 			ANP4CharacterBase* const SpawnChar = GetWorld()->SpawnActor<ANP4CharacterBase>(Owner->CharClass, Loc, Owner->GetActorRotation(), SpawnInfo);
+			
 
 			if ((SpawnChar != nullptr))
 			{
 				SpawnChar->SetTeamNum(GetTeamNum());
 				SpawnChar->SpawnDefaultController();
+				Cast<ACharacter_Minion>(SpawnChar)->SetEnemyCastle(GetEnemyCastle());
 				ProductNum -= 1;
 			}
 		}

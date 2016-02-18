@@ -7,6 +7,7 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Building_Castle.h"
 
 AAIController_Minion::AAIController_Minion(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -14,8 +15,30 @@ AAIController_Minion::AAIController_Minion(const FObjectInitializer& ObjectIniti
 	BehaviorComp = ObjectInitializer.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorComp"));
 	BlackboardComp = ObjectInitializer.CreateDefaultSubobject<UBlackboardComponent>(this, TEXT("BlackboardComp"));
 	TargetEnemyKeyName = "TargetEnemy";
-
+	TargetCastleKeyName = "EnemyCastle";
 	isMove = true;
+}
+
+void AAIController_Minion::Possess(class APawn* InPawn)
+{
+	Super::Possess(InPawn);
+
+	ACharacter_Minion* Minion = Cast<ACharacter_Minion>(InPawn);
+	if (Minion)
+	{
+		if (Minion->BehaviorTree->BlackboardAsset)
+			BlackboardComp->InitializeBlackboard(*Minion->BehaviorTree->BlackboardAsset);
+
+		BehaviorComp->StartTree(*Minion->BehaviorTree);
+	}
+}
+
+void AAIController_Minion::UnPossess()
+{
+	Super::UnPossess();
+
+	/* Stop any behavior running as we no longer have a pawn to control */
+	BehaviorComp->StopTree();
 }
 
 void AAIController_Minion::Tick(float DeltaTime)
@@ -35,9 +58,16 @@ void AAIController_Minion::Tick(float DeltaTime)
 
 void AAIController_Minion::SetTargetEnemy(APawn* NewTarget)
 {
-	isMove = false;
 	if (BlackboardComp)
 	{
 		BlackboardComp->SetValueAsObject(TargetEnemyKeyName, NewTarget);
+	}
+}
+
+void AAIController_Minion::SetEnemyCastle(ABuilding_Castle* EnemyCastle)
+{
+	if (BlackboardComp)
+	{
+		BlackboardComp->SetValueAsObject(TargetCastleKeyName, EnemyCastle);
 	}
 }
