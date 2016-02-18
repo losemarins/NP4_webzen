@@ -5,6 +5,7 @@
 #include "NP4CharacterBase.h"
 #include "NP4PlayerState.h"
 #include "NP4CameraManager.h"
+#include "WeaponBase.h"
 #include "NP4PlayerBase.generated.h"
 
 class ANP4HeroController;
@@ -72,7 +73,6 @@ public:
 	bool m_bComboClkOn;
 	eCombo_Interpol m_ComboStep;
 
-	
 public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
@@ -102,8 +102,6 @@ public:
 		bool IsSkilling();
 	UFUNCTION(BlueprintCallable, Category = "PlayerCheckState")
 		bool IsSomeAction(); //만약 공격이나 스킬이나 히트나 어떠한 행동패턴의 애니메이션 중인가?
-	bool IsCombonOn();
-	bool IsNotifyEnter();
 
 	/* Find */
 	UAnimMontage* FindAnimationMontage_byPath(const TCHAR* _ObjectToFindPath);
@@ -142,7 +140,10 @@ public:
 	void WhileAnimationMoveCharacter(int _CurState);
 
 	/* Notify Combo */
-	void SetbComboClkOnOff(bool _bSet);
 	void SetbNotifyEnter(bool _bEnter);
-	
+	void SetbComboOn(bool _bActive);
+	bool GetbNotifyEnter();
+	bool GetbComboOn();
+	eCombo_Interpol GetCurrentComboStep();
+	void SetCurrentComboStep(eCombo_Interpol _newStep);
 };

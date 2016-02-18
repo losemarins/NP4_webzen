@@ -96,7 +96,7 @@ void ANP4PlayerBase::BeginPlay()
 	}
 
 	/* PlayerState에게 Owner를 세팅한다.. */
-	if (m_pPlayerState)
+	if (!m_pPlayerState)
 	{
 		m_pPlayerState = (Cast<ANP4PlayerState>(PlayerState));
 		m_pPlayerState->SetStateOwner(this);
@@ -119,7 +119,7 @@ void ANP4PlayerBase::Tick(float DeltaTime)
 	CheckState(DeltaTime);
 
 	/* 애니메이션 남은 시간 체크 ! (임시)*/
-	USkeletalMeshComponent* mesh = GetMesh();
+	/*USkeletalMeshComponent* mesh = GetMesh();
 	UAnimInstance* AnimInstance = mesh->AnimScriptInstance;
 	float AnimLength = 0.0f;
 	float CurPos = 0.0f;
@@ -127,7 +127,7 @@ void ANP4PlayerBase::Tick(float DeltaTime)
 	{
 		AnimLength = AnimInstance->GetCurrentActiveMontage()->GetPlayLength();
 		CurPos = AnimInstance->Montage_GetPosition(AnimInstance->GetCurrentActiveMontage());
-	}
+	}*/
 }
 
 void ANP4PlayerBase::PossessedBy(AController* _pController)
@@ -145,27 +145,53 @@ void ANP4PlayerBase::InitAnimationMontage()
 	m_ArrAnimMontage.Init(NULL, 100); /* 애니메이션몬티지 Init */
 	m_fAnimationMoveSpeed.Init(0.f, 100); /* 애니메이션 MoveSpeed Init */
 
+	/* Weapon Type _ 1 */
 	////Idle
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Idle1_PATH)), (int)eCharacterState::eIdle);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Idle1_PATH)), (int)eCharacterState::eIdle + (int)eWeaponType::eType_1);
 	
 	////Walk
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Walk_PATH)), (int)eCharacterState::eWalk);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Walk_PATH)), (int)eCharacterState::eWalk + (int)eWeaponType::eType_1);
 
 	////Run
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Run_PATH)), (int)eCharacterState::eRun);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Run_PATH)), (int)eCharacterState::eRun + (int)eWeaponType::eType_1);
 
 	////Attack
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Attack_PATH)), (int)eCharacterState::eAttack);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Attack_PATH)), (int)eCharacterState::eAttack + (int)eWeaponType::eType_1);
 	m_fAnimationMoveSpeed.Insert(150.f, (int)eCharacterState::eAttack);
 
 	////HIT
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Hit_PATH)), (int)eCharacterState::eHit);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Hit_PATH)), (int)eCharacterState::eHit + (int)eWeaponType::eType_1);
 
 	////Skill_1
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_CastingEarthQuake_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_1);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_CastingEarthQuake_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_1 + (int)eWeaponType::eType_1);
 
 	////Skill_2
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_TurnAttack_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_2);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_TurnAttack_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_2 + (int)eWeaponType::eType_1);
+
+
+
+	/* Weapon Type _ 2 */
+	////Idle
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Idle1_PATH)), (int)eCharacterState::eIdle + (int)eWeaponType::eType_2);
+
+	////Walk
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Walk_PATH)), (int)eCharacterState::eWalk + (int)eWeaponType::eType_2);
+
+	////Run
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Run_PATH)), (int)eCharacterState::eRun + (int)eWeaponType::eType_2);
+
+	////Attack
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Attack_PATH)), (int)eCharacterState::eAttack + (int)eWeaponType::eType_2);
+	m_fAnimationMoveSpeed.Insert(150.f, (int)eCharacterState::eAttack);
+
+	////HIT
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Hit_PATH)), (int)eCharacterState::eHit + (int)eWeaponType::eType_2);
+
+	////Skill_1
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_CastingEarthQuake_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_1 + (int)eWeaponType::eType_2);
+
+	////Skill_2
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_TurnAttack_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_2 + (int)eWeaponType::eType_2);
 }
 
 void ANP4PlayerBase::SetPlayerController(ANP4HeroController* _pPlayerController)
@@ -424,10 +450,6 @@ bool ANP4PlayerBase::IsSomeAction()
 	return false;
 }
 
-bool ANP4PlayerBase::IsCombonOn()
-{
-	return m_bComboClkOn;
-}
 
 //////////////////////////////////////////////////* Character Action */
 void ANP4PlayerBase::StartRunning()
@@ -478,6 +500,7 @@ void ANP4PlayerBase::ActionAttack()
 			Super::SetColliderEnabled(true);
 		}
 
+
 		else
 		{
 			//Hit Motion Animation is not vaild
@@ -485,8 +508,8 @@ void ANP4PlayerBase::ActionAttack()
 	}
 
 	//Combo System
-	else if (m_bComboNotifyEnter && IsAttack() == true && 
-		GetMesh()->AnimScriptInstance->Montage_IsPlaying((m_ArrAnimMontage)[eCharacterState::eAttack]))
+	else if (m_bComboNotifyEnter && IsAttack() == true /*&& 
+		GetMesh()->AnimScriptInstance->Montage_IsPlaying((m_ArrAnimMontage)[eCharacterState::eAttack])*/)
 	{
 		m_bComboClkOn = true;
 	}
@@ -501,6 +524,8 @@ void ANP4PlayerBase::StopAttack()
 	{
 		StopNP4AnimationMontage(pAttackAnim);
 		SetAttack(false);
+		m_bComboClkOn = false;
+		m_ComboStep = eCombo_Interpol::Combo_None;
 
 		/* Collision no Active */
 		Super::SetColliderEnabled(false);
@@ -682,12 +707,33 @@ void ANP4PlayerBase::WhileAnimationMoveCharacter(int _CurState)
 	//FRotator ActorRotation = 
 }
 
-void ANP4PlayerBase::SetbComboClkOnOff(bool _bOnOff)
-{
-
-}
-
 void ANP4PlayerBase::SetbNotifyEnter(bool _bEnter)
 {
-
+	m_bComboNotifyEnter = _bEnter;
 }
+
+void ANP4PlayerBase::SetbComboOn(bool _bActive)
+{
+	m_bComboClkOn = _bActive;
+}
+
+bool ANP4PlayerBase::GetbNotifyEnter()
+{
+	return m_bComboNotifyEnter;
+}
+
+bool ANP4PlayerBase::GetbComboOn()
+{
+	return m_bComboClkOn;
+}
+
+eCombo_Interpol ANP4PlayerBase::GetCurrentComboStep()
+{
+	return m_ComboStep;
+}
+
+void ANP4PlayerBase::SetCurrentComboStep(eCombo_Interpol _newStep)
+{
+	m_ComboStep = _newStep;
+}
+

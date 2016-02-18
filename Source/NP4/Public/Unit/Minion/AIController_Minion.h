@@ -8,6 +8,7 @@
 /**
  * 
  */
+class ABuilding_Castle;
 UCLASS()
 class NP4_API AAIController_Minion : public AAIController_Base
 {
@@ -17,9 +18,14 @@ class NP4_API AAIController_Minion : public AAIController_Base
 	bool isMove;
 
 	FName TargetEnemyKeyName;
+	FName TargetCastleKeyName;
+
+	virtual void Possess(class APawn* InPawn);
+	virtual void UnPossess() override;
 
 public:
 	void SetTargetEnemy(APawn* NewTarget);
+	void SetEnemyCastle(ABuilding_Castle* EnemyCastle);
 
 public :
 	AAIController_Minion(const FObjectInitializer& ObjectInitializer);
