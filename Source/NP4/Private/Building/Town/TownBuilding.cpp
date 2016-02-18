@@ -6,3 +6,7 @@
 
 
 
+void ATownBuilding::Init()
+{
+
+}

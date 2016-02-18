@@ -300,6 +300,7 @@ void ANP4TownPlayerController::OnSwipeStarted(/*const FVector2D& AnchorPosition,
 		if (pTile->GetBuilding())
 		{
 			//건물이 건설되어 있을경우 눌러도 아무 반응도 하면안됨.
+			// 삐빅! 이런 싸운드를 출력하게한다.
 		
 		}
 		else
@@ -308,7 +309,8 @@ void ANP4TownPlayerController::OnSwipeStarted(/*const FVector2D& AnchorPosition,
 			// 타일의 위치에 건물이 생성되야한다. 어떤 건물인지는 UI에서 받아와야하고.
 			// State 를 얻어온 후 building해주는 로직을 만들어야함.
 			FVector TilePos = pTile->GetActorLocation();
-			ANP4TownGameState const* const MyGameState = GetWorld()->GetGameState<ANP4TownGameState>();
+			ANP4TownGameState* MyGameState = GetWorld()->GetGameState<ANP4TownGameState>();
+			MyGameState->CreateBuilding(TilePos, EBuilding::HeroManagement);
 			
 
 		}

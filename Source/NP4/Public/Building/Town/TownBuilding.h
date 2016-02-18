@@ -12,8 +12,8 @@ UCLASS()
 class NP4_API ATownBuilding : public ABuilding
 {
 	GENERATED_BODY()
-	
-	
+public:
+	virtual void Init() ;
 	
 	
 };

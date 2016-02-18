@@ -13,7 +13,8 @@ ATile::ATile()
 	m_bIsBuild = false;
 
 	// static mesh component를 만든다
-	TileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TileMesh"));
+	TileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TileMesh"));	
+	//TileMesh->SetRelativeScale3D(FVector(0.1, 0.1, 0.1));
 	RootComponent = TileMesh;
 	ConstructorHelpers::FObjectFinder<UMaterial> OriginalMaterial(TEXT("/Game/StarterContent/Materials/M_Metal_Brushed_Nickel"));
 	ConstructorHelpers::FObjectFinder<UMaterial> RedMaterial(TEXT("/Game/Material/Red"));

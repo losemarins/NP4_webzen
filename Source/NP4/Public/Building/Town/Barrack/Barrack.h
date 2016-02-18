@@ -12,7 +12,8 @@ UCLASS()
 class NP4_API ABarrack : public ATownBuilding
 {
 	GENERATED_BODY()
-	
+public:
+	virtual void Init() override;
 	
 	
 	

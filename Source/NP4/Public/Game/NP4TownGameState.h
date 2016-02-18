@@ -37,7 +37,7 @@ public:
 public:
 	// tile
 	void InitTile();
-	void CreateBuilding(FVector SpawnPos);
+	void CreateBuilding(FVector SpawnPos, EBuilding::Type BuildingType);
 	
 private:
 	ANP4TownGameState();
