@@ -119,7 +119,7 @@ void AWeaponBase::NotifyActorBeginOverlap(AActor* OtherActor)
 	}
 }
 
-eWeaponType AWeaponBase::GetWeaponType_byInt()
+eWeaponType AWeaponBase::GetWeaponType()
 {
 	return m_iWeaponType;
 }

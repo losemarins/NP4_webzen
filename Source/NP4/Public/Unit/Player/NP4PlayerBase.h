@@ -55,7 +55,6 @@ public:
 	//TArray<UAnimMontage*> m_ArrAnimMontage[100];
 
 	TArray<UAnimMontage*> m_ArrAnimMontage;
-	TArray<float> m_fAnimationMoveSpeed;
 
 	/* Camera Value */
 	float m_ZoomFactor;
@@ -134,10 +133,6 @@ public:
 	void ActionSkill_1();
 	void ActionSkill_2();
 	void StopSkill(UAnimMontage* _pSkillAnim);
-
-	/* Animation Moving */
-	void CheckMovingAnimation();
-	void WhileAnimationMoveCharacter(int _CurState);
 
 	/* Notify Combo */
 	void SetbNotifyEnter(bool _bEnter);

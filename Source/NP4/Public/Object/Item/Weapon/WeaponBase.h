@@ -66,5 +66,5 @@ public:
 	/* Collider ! */
 	void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
-	eWeaponType GetWeaponType_byInt();
+	eWeaponType GetWeaponType();
 };
