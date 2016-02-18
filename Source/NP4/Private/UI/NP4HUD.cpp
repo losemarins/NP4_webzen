@@ -58,7 +58,7 @@ void ANP4HUD::DrawActorsHealth()
 {
 	//코드 실행 확인을 위해 사용한 변수
 	timetest++;
-	num = timetest % 100;
+	num = timetest % 1000;
 
 	//if(num==0)	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("function DrawActorsHealth call 123")));
 
@@ -111,7 +111,7 @@ void ANP4HUD::DrawActorsHealth()
 
 void ANP4HUD::DrawHealthBar(AActor* ForActor, float HealthPercentage, int32 BarHeight, int OffsetY) const
 {
-	if (0 == num)	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("DrawHealthBar call !")));
+	//if (0 == num)	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("DrawHealthBar call !")));
 
 	FBox BB = ForActor->GetComponentsBoundingBox();
 	FVector Center = BB.GetCenter();
@@ -122,7 +122,7 @@ void ANP4HUD::DrawHealthBar(AActor* ForActor, float HealthPercentage, int32 BarH
 							// 건물이 아니라 캐릭터일 때! 그래서 APawn을 가져오나봐ㅏㅏㅏ
 	if (Cast<APawn>(ForActor) != NULL)
 	{
-		if (0 == num)	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("APawn call !")));
+		//if (0 == num)	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("APawn call !")));
 
 		ANP4PlayerBase* CastPlayer = Cast<ANP4PlayerBase>(ForActor);
 		if ((CastPlayer != NULL) && (CastPlayer->GetCapsuleComponent() != NULL))
@@ -144,10 +144,10 @@ void ANP4HUD::DrawHealthBar(AActor* ForActor, float HealthPercentage, int32 BarH
 	TileItem.BlendMode = SE_BLEND_Translucent;
 	TileItem.UV1 = FVector2D(HealthPercentage, 1.f);
 
-	if (0 == num)	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("before DrawItem call !")));
+	if (0 == num)	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT(" DrawItem call !")));
 
 	Canvas->DrawItem(TileItem);
 
-	if (0 == num)	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("after DrawItem call !")));
+	//if (0 == num)	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("after DrawItem call !")));
 
 }
