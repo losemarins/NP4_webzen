@@ -9,7 +9,7 @@
 #include "NP4GameState.h"
 #include "AIDirector.h"
 #include "Building_Castle.h"
-#include "FormationManager.h"
+
 
 ANP4HeroController::ANP4HeroController()
 {
