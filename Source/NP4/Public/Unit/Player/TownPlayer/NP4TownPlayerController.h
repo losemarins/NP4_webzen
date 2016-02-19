@@ -102,6 +102,7 @@ private:
 	bool m_bIsBuildpossibility;
 	AActor* m_OldSelectActor;
 	EBuilding::Type m_EBuildType;
+
 protected:
 	/** if set, input and camera updates will be ignored */
 	uint8 bIgnoreInput : 1;

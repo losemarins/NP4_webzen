@@ -16,7 +16,7 @@ ANP4TownPlayerController::ANP4TownPlayerController()
 	m_fMaxZoomLevel = 1.0f;
 	m_ZoomDistance = 2000;
 	m_bIsSwipe = false;
-	m_bBuildMode = true;
+	m_bBuildMode = false;
 	m_bIsBuildpossibility = false;
 	m_OldSelectActor = NULL;
 	m_fCameraScrollSpeed = 4000.f;
@@ -27,12 +27,13 @@ void ANP4TownPlayerController::Possess(APawn* InPawn)
 {
 	Super::Possess(InPawn);
 	m_pPossessPawn = Cast<ANP4TownPlayer>(InPawn);
+	m_pPossessPawn->SetActorEnableCollision(false);
 }
 
 void ANP4TownPlayerController::Tick(float DeltaSeconds)
 {
 	UpdateCamera(DeltaSeconds);	
-	MouseScrolling(DeltaSeconds);
+		
 
 	if (!m_bBuildMode && m_bIsSwipe)
 	{
@@ -42,7 +43,7 @@ void ANP4TownPlayerController::Tick(float DeltaSeconds)
 	if (m_bBuildMode)
 	{
 		TileDetecting();
-		
+		MouseScrolling(DeltaSeconds);
 	}
 }
 
@@ -91,8 +92,8 @@ void ANP4TownPlayerController::UpdateCamera(float DeltaTime)
 
 void ANP4TownPlayerController::MouseScrolling(float DeltaTime)
 {
-	FVector2D MosePos = GetMousePos();
-	ULocalPlayer* const LocalPlayer = Cast<ULocalPlayer>(m_pPossessPawn);
+	FVector2D MousePos = GetMousePos();
+	ULocalPlayer* const LocalPlayer = Cast<ULocalPlayer>(Player);
 
 	if (LocalPlayer && LocalPlayer->ViewportClient && LocalPlayer->ViewportClient->Viewport)
 	{
@@ -108,51 +109,49 @@ void ANP4TownPlayerController::MouseScrolling(float DeltaTime)
 
 		/*ANP4TownGameState const* const MyGameState = GetWorld()->GetGameState<ANP4TownGameState>();
 		bool bNoScrollZone = false;
-		FVector MouseCoords(MousePosition, 0.0f);*/
-		const uint32 MouseX = MosePos.X;
-		const uint32 MouseY = MosePos.Y;
-		float SpectatorCameraSpeed = MaxSpeed;
+		FVector MouseCoords(MousePos, 0.0f);*/
+	
 
-		float CameraActiveBorder = 20.f;
-
-		if (MouseX >= ViewLeft && MouseX <= (ViewLeft + CameraActiveBorder))
+		//if (!bNoScrollZone)
 		{
-			const float delta = 1.0f - float(MouseX - ViewLeft) / CameraActiveBorder;
-			SpectatorCameraSpeed = delta * MaxSpeed;
-			//MoveRight(-ScrollSpeed * delta);
+			const uint32 MouseX = MousePos.X;
+			const uint32 MouseY = MousePos.Y;
+			float SpectatorCameraSpeed = MaxSpeed;
+			float CameraActiveBorder = 80.f;
 
-			if (SpectatorCameraSpeed != 0.f)
+			if (MouseX >= ViewLeft && MouseX <= (ViewLeft + CameraActiveBorder))
 			{
-				const FRotationMatrix R(PlayerCameraManager->GetCameraRotation());
-				const FVector WorldSpaceAccel = R.GetScaledAxis(EAxis::Y) * 100.0f;
-				m_pPossessPawn->AddMovementInput(WorldSpaceAccel, SpectatorCameraSpeed);
+				FVector vLocation = m_pPossessPawn->GetActorLocation();
+				vLocation.Y -= 1500.f * DeltaTime;
+				m_pPossessPawn->SetActorLocation(vLocation);
+				Viewport->SetMouse(CameraActiveBorder, MouseY);
+
 			}
-			/*FVector vLocation = m_pPossessPawn->GetActorLocation();
-			vLocation += delta;
-			m_pPossessPawn->SetActorRelativeLocation(vLocation);*/
+			if (MouseX >= (ViewRight - CameraActiveBorder) && MouseX <= ViewRight)
+			{
+				FVector vLocation = m_pPossessPawn->GetActorLocation();
+				vLocation.Y += 1500.f * DeltaTime;
+				m_pPossessPawn->SetActorLocation(vLocation);
+				Viewport->SetMouse(ViewRight - CameraActiveBorder, MouseY);
+			}
 
-
+			if (MouseY >= ViewTop && MouseY <= (ViewTop + CameraActiveBorder))
+			{
+				FVector vLocation = m_pPossessPawn->GetActorLocation();
+				vLocation.X += 1500.f * DeltaTime;
+				m_pPossessPawn->SetActorLocation(vLocation);
+				Viewport->SetMouse( MouseX, ViewTop + CameraActiveBorder);
+			}
+			if (MouseY >= (ViewBottom - CameraActiveBorder) && MouseY <= ViewBottom)
+			{
+				FVector vLocation = m_pPossessPawn->GetActorLocation();
+				vLocation.X -= 1500.f * DeltaTime;
+				m_pPossessPawn->SetActorLocation(vLocation);
+				Viewport->SetMouse(MouseX, ViewBottom - CameraActiveBorder);
+			}
 		}
-		else if (MouseX >= (ViewRight - CameraActiveBorder) && MouseX <= ViewRight)
-		{
-			const float delta = float(MouseX - ViewRight + CameraActiveBorder) / CameraActiveBorder;
-			SpectatorCameraSpeed = delta * MaxSpeed;
-			//MoveRight(ScrollSpeed * delta);
 		}
-
-		if (MouseY >= ViewTop && MouseY <= (ViewTop + CameraActiveBorder))
-		{
-			const float delta = 1.0f - float(MouseY - ViewTop) / CameraActiveBorder;
-			SpectatorCameraSpeed = delta * MaxSpeed;
-			//MoveForward(ScrollSpeed * delta);
-		}
-		else if (MouseY >= (ViewBottom - CameraActiveBorder) && MouseY <= ViewBottom)
-		{
-			const float delta = float(MouseY - (ViewBottom - CameraActiveBorder)) / CameraActiveBorder;
-			SpectatorCameraSpeed = delta * MaxSpeed;
-			//MoveForward(-ScrollSpeed * delta);
-		}
-	}
+		
 }
 
 FHitResult ANP4TownPlayerController::GetSelectActor(FVector2D MousePos)

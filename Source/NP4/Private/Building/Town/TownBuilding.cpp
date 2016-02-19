@@ -8,5 +8,5 @@
 
 void ATownBuilding::Init()
 {
-
+	MeshComp->SetSimulatePhysics(true);
 }
