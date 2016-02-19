@@ -21,7 +21,7 @@ public:
 	// End HUD interface
 
 	/** current UI scale */
-	float UIScale;
+	//float UIScale;
 	
 	
 	/**
@@ -32,27 +32,27 @@ public:
 	* @param		BarHeight	Height of the health bar
 	* @param		OffsetY		Y Offset of the bealth bar.
 	*/
-	void DrawHealthBar(AActor* ForActor, float HealthPct, int32 BarHeight, int OffsetY = 0) const;
-
-	/** draw health bars for actors */
-	void DrawActorsHealth();
-
-protected:
-
-	/** gets player (hero) controller */
-	class ANP4HeroController* GetHeroController() const;
-
-	/** gray health bar terxture */
-	UPROPERTY()
-	class UTexture2D* BarFillTexture;
-
-	/**player team health bar texture */
-	UPROPERTY()
-	class UTexture2D* PlayerTeamHPTexture;
-
-	/** enemy team health bar texture */
-	UPROPERTY()
-	class UTexture2D* EnemyTeamHPTexure;
+//	void DrawHealthBar(AActor* ForActor, float HealthPct, int32 BarHeight, int OffsetY = 0) const;
+//
+//	/** draw health bars for actors */
+//	void DrawActorsHealth();
+//
+//protected:
+//
+//	/** gets player (hero) controller */
+//	class ANP4HeroController* GetHeroController() const;
+//
+//	/** gray health bar terxture */
+//	UPROPERTY()
+//	class UTexture2D* BarFillTexture;
+//
+//	/**player team health bar texture */
+//	UPROPERTY()
+//	class UTexture2D* PlayerTeamHPTexture;
+//
+//	/** enemy team health bar texture */
+//	UPROPERTY()
+//	class UTexture2D* EnemyTeamHPTexure;
 
 
 };
