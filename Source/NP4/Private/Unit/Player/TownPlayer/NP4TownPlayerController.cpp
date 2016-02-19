@@ -19,6 +19,8 @@ ANP4TownPlayerController::ANP4TownPlayerController()
 	m_bBuildMode = true;
 	m_bIsBuildpossibility = false;
 	m_OldSelectActor = NULL;
+	m_fCameraScrollSpeed = 4000.f;
+	m_EBuildType = EBuilding::Defualt;
 }
 
 void ANP4TownPlayerController::Possess(APawn* InPawn)
@@ -30,6 +32,7 @@ void ANP4TownPlayerController::Possess(APawn* InPawn)
 void ANP4TownPlayerController::Tick(float DeltaSeconds)
 {
 	UpdateCamera(DeltaSeconds);	
+	MouseScrolling(DeltaSeconds);
 
 	if (!m_bBuildMode && m_bIsSwipe)
 	{
@@ -84,6 +87,72 @@ void ANP4TownPlayerController::UpdateCamera(float DeltaTime)
 {
 	Cast<ANP4TownPlayer>(m_pPossessPawn)->GetCamera()->FieldOfView = FMath::Lerp<float>(90.0f, 60.0f, m_ZoomFactor);
 	Cast<ANP4TownPlayer>(m_pPossessPawn)->GetSpringArm()->TargetArmLength = FMath::Lerp<float>(m_ZoomDistance, m_ZoomDistance, 1);
+}
+
+void ANP4TownPlayerController::MouseScrolling(float DeltaTime)
+{
+	FVector2D MosePos = GetMousePos();
+	ULocalPlayer* const LocalPlayer = Cast<ULocalPlayer>(m_pPossessPawn);
+
+	if (LocalPlayer && LocalPlayer->ViewportClient && LocalPlayer->ViewportClient->Viewport)
+	{
+		FViewport* Viewport = LocalPlayer->ViewportClient->Viewport;
+		const float ScrollSpeed = 60.0f;
+		const FIntPoint ViewportSize = Viewport->GetSizeXY();
+		const uint32 ViewLeft = FMath::TruncToInt(LocalPlayer->Origin.X * ViewportSize.X);
+		const uint32 ViewRight = ViewLeft + FMath::TruncToInt(LocalPlayer->Size.X * ViewportSize.X);
+		const uint32 ViewTop = FMath::TruncToInt(LocalPlayer->Origin.Y * ViewportSize.Y);
+		const uint32 ViewBottom = ViewTop + FMath::TruncToInt(LocalPlayer->Size.Y * ViewportSize.Y);
+
+		const float MaxSpeed = m_fCameraScrollSpeed * FMath::Clamp(m_ZoomDistance, 0.3f, 1.0f);
+
+		/*ANP4TownGameState const* const MyGameState = GetWorld()->GetGameState<ANP4TownGameState>();
+		bool bNoScrollZone = false;
+		FVector MouseCoords(MousePosition, 0.0f);*/
+		const uint32 MouseX = MosePos.X;
+		const uint32 MouseY = MosePos.Y;
+		float SpectatorCameraSpeed = MaxSpeed;
+
+		float CameraActiveBorder = 20.f;
+
+		if (MouseX >= ViewLeft && MouseX <= (ViewLeft + CameraActiveBorder))
+		{
+			const float delta = 1.0f - float(MouseX - ViewLeft) / CameraActiveBorder;
+			SpectatorCameraSpeed = delta * MaxSpeed;
+			//MoveRight(-ScrollSpeed * delta);
+
+			if (SpectatorCameraSpeed != 0.f)
+			{
+				const FRotationMatrix R(PlayerCameraManager->GetCameraRotation());
+				const FVector WorldSpaceAccel = R.GetScaledAxis(EAxis::Y) * 100.0f;
+				m_pPossessPawn->AddMovementInput(WorldSpaceAccel, SpectatorCameraSpeed);
+			}
+			/*FVector vLocation = m_pPossessPawn->GetActorLocation();
+			vLocation += delta;
+			m_pPossessPawn->SetActorRelativeLocation(vLocation);*/
+
+
+		}
+		else if (MouseX >= (ViewRight - CameraActiveBorder) && MouseX <= ViewRight)
+		{
+			const float delta = float(MouseX - ViewRight + CameraActiveBorder) / CameraActiveBorder;
+			SpectatorCameraSpeed = delta * MaxSpeed;
+			//MoveRight(ScrollSpeed * delta);
+		}
+
+		if (MouseY >= ViewTop && MouseY <= (ViewTop + CameraActiveBorder))
+		{
+			const float delta = 1.0f - float(MouseY - ViewTop) / CameraActiveBorder;
+			SpectatorCameraSpeed = delta * MaxSpeed;
+			//MoveForward(ScrollSpeed * delta);
+		}
+		else if (MouseY >= (ViewBottom - CameraActiveBorder) && MouseY <= ViewBottom)
+		{
+			const float delta = float(MouseY - (ViewBottom - CameraActiveBorder)) / CameraActiveBorder;
+			SpectatorCameraSpeed = delta * MaxSpeed;
+			//MoveForward(-ScrollSpeed * delta);
+		}
+	}
 }
 
 FHitResult ANP4TownPlayerController::GetSelectActor(FVector2D MousePos)
@@ -144,6 +213,12 @@ void ANP4TownPlayerController::TileDetecting()
 	}
 
 	m_OldSelectActor = pTile;
+}
+
+void ANP4TownPlayerController::SetBuildMode(EBuilding::Type EBuildType)
+{
+	m_bBuildMode = true;
+	m_EBuildType = EBuildType;	
 }
 
 void ANP4TownPlayerController::OnZoomIn()
@@ -294,6 +369,12 @@ void ANP4TownPlayerController::OnSwipeStarted(/*const FVector2D& AnchorPosition,
 		// 건설모드일 경우 마우스 위치에 있는 액터를 얻어온다.
 		// 해당 액터가 타일일 경우 타일에 건물이 건설되어 있는지 판단.
 		ATile* pTile = Cast<ATile>(HitResult.GetActor());
+
+		//타일이 아니면 종료가 아닌. 다른 방식을 취해야한다. 건물일경우? 
+		// 아니다 건물은 무조건 타일에 건설된다.
+		// 그렇다면 해당 타일에 어떤 건물이 건설되었는지 정보를 주고.
+		// 그 해당 타일의 위치에 있는 건물을 가져온다. 근데 어떻게?
+		// 이렇게되면 타일이 건물을 가지고 있도록 만들어야되나?? 
 		if (!pTile)
 			return;
 
@@ -310,9 +391,7 @@ void ANP4TownPlayerController::OnSwipeStarted(/*const FVector2D& AnchorPosition,
 			// State 를 얻어온 후 building해주는 로직을 만들어야함.
 			FVector TilePos = pTile->GetActorLocation();
 			ANP4TownGameState* MyGameState = GetWorld()->GetGameState<ANP4TownGameState>();
-			MyGameState->CreateBuilding(TilePos, EBuilding::HeroManagement);
-			
-
+			MyGameState->CreateBuilding(TilePos, m_EBuildType);
 		}
 	}
 	else 
@@ -392,7 +471,6 @@ void ANP4TownPlayerController::OnSwipeUpdate(/*const FVector2D& ScreenPosition, 
 
 	//m_vStartSwipeCoords = MouseWorldPosition_3D;
 	//m_vPrevSwipeScreenPosition = MousePos;
-
 	FVector2D MousePos = GetMousePos();
 	FHitResult TraceHitResult = GetSelectActor(MousePos);
 
@@ -425,13 +503,28 @@ void ANP4TownPlayerController::OnSwipeUpdate(/*const FVector2D& ScreenPosition, 
 	//		}
 	//	}
 	//}
-
+	
 	//m_vPrevSwipeScreenPosition = ScreenPosition;
 }
 
 void ANP4TownPlayerController::OnSwipeReleased(/*const FVector2D& ScreenPosition, float DownTime*/)
 {
 	m_bIsSwipe = false;
+	if (m_bBuildMode)
+	{
+		m_bBuildMode = false;
+
+		FVector2D MousePos = GetMousePos();
+		FHitResult HitResult = GetSelectActor(MousePos);
+
+		ATile* pTile = Cast<ATile>(HitResult.GetActor());
+		if (!pTile)
+			return;
+		
+		pTile->SetBuilding(true);
+		pTile->SetMeshMetarial(EColor::Original);
+	}
+		
 	/*AActor* const Selected = m_SelectedActor.Get();
 	if (Selected && Selected->GetClass()->ImplementsInterface(UStrategyInputInterface::StaticClass()))
 	{
