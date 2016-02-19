@@ -88,6 +88,8 @@ public:
 	void ActionHit();
 	void ActionSkill_1();
 	void ActionSkill_2();
+	void DrawWeapon();
+	void SheathWeapon();
 
 	//////////////////////테스트용
 	void FORCEINLINE TestTestTest()

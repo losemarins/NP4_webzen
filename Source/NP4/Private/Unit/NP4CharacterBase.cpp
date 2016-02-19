@@ -16,7 +16,6 @@ ANP4CharacterBase::ANP4CharacterBase()
 	HealthMax = 100;
 
 	m_pCurrentEquipWeapon = NULL;
-	WeaponAttachPoint = "";
 }
 
 // Called when the game starts or when spawned
@@ -65,20 +64,10 @@ bool ANP4CharacterBase::IsAlive()
 	return Health > 0;
 }
 
-void ANP4CharacterBase::SetAttachWeaponSocketPoint()
-{
-	/* 소켓 이름을 얻어와야 함 */
-	WeaponAttachPoint = TEXT("WeaponSocket");
-}
-
-FName ANP4CharacterBase::GetAttachWeaponSocketPoint()
-{
-	return WeaponAttachPoint;
-}
-
 void ANP4CharacterBase::OnUnEquipWeapon()
 {
 	m_pCurrentEquipWeapon->OnUnEquip();
+	m_pCurrentEquipWeapon = NULL;
 }
 
 void ANP4CharacterBase::OnEqipWeapon(AWeaponBase* _pWeapon)
@@ -96,6 +85,11 @@ void ANP4CharacterBase::OnEqipWeapon(AWeaponBase* _pWeapon)
 		_pWeapon->SetOwningPawn(this);
 		_pWeapon->OnEquip();
 	}
+}
+
+void ANP4CharacterBase::OnEqipWeapon_byInventoryIndex()
+{
+
 }
 
 void ANP4CharacterBase::InitWeapon_TempFunction()
@@ -117,10 +111,10 @@ void ANP4CharacterBase::InitWeapon_TempFunction()
 				m_pItemInven_Temp.AddUnique(pItem);
 			}
 
-			if (m_pItemInven_Temp.Num() > 0)
+			/*if (m_pItemInven_Temp.Num() > 0)
 			{
 				OnEqipWeapon(m_pItemInven_Temp[0]);
-			}
+			}*/
 		}
 	}
 }
@@ -137,3 +131,8 @@ AWeaponBase* ANP4CharacterBase::GetCurrentWeapon()
 {
 	return m_pCurrentEquipWeapon;
 }
+
+//void ANP4CharacterBase::SetCurrentWeapon_byInventoryIndex(int _idx)
+//{
+//	m_pCurrentEquipWeapon = m_pItemInven_Temp[_idx];
+//}

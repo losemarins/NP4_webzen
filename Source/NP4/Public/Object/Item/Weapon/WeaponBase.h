@@ -15,9 +15,10 @@
 UENUM(BlueprintType)		//"BlueprintType" is essential to include
 enum class eWeaponType : uint8
 {
-	eType_1 = 0,
-	eType_2 = 21,
-	eType_3 = 41
+	eType_None = 0,
+	eType_1 = 21,
+	eType_2 = 42,
+	eType_3 = 63
 };
 
 class ANP4CharacterBase;
@@ -39,7 +40,13 @@ protected:
 	UCapsuleComponent* m_pCollisionCapsule;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		eWeaponType m_iWeaponType;
+	eWeaponType m_iWeaponType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName m_strUnEquipSocketName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName m_strEquipSocketName;
 
 public:
 	AWeaponBase();
@@ -48,7 +55,7 @@ public:
 	
 	void SetOwningPawn(ANP4CharacterBase* NewOwner);
 
-	void AttachMeshToPawn();
+	void AttachMeshToPawn(FName _fName);
 
 	void OnEquip();
 

@@ -106,8 +106,6 @@ void ANP4PlayerBase::BeginPlay()
 		m_pPlayerState->setPlayerMaxHealth(100.f);
 	}
 
-	/* 무기 소켓을 세팅한다. */
-	Super::SetAttachWeaponSocketPoint();
 	//임시로 무기를 인벤토리에 생성한다.
 	Super::InitWeapon_TempFunction();
 }
@@ -144,52 +142,66 @@ void ANP4PlayerBase::InitAnimationMontage()
 
 	m_ArrAnimMontage.Init(NULL, 100); /* 애니메이션몬티지 Init */
 
+	eWeaponType weaponType = eWeaponType::eType_None;
+	
+	/* Weapon Type _ None*/
+
+
+	weaponType = eWeaponType::eType_1;
 	/* Weapon Type _ 1 */
 	////Idle
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Idle1_PATH)), (int)eCharacterState::eIdle + (int)eWeaponType::eType_1);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Idle1_PATH)), (int)eCharacterState::eIdle + (int)weaponType);
 	
 	////Walk
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Walk_PATH)), (int)eCharacterState::eWalk + (int)eWeaponType::eType_1);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Walk_PATH)), (int)eCharacterState::eWalk + (int)weaponType);
 
 	////Run
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Run_PATH)), (int)eCharacterState::eRun + (int)eWeaponType::eType_1);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Run_PATH)), (int)eCharacterState::eRun + (int)weaponType);
 
 	////Attack
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Attack_PATH)), (int)eCharacterState::eAttack + (int)eWeaponType::eType_1 + (int)eCombo_Interpol::Combo_None);
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_DownAttack_PATH)), (int)eCharacterState::eAttack + (int)eWeaponType::eType_1 + (int)eCombo_Interpol::Combo_One);
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Kick_PATH)), (int)eCharacterState::eAttack + (int)eWeaponType::eType_1 + (int)eCombo_Interpol::Combo_Two);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Attack_PATH)), (int)eCharacterState::eAttack + (int)weaponType + (int)eCombo_Interpol::Combo_None);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_DownAttack_PATH)), (int)eCharacterState::eAttack + (int)weaponType + (int)eCombo_Interpol::Combo_One);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Kick_PATH)), (int)eCharacterState::eAttack + (int)weaponType + (int)eCombo_Interpol::Combo_Two);
 
 	////HIT
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Hit_PATH)), (int)eCharacterState::eHit + (int)eWeaponType::eType_1);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Hit_PATH)), (int)eCharacterState::eHit + (int)weaponType);
 
 	////Skill_1
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_CastingEarthQuake_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_1 + (int)eWeaponType::eType_1);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_CastingEarthQuake_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_1 + (int)weaponType);
 
 	////Skill_2
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_TurnAttack_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_2 + (int)eWeaponType::eType_1);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_TurnAttack_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_2 + (int)weaponType);
+
+	////Draw Weapon ->칼 넣기
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Draw_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eDrawWeapon + (int)weaponType);
+
+	////Sheath Weapon ->칼 빼기
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Sheath_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSheathWeapon + (int)weaponType);
 
 
+
+	weaponType = eWeaponType::eType_2;
 	/* Weapon Type _ 2 */
 	////Idle
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Idle1_PATH)), (int)eCharacterState::eIdle + (int)eWeaponType::eType_2);
+	//m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Idle1_PATH)), (int)eCharacterState::eIdle + (int)eWeaponType::eType_2);
 
-	////Walk
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Walk_PATH)), (int)eCharacterState::eWalk + (int)eWeaponType::eType_2);
+	//////Walk
+	//m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Walk_PATH)), (int)eCharacterState::eWalk + (int)eWeaponType::eType_2);
 
-	////Run
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Run_PATH)), (int)eCharacterState::eRun + (int)eWeaponType::eType_2);
+	//////Run
+	//m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Run_PATH)), (int)eCharacterState::eRun + (int)eWeaponType::eType_2);
 
-	////Attack
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Attack_PATH)), (int)eCharacterState::eAttack + (int)eWeaponType::eType_2);
+	//////Attack
+	//m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Attack_PATH)), (int)eCharacterState::eAttack + (int)eWeaponType::eType_2);
 
-	////HIT
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Hit_PATH)), (int)eCharacterState::eHit + (int)eWeaponType::eType_2);
+	//////HIT
+	//m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Hit_PATH)), (int)eCharacterState::eHit + (int)eWeaponType::eType_2);
 
-	////Skill_1
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_CastingEarthQuake_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_1 + (int)eWeaponType::eType_2);
+	//////Skill_1
+	//m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_CastingEarthQuake_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_1 + (int)eWeaponType::eType_2);
 
-	////Skill_2
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_TurnAttack_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_2 + (int)eWeaponType::eType_2);
+	//////Skill_2
+	//m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_TurnAttack_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_2 + (int)eWeaponType::eType_2);
 }
 
 void ANP4PlayerBase::SetPlayerController(ANP4HeroController* _pPlayerController)
@@ -335,6 +347,7 @@ void ANP4PlayerBase::CheckState(float _Deltatime)
 	UAnimMontage* ExeAnimMontage = NULL;
 	eCharacterState ExeAnimMontage_Type = eCharacterState::eEnd;
 	float ReturnValue = Animation_Montage_Failed;
+	eWeaponType iWeaponType = GetCurrentWeapon() == NULL ? eWeaponType::eType_None : GetCurrentWeapon()->GetWeaponType();
 
 	if (IsSomeAction())
 	{
@@ -345,7 +358,7 @@ void ANP4PlayerBase::CheckState(float _Deltatime)
 	{
 		if (IsRunning())
 		{
-			ExeAnimMontage = (m_ArrAnimMontage)[eCharacterState::eRun + (int)m_pCurrentEquipWeapon->GetWeaponType()];
+			ExeAnimMontage = (m_ArrAnimMontage)[eCharacterState::eRun + (int)iWeaponType];
 			ExeAnimMontage_Type = eCharacterState::eRun;
 		}
 
@@ -358,14 +371,14 @@ void ANP4PlayerBase::CheckState(float _Deltatime)
 			if (GetCharacterMovement())
 				GetCharacterMovement()->MaxWalkSpeed = 150;
 
-			ExeAnimMontage = (m_ArrAnimMontage)[eCharacterState::eWalk + (int)m_pCurrentEquipWeapon->GetWeaponType()];
+			ExeAnimMontage = (m_ArrAnimMontage)[eCharacterState::eWalk + (int)iWeaponType];
 			ExeAnimMontage_Type = eCharacterState::eWalk;
 		}
 	}
 
 	else if (IsRunning())
 	{
-		ExeAnimMontage = (m_ArrAnimMontage)[eCharacterState::eRun + (int)m_pCurrentEquipWeapon->GetWeaponType()];
+		ExeAnimMontage = (m_ArrAnimMontage)[eCharacterState::eRun + (int)iWeaponType];
 		ExeAnimMontage_Type = eCharacterState::eRun;
 	}
 
@@ -378,7 +391,7 @@ void ANP4PlayerBase::CheckState(float _Deltatime)
 		return;
 
 	/* EntryPoint */
-	else if (PlayAnimMontage_CheckCurrent((m_ArrAnimMontage)[eCharacterState::eIdle + (int)m_pCurrentEquipWeapon->GetWeaponType()], eCharacterState::eIdle) != Animation_Montage_Failed)
+	else if (PlayAnimMontage_CheckCurrent((m_ArrAnimMontage)[eCharacterState::eIdle + (int)iWeaponType], eCharacterState::eIdle) != Animation_Montage_Failed)
 	{
 		if(m_pPlayerState)
 			m_pPlayerState->SetPlayerState(eCharacterState::eIdle);
@@ -458,7 +471,6 @@ bool ANP4PlayerBase::IsSomeAction()
 	return false;
 }
 
-
 //////////////////////////////////////////////////* Character Action */
 void ANP4PlayerBase::StartRunning()
 {
@@ -489,11 +501,12 @@ void ANP4PlayerBase::ActionAttack()
 {
 	if (!IsHit() && !IsSkilling() && IsAttack() == false)
 	{
+		eWeaponType iWeaponType = GetCurrentWeapon() == NULL ? eWeaponType::eType_None : GetCurrentWeapon()->GetWeaponType();
 		float fAnimDuationVal = 0.0f;
 		SetRunning(false);
 
 		UAnimMontage* pAttackAnim = NULL;
-		pAttackAnim = (m_ArrAnimMontage)[eCharacterState::eAttack + (int)m_pCurrentEquipWeapon->GetWeaponType()];;
+		pAttackAnim = (m_ArrAnimMontage)[eCharacterState::eAttack + (int)iWeaponType];;
 
 		if (pAttackAnim)
 		{
@@ -516,8 +529,7 @@ void ANP4PlayerBase::ActionAttack()
 	}
 
 	//Combo System
-	else if (m_bComboNotifyEnter && IsAttack() == true /*&& 
-		GetMesh()->AnimScriptInstance->Montage_IsPlaying((m_ArrAnimMontage)[eCharacterState::eAttack])*/)
+	else if (m_bComboNotifyEnter && IsAttack() == true)
 	{
 		m_bComboClkOn = true;
 	}
@@ -525,8 +537,9 @@ void ANP4PlayerBase::ActionAttack()
 
 void ANP4PlayerBase::StopAttack()
 {
+	eWeaponType iWeaponType = GetCurrentWeapon() == NULL ? eWeaponType::eType_None : GetCurrentWeapon()->GetWeaponType();
 	UAnimMontage* pAttackAnim = NULL;
-	pAttackAnim = pAttackAnim = (m_ArrAnimMontage)[eCharacterState::eAttack + (int)m_pCurrentEquipWeapon->GetWeaponType() + (int)m_ComboStep];;
+	pAttackAnim = pAttackAnim = (m_ArrAnimMontage)[eCharacterState::eAttack + (int)iWeaponType + (int)m_ComboStep];;
 
 	if (pAttackAnim)
 	{
@@ -548,12 +561,13 @@ void ANP4PlayerBase::StopAttack()
 
 void ANP4PlayerBase::ActionHit()
 {
+	eWeaponType iWeaponType = GetCurrentWeapon() == NULL ? eWeaponType::eType_None : GetCurrentWeapon()->GetWeaponType();
 	if (!IsSkilling() && IsHit() == false)
 	{
 		SetRunning(false);
 
 		UAnimMontage* pHitAnim = NULL;
-		pHitAnim = (m_ArrAnimMontage)[eCharacterState::eHit + (int)m_pCurrentEquipWeapon->GetWeaponType()];;
+		pHitAnim = (m_ArrAnimMontage)[eCharacterState::eHit + (int)iWeaponType];;
 
 		if (pHitAnim)
 		{
@@ -573,8 +587,9 @@ void ANP4PlayerBase::ActionHit()
 
 void ANP4PlayerBase::StopHit()
 {
+	eWeaponType iWeaponType = GetCurrentWeapon() == NULL ? eWeaponType::eType_None : GetCurrentWeapon()->GetWeaponType();
 	UAnimMontage* pHitAnim = NULL;
-	pHitAnim = (m_ArrAnimMontage)[eCharacterState::eHit + (int)m_pCurrentEquipWeapon->GetWeaponType()];;
+	pHitAnim = (m_ArrAnimMontage)[eCharacterState::eHit + (int)iWeaponType];;
 
 	if (pHitAnim)
 	{
@@ -590,8 +605,9 @@ void ANP4PlayerBase::StopHit()
 
 void ANP4PlayerBase::ActionSkill_1()
 {
+	eWeaponType iWeaponType = GetCurrentWeapon() == NULL ? eWeaponType::eType_None : GetCurrentWeapon()->GetWeaponType();
 	UAnimMontage* pSkill_1_Anim = NULL;
-	pSkill_1_Anim = (m_ArrAnimMontage)[eCharacterState::eSkilling + eAnimMontage_Skill_Interpol::eSkill_1 + (int)m_pCurrentEquipWeapon->GetWeaponType()];;
+	pSkill_1_Anim = (m_ArrAnimMontage)[eCharacterState::eSkilling + eAnimMontage_Skill_Interpol::eSkill_1 + (int)iWeaponType];;
 
 	if (pSkill_1_Anim && IsSkilling() == false)
 	{
@@ -608,8 +624,9 @@ void ANP4PlayerBase::ActionSkill_1()
 
 void ANP4PlayerBase::ActionSkill_2()
 {
+	eWeaponType iWeaponType = GetCurrentWeapon() == NULL ? eWeaponType::eType_None : GetCurrentWeapon()->GetWeaponType();
 	UAnimMontage* pSkill_2_Anim = NULL;
-	pSkill_2_Anim = (m_ArrAnimMontage)[eCharacterState::eSkilling + eAnimMontage_Skill_Interpol::eSkill_2 + (int)m_pCurrentEquipWeapon->GetWeaponType()];;
+	pSkill_2_Anim = (m_ArrAnimMontage)[eCharacterState::eSkilling + eAnimMontage_Skill_Interpol::eSkill_2 + (int)iWeaponType];;
 
 
 	if (pSkill_2_Anim && IsSkilling() == false)
@@ -630,10 +647,69 @@ void ANP4PlayerBase::StopSkill(UAnimMontage* _pSkillAnim)
 	SetSkilling(false);
 }
 
+/* 칼 넣기 */
+void ANP4PlayerBase::DrawWeapon()
+{
+	//eWeaponType iWeaponType = GetCurrentWeapon() == NULL ? eWeaponType::eType_None : GetCurrentWeapon()->GetWeaponType();
+	//UAnimMontage* pSheath_Anim = NULL;
+	//pSheath_Anim = (m_ArrAnimMontage)[eCharacterState::eSkilling + eAnimMontage_Skill_Interpol::eSheathWeapon + (int)iWeaponType];;
+
+	//if (pSheath_Anim && IsSkilling() == false)
+	//{
+	//	GetMesh()->AnimScriptInstance->Montage_Stop(0.0f); /* Stop All Montage Anim */
+	//	SetRunning(false);
+	//	PlayAnimMontage_CheckCurrent(pSheath_Anim, eCharacterState::eSkilling);
+	//	SetRunning(false);
+	//	if (m_pPlayerState)
+	//		m_pPlayerState->SetPlayerState(eCharacterState::eSkilling);
+	//}
+}
+
+/* 칼 빼기 */
+void ANP4PlayerBase::SheathWeapon()
+{
+	eWeaponType iWeaponType = GetCurrentWeapon() == NULL ? eWeaponType::eType_None : GetCurrentWeapon()->GetWeaponType();
+
+	//처음 끼는 것
+	if (iWeaponType == eWeaponType::eType_None)
+	{
+		iWeaponType = eWeaponType::eType_1;
+	}
+
+	//이미 끼고 있는데 교체 하는 것
+	else
+	{
+		//마지막인지 체크
+		if (iWeaponType == eWeaponType::eType_3)
+		{
+			iWeaponType = eWeaponType::eType_1;
+		}
+
+		else
+		{
+			iWeaponType = eWeaponType(((int)iWeaponType) + 1);
+		}
+	}
+
+	UAnimMontage* pSheath_Anim = NULL;
+	pSheath_Anim = (m_ArrAnimMontage)[eCharacterState::eSkilling + eAnimMontage_Skill_Interpol::eSheathWeapon + (int)iWeaponType];;
+
+	if (pSheath_Anim && IsSkilling() == false)
+	{
+		GetMesh()->AnimScriptInstance->Montage_Stop(0.0f); /* Stop All Montage Anim */
+		SetRunning(false);
+		PlayAnimMontage_CheckCurrent(pSheath_Anim, eCharacterState::eSkilling);
+		SetSkilling(true);
+		if (m_pPlayerState)
+			m_pPlayerState->SetPlayerState(eCharacterState::eSkilling);
+	}
+}
+
 
 float ANP4PlayerBase::PlayAnimMontage_CheckCurrent(UAnimMontage* _AnimMontage, eCharacterState _eAnimType)
 {
 	float reuturnVal = 0.0f;
+	eWeaponType iWeaponType = GetCurrentWeapon() == NULL ? eWeaponType::eType_None : GetCurrentWeapon()->GetWeaponType();
 
 	USkeletalMeshComponent* mesh = GetMesh();
 	UAnimInstance* AnimInstance = mesh->AnimScriptInstance;
@@ -669,17 +745,34 @@ float ANP4PlayerBase::PlayAnimMontage_CheckCurrent(UAnimMontage* _AnimMontage, e
 
 		else if (_eAnimType == eCharacterState::eSkilling)
 		{
+			float SubVal = 1.0f;
+
+			int AnimIdx = (int)eCharacterState::eSkilling + (int)iWeaponType;
 			FTimerHandle TimerHandle_StopSkill;
 			if (_AnimMontage == (m_ArrAnimMontage)[
-				(int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_1])
+				AnimIdx + (int)eAnimMontage_Skill_Interpol::eSkill_1])
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("Skill_1")));
+				SubVal = 0.8f;
 			}
 
 			else if (_AnimMontage == (m_ArrAnimMontage)[
-				(int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_2])
+				AnimIdx + (int)eAnimMontage_Skill_Interpol::eSkill_2] )
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("Skill_2")));
+				SubVal = 0.8f;
+			}
+
+			else if (_AnimMontage == (m_ArrAnimMontage)[
+				AnimIdx + (int)eAnimMontage_Skill_Interpol::eDrawWeapon] )
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("DrawWeapon")));
+			}
+
+			else if (_AnimMontage == (m_ArrAnimMontage)[
+				AnimIdx + (int)eAnimMontage_Skill_Interpol::eSheathWeapon] )
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("SheathWeapon")));
 			}
 
 				float AnimDuration = PlayNP4AnimationMontage(_AnimMontage);
@@ -688,7 +781,7 @@ float ANP4PlayerBase::PlayAnimMontage_CheckCurrent(UAnimMontage* _AnimMontage, e
 				FTimerDelegate RespawnDelegate =
 					FTimerDelegate::CreateUObject(this, &ANP4PlayerBase::StopSkill, _AnimMontage);
 				GetWorldTimerManager().SetTimer(TimerHandle_StopSkill,
-					RespawnDelegate, AnimDuration - 0.1f - (_AnimMontage->RateScale - 0.8f), false);
+					RespawnDelegate, AnimDuration - 0.1f - (_AnimMontage->RateScale - SubVal), false);
 		}
 
 		else

@@ -43,26 +43,28 @@ void AWeaponBase::SetOwningPawn(ANP4CharacterBase* NewOwner)
 	}
 }
 
-void AWeaponBase::AttachMeshToPawn()
+void AWeaponBase::AttachMeshToPawn(FName _Name)
 {
 	if (m_pWeaponOwner)
 	{
 		USkeletalMeshComponent* PawnMesh = m_pWeaponOwner->GetMesh();
-		FName AttachPoint = m_pWeaponOwner->GetAttachWeaponSocketPoint();
+		//FName AttachPoint = m_pWeaponOwner->GetAttachWeaponSocketPoint();
 
-		if(AttachPoint != "")
-			m_pItemMesh->AttachTo(PawnMesh, AttachPoint);
+		if(_Name != "")
+			m_pItemMesh->AttachTo(PawnMesh, _Name);
 	}
 }
 
 void AWeaponBase::OnEquip()
 {
-	AttachMeshToPawn();
+	AttachMeshToPawn(m_strEquipSocketName);
 }
 
 void AWeaponBase::OnUnEquip()
 {
-	m_pItemMesh->DetachFromParent();
+	//m_pItemMesh->DetachFromParent();
+
+	AttachMeshToPawn(m_strUnEquipSocketName);
 }
 
 void AWeaponBase::SetMeshComponent(USkeletalMesh* _pMeshCom)
