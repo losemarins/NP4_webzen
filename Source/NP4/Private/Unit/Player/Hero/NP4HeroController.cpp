@@ -9,12 +9,14 @@
 #include "NP4GameState.h"
 #include "AIDirector.h"
 #include "Building_Castle.h"
+#include "FormationManager.h"
 
 ANP4HeroController::ANP4HeroController()
 {
 	//ANP4PlayerController::ANP4PlayerController();
 
 	PlayerCameraManagerClass = ANP4CameraManager::StaticClass();
+	
 
 	m_bZoomingIn = false;
 	m_bMouseRightClk = false;
@@ -30,6 +32,9 @@ void ANP4HeroController::SetupInputComponent()
 	//몬스터 스폰 임시로
 	InputComponent->BindAction("Spawn_1", IE_Pressed, this, &ANP4HeroController::PlayerSpawn);
 	InputComponent->BindAction("Spawn_2", IE_Pressed, this, &ANP4HeroController::EnemySpawn);
+
+	//부대 전술관련 임시로
+	InputComponent->BindAction("Formation", IE_Pressed, this, &ANP4HeroController::FormationSetting);
 
 	//이동 관련
 	InputComponent->BindAxis(TEXT("MoveForward"), this, &ANP4HeroController::MoveFoward);
@@ -356,4 +361,9 @@ void ANP4HeroController::EnemySpawn()
 	{
 		EnemyTeamData->Castle->GetAIDirector()->RequestSpawn();
 	}
+}
+
+void ANP4HeroController::FormationSetting()
+{
+	//UFormationManager->AllieList;
 }
