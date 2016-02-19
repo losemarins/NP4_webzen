@@ -24,6 +24,7 @@ class NP4_API ACharacter_Minion : public ANP4CharacterBase
 	bool bSensedTarget;
 	
 protected :
+	UPROPERTY(VisibleAnywhere, Category = "Attacking")
 	UCapsuleComponent* MeleeCollisionComp;
 	UPROPERTY(EditDefaultsOnly, Category = "Attacking")
 	UAnimMontage* MeleeAnimMontage;
