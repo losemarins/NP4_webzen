@@ -63,6 +63,7 @@ public:
 	/* Set,Get WeaponSocket */
 	void SetAttachWeaponSocketPoint();
 	FName GetAttachWeaponSocketPoint();
+	AWeaponBase* GetCurrentWeapon();
 
 public:
 	void OnUnEquipWeapon();

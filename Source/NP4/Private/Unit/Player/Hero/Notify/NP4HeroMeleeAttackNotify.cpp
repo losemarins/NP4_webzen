@@ -17,9 +17,6 @@ void UNP4HeroMeleeAttackNotify::NotifyBegin(USkeletalMeshComponent * MeshComp, U
 
 			if (pPlayerCast)
 			{
-				m_eCurrentComboNum = pPlayerCast->GetCurrentComboStep();
-				m_bNextSectionReady = false;
-
 				pPlayerCast->SetbNotifyEnter(true);
 			}
 		}
@@ -29,24 +26,6 @@ void UNP4HeroMeleeAttackNotify::NotifyBegin(USkeletalMeshComponent * MeshComp, U
 void UNP4HeroMeleeAttackNotify::NotifyTick(USkeletalMeshComponent * MeshComp, UAnimSequenceBase * Animation, float FrameDeltaTime)
 {
 	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime);
-
-	if (MeshComp)
-	{
-		AActor* pOwnerActor = MeshComp->GetOwner();
-		if (pOwnerActor)
-		{
-			ANP4PlayerBase* pPlayerCast = Cast<ANP4PlayerBase>(pOwnerActor);
-
-			if (pPlayerCast)
-			{
-				if (pPlayerCast->GetbNotifyEnter()  && pPlayerCast->GetbComboOn())
-				{
-					m_bNextSectionReady = true;
-				}
-			}
-		}
-	}
-
 }
 
 void UNP4HeroMeleeAttackNotify::NotifyEnd(USkeletalMeshComponent * MeshComp, UAnimSequenceBase * Animation)
@@ -63,36 +42,34 @@ void UNP4HeroMeleeAttackNotify::NotifyEnd(USkeletalMeshComponent * MeshComp, UAn
 
 			if (pPlayerCast && AnimInstance)
 			{
-				if (m_bNextSectionReady == true)
+				if(pPlayerCast->GetbComboOn() && pPlayerCast->GetCurrentComboStep() != eCombo_Interpol::Combo_Two)
 				{
-					if (m_eCurrentComboNum == eCombo_Interpol::Combo_None)
+					if (pPlayerCast->GetCurrentComboStep() == eCombo_Interpol::Combo_None)
 					{
-						pPlayerCast->SetCurrentComboStep(eCombo_Interpol::Combo_DownAttack);
-						MeshComp->GetAnimInstance()->Montage_JumpToSection(TEXT("Combo_DownAttack"));
+						pPlayerCast->SetCurrentComboStep(eCombo_Interpol::Combo_One);
+						UAnimMontage* pAnimMon = pPlayerCast->GetAnimationMontage_fromArrMontage( 
+							eCharacterState::eAttack + (int)pPlayerCast->GetCurrentWeapon()->GetWeaponType() + (int)eCombo_Interpol::Combo_One);
+						pPlayerCast->PlayAnimMontage_CheckCurrent(pAnimMon, eCharacterState::eAttack);
 					}
 
-					/*else if (m_eCurrentComboNum == eCombo_Interpol::Combo_DownAttack)
+					else if (pPlayerCast->GetCurrentComboStep() == eCombo_Interpol::Combo_One)
 					{
-						pPlayerCast->SetCurrentComboStep(eCombo_Interpol::Combo_Kick);
-						MeshComp->GetAnimInstance()->Montage_JumpToSection(TEXT("Combo_Kick"));
+						pPlayerCast->SetCurrentComboStep(eCombo_Interpol::Combo_Two);
+						UAnimMontage* pAnimMon = pPlayerCast->GetAnimationMontage_fromArrMontage(
+							eCharacterState::eAttack + (int)pPlayerCast->GetCurrentWeapon()->GetWeaponType() + (int)eCombo_Interpol::Combo_Two);
+						pPlayerCast->PlayAnimMontage_CheckCurrent(pAnimMon, eCharacterState::eAttack);
 					}
-
-
-					else if (m_eCurrentComboNum == eCombo_Interpol::Combo_Kick)
-					{
-
-					}*/
-
-					m_bNextSectionReady = false;
+					pPlayerCast->SetbComboOn(false);		
 				}
+
 				else
 				{
 					pPlayerCast->StopAttack();
 				}
 
-				pPlayerCast->SetbComboOn(false);
-				pPlayerCast->SetbNotifyEnter(false);
+				pPlayerCast->SetbNotifyEnter(false);				
 			}
+
 		}
 	}
 	

@@ -21,8 +21,8 @@ enum eAnimMontage_Skill_Interpol
 enum eCombo_Interpol
 {
 	Combo_None = 0,
-	Combo_DownAttack = 1,
-	Combo_Kick = 2
+	Combo_One = 1,
+	Combo_Two = 2
 };
 
 UCLASS()
@@ -86,6 +86,7 @@ public:
 	void SetCameraRotaion(FRotator _Rot);
 	void SetSpringArmCameraRotation(FRotator _Rot);
 	UAnimMontage* GetAnimationMontage_fromArrMontage(eCharacterState _eState, eAnimMontage_Skill_Interpol _eSkill_Interpolation = eAnimMontage_Skill_Interpol::eSkill_1);
+	UAnimMontage* GetAnimationMontage_fromArrMontage(int _idex);
 
 	/* Bool Check */
 	bool IsPlayerControllerNull();

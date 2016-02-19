@@ -155,7 +155,9 @@ void ANP4PlayerBase::InitAnimationMontage()
 	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Run_PATH)), (int)eCharacterState::eRun + (int)eWeaponType::eType_1);
 
 	////Attack
-	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Attack_PATH)), (int)eCharacterState::eAttack + (int)eWeaponType::eType_1);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Attack_PATH)), (int)eCharacterState::eAttack + (int)eWeaponType::eType_1 + (int)eCombo_Interpol::Combo_None);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_DownAttack_PATH)), (int)eCharacterState::eAttack + (int)eWeaponType::eType_1 + (int)eCombo_Interpol::Combo_One);
+	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Kick_PATH)), (int)eCharacterState::eAttack + (int)eWeaponType::eType_1 + (int)eCombo_Interpol::Combo_Two);
 
 	////HIT
 	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Hit_PATH)), (int)eCharacterState::eHit + (int)eWeaponType::eType_1);
@@ -231,12 +233,22 @@ void ANP4PlayerBase::SetCameraRotaion(FRotator _Rot)
 
 UAnimMontage* ANP4PlayerBase::GetAnimationMontage_fromArrMontage(eCharacterState _eState, eAnimMontage_Skill_Interpol _eSkill_Interpolation)
 {
-	if (m_ArrAnimMontage.Num() <= (int)_eState)
+	if (m_ArrAnimMontage.Num() <= (int)_eState + (int)_eSkill_Interpolation )
 	{
 		return NULL;
 	}
 
 	return (m_ArrAnimMontage)[(int)_eState + (int)_eSkill_Interpolation];
+}
+
+UAnimMontage* ANP4PlayerBase::GetAnimationMontage_fromArrMontage(int _idex)
+{
+	if (m_ArrAnimMontage.Num() <= _idex)
+	{
+		return NULL;
+	}
+
+	return (m_ArrAnimMontage)[_idex];
 }
 
 bool ANP4PlayerBase::IsPlayerControllerNull()
@@ -514,7 +526,7 @@ void ANP4PlayerBase::ActionAttack()
 void ANP4PlayerBase::StopAttack()
 {
 	UAnimMontage* pAttackAnim = NULL;
-	pAttackAnim = pAttackAnim = (m_ArrAnimMontage)[eCharacterState::eAttack + (int)m_pCurrentEquipWeapon->GetWeaponType()];;
+	pAttackAnim = pAttackAnim = (m_ArrAnimMontage)[eCharacterState::eAttack + (int)m_pCurrentEquipWeapon->GetWeaponType() + (int)m_ComboStep];;
 
 	if (pAttackAnim)
 	{
@@ -650,9 +662,9 @@ float ANP4PlayerBase::PlayAnimMontage_CheckCurrent(UAnimMontage* _AnimMontage, e
 
 			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("ATTACk")));
 
-			FTimerHandle TimerHandle_StopAttack;
+			/*FTimerHandle TimerHandle_StopAttack;
 			GetWorldTimerManager().SetTimer(TimerHandle_StopAttack, this,
-				&ANP4PlayerBase::StopAttack, AnimDuration - 0.2f - (_AnimMontage->RateScale - 0.8f), false);
+				&ANP4PlayerBase::StopAttack, AnimDuration - 0.2f - (_AnimMontage->RateScale - 0.8f), false);*/
 		}
 
 		else if (_eAnimType == eCharacterState::eSkilling)

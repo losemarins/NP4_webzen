@@ -132,3 +132,8 @@ void ANP4CharacterBase::SetColliderEnabled(bool _bActive)
 		m_pCurrentEquipWeapon->SetColliderEnabled(_bActive);
 	}
 }
+
+AWeaponBase* ANP4CharacterBase::GetCurrentWeapon()
+{
+	return m_pCurrentEquipWeapon;
+}
