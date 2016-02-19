@@ -35,7 +35,8 @@ void UNP4HeroAnmationMoveNotifyState::NotifyTick(USkeletalMeshComponent * MeshCo
 
 			if (pPlayerCast)
 			{
-				pPlayerCast->AddMovementInput(pPlayerCast->GetCapsuleComponent()->GetForwardVector(), FrameDeltaTime * m_fMoveSpeed,false);
+				//pPlayerCast->AddMovementInput(pPlayerCast->GetCapsuleComponent()->GetForwardVector(), FrameDeltaTime);
+				pPlayerCast->GetCharacterMovement()->AddForce(pPlayerCast->GetCapsuleComponent()->GetForwardVector() * m_fMoveSpeed * 100000);
 			}
 		}
 	}

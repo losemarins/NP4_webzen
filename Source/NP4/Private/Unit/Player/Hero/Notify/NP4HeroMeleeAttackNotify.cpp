@@ -44,11 +44,13 @@ void UNP4HeroMeleeAttackNotify::NotifyEnd(USkeletalMeshComponent * MeshComp, UAn
 			{
 				if(pPlayerCast->GetbComboOn() && pPlayerCast->GetCurrentComboStep() != eCombo_Interpol::Combo_Two)
 				{
+					eWeaponType iWeaponType = pPlayerCast->GetCurrentWeapon() == NULL ? eWeaponType::eType_None : pPlayerCast->GetCurrentWeapon()->GetWeaponType();
+
 					if (pPlayerCast->GetCurrentComboStep() == eCombo_Interpol::Combo_None)
 					{
 						pPlayerCast->SetCurrentComboStep(eCombo_Interpol::Combo_One);
 						UAnimMontage* pAnimMon = pPlayerCast->GetAnimationMontage_fromArrMontage( 
-							eCharacterState::eAttack + (int)pPlayerCast->GetCurrentWeapon()->GetWeaponType() + (int)eCombo_Interpol::Combo_One);
+							eCharacterState::eAttack + (int)iWeaponType + (int)eCombo_Interpol::Combo_One);
 						pPlayerCast->PlayAnimMontage_CheckCurrent(pAnimMon, eCharacterState::eAttack);
 					}
 
@@ -56,7 +58,7 @@ void UNP4HeroMeleeAttackNotify::NotifyEnd(USkeletalMeshComponent * MeshComp, UAn
 					{
 						pPlayerCast->SetCurrentComboStep(eCombo_Interpol::Combo_Two);
 						UAnimMontage* pAnimMon = pPlayerCast->GetAnimationMontage_fromArrMontage(
-							eCharacterState::eAttack + (int)pPlayerCast->GetCurrentWeapon()->GetWeaponType() + (int)eCombo_Interpol::Combo_Two);
+							eCharacterState::eAttack + (int)iWeaponType + (int)eCombo_Interpol::Combo_Two);
 						pPlayerCast->PlayAnimMontage_CheckCurrent(pAnimMon, eCharacterState::eAttack);
 					}
 					pPlayerCast->SetbComboOn(false);		

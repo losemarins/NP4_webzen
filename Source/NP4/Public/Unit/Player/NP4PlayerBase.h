@@ -16,6 +16,9 @@ enum eAnimMontage_Skill_Interpol
 	eSkill_1 = 0,
 	eSkill_2 = 1,
 	eSkill_3 = 2,
+
+	eDrawWeapon = 7,
+	eSheathWeapon = 8 //스킬은 9개씩이므로 8번이 마지막
 };
 
 enum eCombo_Interpol
@@ -134,6 +137,8 @@ public:
 	void ActionSkill_1();
 	void ActionSkill_2();
 	void StopSkill(UAnimMontage* _pSkillAnim);
+	void DrawWeapon();
+	void SheathWeapon();
 
 	/* Notify Combo */
 	void SetbNotifyEnter(bool _bEnter);

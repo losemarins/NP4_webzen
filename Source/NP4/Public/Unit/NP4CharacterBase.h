@@ -25,12 +25,10 @@ protected:
 
 public:
 	TArray<AWeaponBase*> m_pItemInven_Temp; //임시
+	int m_iCurrentEquip_InvenIndex; //임시
 
 											/* 현재 무기 */
 	AWeaponBase* m_pCurrentEquipWeapon;
-
-	/* 무기 붙이는 곳 */ //추후에 CharacterBase로 올려야할 수도 있음.
-	FName WeaponAttachPoint;
 
 public:
 	// Sets default values for this character's properties
@@ -61,13 +59,13 @@ public:
 	void InitWeapon_TempFunction();
 
 	/* Set,Get WeaponSocket */
-	void SetAttachWeaponSocketPoint();
-	FName GetAttachWeaponSocketPoint();
 	AWeaponBase* GetCurrentWeapon();
+	void NextInventoryIndex();
 
 public:
 	void OnUnEquipWeapon();
 	void OnEqipWeapon(AWeaponBase* _pWeapon);
+	void OnEqipWeapon_byInventoryIndex();
 
 public:
 	/* Collision */

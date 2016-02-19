@@ -15,7 +15,7 @@ class NP4_API ACharacter_Minion : public ANP4CharacterBase
 	GENERATED_BODY()
 
 	UPROPERTY(VisibleAnywhere, Category = "AI")
-	class UPawnSensingComponent* PawnSensingComp;
+	class UMyPawnSensingComponent* PawnSensingComp;
 	FTimerHandle TimerHandle_MeleeAttack;
 	float MeleeStrikeCooldown;
 	float LastMeleeAttackTime;
