@@ -16,6 +16,7 @@ ANP4CharacterBase::ANP4CharacterBase()
 	HealthMax = 100;
 
 	m_pCurrentEquipWeapon = NULL;
+	m_iCurrentEquip_InvenIndex = 0;
 }
 
 // Called when the game starts or when spawned
@@ -111,10 +112,10 @@ void ANP4CharacterBase::InitWeapon_TempFunction()
 				m_pItemInven_Temp.AddUnique(pItem);
 			}
 
-			/*if (m_pItemInven_Temp.Num() > 0)
+			if (m_pItemInven_Temp.Num() > 0)
 			{
 				OnEqipWeapon(m_pItemInven_Temp[0]);
-			}*/
+			}
 		}
 	}
 }
@@ -136,3 +137,14 @@ AWeaponBase* ANP4CharacterBase::GetCurrentWeapon()
 //{
 //	m_pCurrentEquipWeapon = m_pItemInven_Temp[_idx];
 //}
+
+void ANP4CharacterBase::NextInventoryIndex()
+{
+	if (m_pItemInven_Temp.Num() <= m_iCurrentEquip_InvenIndex)
+	{
+		m_iCurrentEquip_InvenIndex = 0;
+	}
+
+	else
+		++m_iCurrentEquip_InvenIndex;
+}

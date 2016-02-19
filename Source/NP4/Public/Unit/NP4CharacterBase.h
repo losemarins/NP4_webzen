@@ -25,6 +25,7 @@ protected:
 
 public:
 	TArray<AWeaponBase*> m_pItemInven_Temp; //임시
+	int m_iCurrentEquip_InvenIndex; //임시
 
 											/* 현재 무기 */
 	AWeaponBase* m_pCurrentEquipWeapon;
@@ -59,6 +60,7 @@ public:
 
 	/* Set,Get WeaponSocket */
 	AWeaponBase* GetCurrentWeapon();
+	void NextInventoryIndex();
 
 public:
 	void OnUnEquipWeapon();
