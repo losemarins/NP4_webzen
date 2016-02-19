@@ -23,6 +23,7 @@ public:
 	/* Possess Character Class */
 	UPROPERTY()
 	ANP4PlayerBase* m_pPossessCharacter;
+	TSubclassOf<class UFormationManager> FormationManager;
 
 public:	/* 컨트롤러가 카메라를 가지고 있는다 */
 
@@ -31,7 +32,6 @@ public:	/* 컨트롤러가 카메라를 가지고 있는다 */
 	bool m_bUseCameraAction; /* 카메라 액션 중일 경우 기본 카메라를 off 한다. */
 	UPROPERTY(EditAnywhere, Category = "ActionCamera")
 	bool m_bActionCameraActive; /* 액션 카메라 사용 여부이다. 탑뷰에서는 이 값이 false일 것이다. */
-
 
 public:
 	/* About Camera Check Value */
@@ -100,4 +100,6 @@ public:
 	//몬스터 스폰 임시로
 	void PlayerSpawn();
 	void EnemySpawn();
+	void FormationSetting();
+
 };

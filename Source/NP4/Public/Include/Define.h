@@ -14,6 +14,7 @@ namespace EBuilding
 		HeroManagement,
 	};
 }
+
 // Color
 namespace EColor
 {
@@ -54,6 +55,7 @@ namespace EGameDifficulty
 		Hard,
 	};
 }
+
 // 게임의 진행중인 상태
 namespace EGameplayState
 {
