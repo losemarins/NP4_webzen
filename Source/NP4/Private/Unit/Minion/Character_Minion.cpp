@@ -3,7 +3,7 @@
 #include "NP4.h"
 #include "Character_Minion.h"
 #include "AIController_Minion.h"
-#include "Perception/PawnSensingComponent.h"
+#include "MyPawnSensingComponent.h"
 
 ACharacter_Minion::ACharacter_Minion()
 {
@@ -20,7 +20,7 @@ ACharacter_Minion::ACharacter_Minion()
 	MeleeCollisionComp->AttachParent = GetCapsuleComponent();
 
 	AIControllerClass = AAIController_Minion::StaticClass();
-	PawnSensingComp = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensingComp"));
+	PawnSensingComp = CreateDefaultSubobject<UMyPawnSensingComponent>(TEXT("PawnSensingComp"));
 	PawnSensingComp->SetPeripheralVisionAngle(70);
 	PawnSensingComp->SightRadius = 300;
 	PawnSensingComp->bOnlySensePlayers = 0;
@@ -92,7 +92,7 @@ void ACharacter_Minion::OnSeeEnemy(APawn* Pawn)
 	AAIController_Minion* MinionController = Cast<AAIController_Minion>(GetController());
 	ANP4CharacterBase* SensedPawn = Cast<ANP4CharacterBase>(Pawn);
 
-	if (MinionController && SensedPawn->IsAlive())
+	if (MinionController && SensedPawn->IsAlive() && MyTeamNum != SensedPawn->GetTeamNum())
 	{
 		MinionController->SetTargetEnemy(SensedPawn);
 	}
