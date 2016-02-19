@@ -647,61 +647,101 @@ void ANP4PlayerBase::StopSkill(UAnimMontage* _pSkillAnim)
 	SetSkilling(false);
 }
 
-/* 칼 넣기 */
-void ANP4PlayerBase::DrawWeapon()
+/* 칼 넣기(해제) */
+float ANP4PlayerBase::DrawWeapon()
 {
-	//eWeaponType iWeaponType = GetCurrentWeapon() == NULL ? eWeaponType::eType_None : GetCurrentWeapon()->GetWeaponType();
-	//UAnimMontage* pSheath_Anim = NULL;
-	//pSheath_Anim = (m_ArrAnimMontage)[eCharacterState::eSkilling + eAnimMontage_Skill_Interpol::eSheathWeapon + (int)iWeaponType];;
-
-	//if (pSheath_Anim && IsSkilling() == false)
-	//{
-	//	GetMesh()->AnimScriptInstance->Montage_Stop(0.0f); /* Stop All Montage Anim */
-	//	SetRunning(false);
-	//	PlayAnimMontage_CheckCurrent(pSheath_Anim, eCharacterState::eSkilling);
-	//	SetRunning(false);
-	//	if (m_pPlayerState)
-	//		m_pPlayerState->SetPlayerState(eCharacterState::eSkilling);
-	//}
-}
-
-/* 칼 빼기 */
-void ANP4PlayerBase::SheathWeapon()
-{
-	eWeaponType iWeaponType = GetCurrentWeapon() == NULL ? eWeaponType::eType_None : GetCurrentWeapon()->GetWeaponType();
-
-	//처음 끼는 것
-	if (iWeaponType == eWeaponType::eType_None)
+	float fDrawAnimDuation = 0.0f;
+	/* 끼고 있는 무기가 없으면 의미가 없다. */
+	if (!m_pCurrentEquipWeapon || IsSkilling())
 	{
-		iWeaponType = eWeaponType::eType_1;
+		/* 이미 어떠한 행동 중이다(해제중 포함) */
+		/* 주희에게 에러 메세지를 돌려보내줘야 한다(0을 리턴했을 경우, 메세지를 띄우게 하자) */
+		/* 지금은 할 수 없습니다. 라는 메시지 같은? */
+		return fDrawAnimDuation;
 	}
+		
 
-	//이미 끼고 있는데 교체 하는 것
-	else
-	{
-		//마지막인지 체크
-		if (iWeaponType == eWeaponType::eType_3)
-		{
-			iWeaponType = eWeaponType::eType_1;
-		}
+	/* 끼고 있는 무기가 있다. */
+	eWeaponType iWeaponType = GetCurrentWeapon()->GetWeaponType();
+	
+	UAnimMontage* pDraw_Anim = NULL;
+	pDraw_Anim = (m_ArrAnimMontage)[eCharacterState::eSkilling + eAnimMontage_Skill_Interpol::eDrawWeapon + (int)iWeaponType];;
 
-		else
-		{
-			iWeaponType = eWeaponType(((int)iWeaponType) + 1);
-		}
-	}
-
-	UAnimMontage* pSheath_Anim = NULL;
-	pSheath_Anim = (m_ArrAnimMontage)[eCharacterState::eSkilling + eAnimMontage_Skill_Interpol::eSheathWeapon + (int)iWeaponType];;
-
-	if (pSheath_Anim && IsSkilling() == false)
+	if (pDraw_Anim)
 	{
 		GetMesh()->AnimScriptInstance->Montage_Stop(0.0f); /* Stop All Montage Anim */
 		SetRunning(false);
-		PlayAnimMontage_CheckCurrent(pSheath_Anim, eCharacterState::eSkilling);
+		fDrawAnimDuation = PlayAnimMontage_CheckCurrent(pDraw_Anim, eCharacterState::eSkilling);
 		SetSkilling(true);
 		if (m_pPlayerState)
 			m_pPlayerState->SetPlayerState(eCharacterState::eSkilling);
+	}
+
+	return fDrawAnimDuation;
+}
+
+void ANP4PlayerBase::TempSheathWeapon()
+{
+	if (tempidx >= 1) //무기 개수는 3개.
+	{
+		tempidx = 0;
+	}
+	else
+		++tempidx;
+
+	SheathWeapon(tempidx); /* 실제로는 주희 UMG에서 선택한 아이템의 번호를 넘겨준다. */
+}
+
+/* 칼 빼기 */
+void ANP4PlayerBase::SheathWeapon(int _InvenIdx)
+{
+	/* 어떠한 행동 중 체크와, 인벤토리 범위 체크를 한다..*/
+	if (IsSkilling() || !CheckIndex_inInventory(_InvenIdx))
+	{
+		/* 전해진 번호가 인벤토리 이상이거나 음수이다. */
+		/* 이미 어떠한 행동 중이다(착용중 포함) */
+		/* 주희에게 에러 메세지를 돌려보내줘야 한다(리턴 값 수정이 필요할 수 있다) */
+		/* 지금은 할 수 없습니다. 라는 메시지 같은? */
+		return;
+	}
+
+	UAnimMontage* pSheath_Anim = NULL;
+	eWeaponType iWeaponType = eWeaponType::eType_None;
+
+	//이미 끼고 있는 무기가 있는가?
+	if (!GetCurrentWeapon())
+	{
+		/* 없다. */
+		//바로 착용.
+		//OnEqipWeapon_byInventoryIndex(_InvenIdx);
+		JustSetCurrentWeapon_NotEquip(_InvenIdx);
+
+		//착용 후 착용 된 무기의 타입을 얻어온다.
+		eWeaponType iWeaponType = GetCurrentWeapon()->GetWeaponType();
+		pSheath_Anim = (m_ArrAnimMontage)[eCharacterState::eSkilling + eAnimMontage_Skill_Interpol::eSheathWeapon + (int)iWeaponType];
+
+		if (pSheath_Anim)
+		{
+			GetMesh()->AnimScriptInstance->Montage_Stop(0.0f); /* Stop All Montage Anim */
+			SetRunning(false);
+			PlayAnimMontage_CheckCurrent(pSheath_Anim, eCharacterState::eSkilling);
+			SetSkilling(true);
+			if (m_pPlayerState)
+				m_pPlayerState->SetPlayerState(eCharacterState::eSkilling);
+		}
+	}
+
+	else
+	{
+		//이미 끼고 있는 무기가 있다. 착용 해제가 먼저 필요하다.
+		float fDrawAnimDuration = DrawWeapon();
+
+		//칼을 넣는 애니메이션이 끝나면 다시 이 함수를 부른다.
+		FTimerHandle TimerHandle_ReCallFunction;
+		FTimerDelegate RecallFunctionDelegate =
+			FTimerDelegate::CreateUObject(this, &ANP4PlayerBase::SheathWeapon, _InvenIdx);
+		GetWorldTimerManager().SetTimer(TimerHandle_ReCallFunction,
+			RecallFunctionDelegate, fDrawAnimDuration + 0.05f , false);
 	}
 }
 
@@ -722,13 +762,13 @@ float ANP4PlayerBase::PlayAnimMontage_CheckCurrent(UAnimMontage* _AnimMontage, e
 		if (_eAnimType == eCharacterState::eHit)
 		{
 			float AnimDuration = PlayNP4AnimationMontage(_AnimMontage);
-			reuturnVal = AnimDuration;
+			reuturnVal = AnimDuration - 0.2f - (_AnimMontage->RateScale - 0.8f); //-0.2f부터 없었던 거임
 
 			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("HIT")));
 
 			FTimerHandle TimerHandle_StopHit;
 			GetWorldTimerManager().SetTimer(TimerHandle_StopHit, this,
-				&ANP4PlayerBase::StopHit, AnimDuration - 0.2f - (_AnimMontage->RateScale - 0.8f), false);
+				&ANP4PlayerBase::StopHit, reuturnVal/*AnimDuration - 0.2f - (_AnimMontage->RateScale - 0.8f)*/, false);
 		}
 
 		else if (_eAnimType == eCharacterState::eAttack)
@@ -776,12 +816,12 @@ float ANP4PlayerBase::PlayAnimMontage_CheckCurrent(UAnimMontage* _AnimMontage, e
 			}
 
 				float AnimDuration = PlayNP4AnimationMontage(_AnimMontage);
-				reuturnVal = AnimDuration;
+				reuturnVal = AnimDuration - 0.1f - (_AnimMontage->RateScale - SubVal); //- 0.1f부터 없었던 거임.
 
 				FTimerDelegate RespawnDelegate =
 					FTimerDelegate::CreateUObject(this, &ANP4PlayerBase::StopSkill, _AnimMontage);
 				GetWorldTimerManager().SetTimer(TimerHandle_StopSkill,
-					RespawnDelegate, AnimDuration - 0.1f - (_AnimMontage->RateScale - SubVal), false);
+					RespawnDelegate, reuturnVal /* AnimDuration  - 0.1f - (_AnimMontage->RateScale - SubVal)*/, false);
 		}
 
 		else

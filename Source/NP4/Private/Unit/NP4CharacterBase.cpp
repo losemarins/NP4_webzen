@@ -73,12 +73,6 @@ void ANP4CharacterBase::OnUnEquipWeapon()
 
 void ANP4CharacterBase::OnEqipWeapon(AWeaponBase* _pWeapon)
 {
-	//현재 장착된 무기가 있으면 때고
-	if (m_pCurrentEquipWeapon)
-	{
-		OnUnEquipWeapon();
-	}
-	
 	//무기를 장착]
 	if (_pWeapon)
 	{
@@ -88,9 +82,15 @@ void ANP4CharacterBase::OnEqipWeapon(AWeaponBase* _pWeapon)
 	}
 }
 
-void ANP4CharacterBase::OnEqipWeapon_byInventoryIndex()
+void ANP4CharacterBase::OnEqipWeapon_byInventoryIndex(int _InvenIdx)
 {
+	if (_InvenIdx >= m_pItemInven_Temp.Num())
+		return;
 
+	else
+	{
+		OnEqipWeapon(m_pItemInven_Temp[_InvenIdx]);
+	}
 }
 
 void ANP4CharacterBase::InitWeapon_TempFunction()
@@ -112,10 +112,10 @@ void ANP4CharacterBase::InitWeapon_TempFunction()
 				m_pItemInven_Temp.AddUnique(pItem);
 			}
 
-			if (m_pItemInven_Temp.Num() > 0)
+			/*if (m_pItemInven_Temp.Num() > 0)
 			{
 				OnEqipWeapon(m_pItemInven_Temp[0]);
-			}
+			}*/
 		}
 	}
 }
@@ -128,23 +128,29 @@ void ANP4CharacterBase::SetColliderEnabled(bool _bActive)
 	}
 }
 
+void ANP4CharacterBase::JustSetCurrentWeapon_NotEquip(int _InvenIdx)
+{
+	if (_InvenIdx >= m_pItemInven_Temp.Num())
+		return;
+
+	else
+	{
+		//OnEqipWeapon(m_pItemInven_Temp[_InvenIdx]);
+		m_pCurrentEquipWeapon = m_pItemInven_Temp[_InvenIdx];
+	}
+}
+
 AWeaponBase* ANP4CharacterBase::GetCurrentWeapon()
 {
 	return m_pCurrentEquipWeapon;
 }
 
-//void ANP4CharacterBase::SetCurrentWeapon_byInventoryIndex(int _idx)
-//{
-//	m_pCurrentEquipWeapon = m_pItemInven_Temp[_idx];
-//}
-
-void ANP4CharacterBase::NextInventoryIndex()
+bool ANP4CharacterBase::CheckIndex_inInventory(int _idx)
 {
-	if (m_pItemInven_Temp.Num() <= m_iCurrentEquip_InvenIndex)
+	if (m_pItemInven_Temp.Num() <= _idx || _idx < 0)
 	{
-		m_iCurrentEquip_InvenIndex = 0;
+		return false;
 	}
 
-	else
-		++m_iCurrentEquip_InvenIndex;
+	return true;
 }
