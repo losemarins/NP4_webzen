@@ -10,7 +10,6 @@ void AHeroManagementBuilding::Init()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	ConstructorHelpers::FObjectFinder<UStaticMesh> MeshLoad(TEXT("StaticMesh '/Game/Environment/Meshes/Hero1.Hero1'"));
-	//UStaticMesh* pMesh = LoadObject<UStaticMesh>(NULL, TEXT("Game/Environment/Meshes/Hero1.Hero1"), NULL, LOAD_None, NULL);
 	if(MeshLoad.Succeeded())
 		MeshComp->SetStaticMesh(MeshLoad.Object);
 

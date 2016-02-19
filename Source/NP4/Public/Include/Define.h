@@ -3,10 +3,12 @@
 
 #pragma once
 
+UENUM(BlueprintType)
 namespace EBuilding
 {
 	enum Type
 	{
+		Defualt,
 		Barrack,
 		Laboratory,
 		HeroManagement,
