@@ -342,7 +342,7 @@ void ANP4HeroController::SheathWeapon()
 {
 	if (m_pPossessCharacter != NULL)
 	{
-		m_pPossessCharacter->SheathWeapon();
+		m_pPossessCharacter->TempSheathWeapon();
 	}
 }
 
