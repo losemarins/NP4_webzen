@@ -63,6 +63,23 @@ ANP4PlayerBase::ANP4PlayerBase()
 
 	/* Combo Init */
 	m_ComboStep = Combo_None;
+
+	/* Create Hit Capsule Component */
+	MeleeCollisionComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("HitCollision"));
+	GetMesh()->BodyInstance.SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	MeleeCollisionComp->AttachTo(RootComponent);
+	MeleeCollisionComp->bHiddenInGame = false;
+	MeleeCollisionComp->SetVisibility(true);
+
+	MeleeCollisionComp->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel2);
+	MeleeCollisionComp->SetCollisionResponseToAllChannels(ECR_Ignore);
+
+	MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel1, ECollisionResponse::ECR_Ignore);
+	MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
+	MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Overlap);
+
+	/* Set Team */
+	MyTeamNum = EGameTeam::Player;
 }
 
 void ANP4PlayerBase::BeginPlay()
