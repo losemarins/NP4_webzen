@@ -16,12 +16,17 @@ AWeaponBase::AWeaponBase()
 	m_pCollisionCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("WeaponCollision"));
 	m_pCollisionCapsule->AttachTo(RootComponent, "WeaponCollision");
 	//m_pCollisionCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	//m_pCollisionCapsule->SetVisibility(false);
+	m_pCollisionCapsule->SetVisibility(true);
 	m_pCollisionCapsule->bHiddenInGame = false;
-	
 
+	
 	//State의 팀에 따라서 채널이 바뀌어야 한다.
-	m_pCollisionCapsule->SetCollisionObjectType(ECollisionChannel::ECC_GameTraceChannel2);
+	m_pCollisionCapsule->SetCollisionObjectType(ECollisionChannel::ECC_GameTraceChannel1);
+	m_pCollisionCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
+	m_pCollisionCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
+	m_pCollisionCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
+	m_pCollisionCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
+
 }
 
 void AWeaponBase::BeginPlay()
@@ -31,7 +36,6 @@ void AWeaponBase::BeginPlay()
 	m_pItemMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	m_pCollisionCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	m_pCollisionCapsule->SetVisibility(false);
 }
 
 
@@ -106,16 +110,17 @@ void AWeaponBase::NotifyActorBeginOverlap(AActor* OtherActor)
 
 	if (IsColliderEnabled())
 	{
-		TArray<UPrimitiveComponent*> tArr;
-		OtherActor->GetOverlappingComponents(tArr);
+		//TArray<UPrimitiveComponent*> tArr;
+		//OtherActor->GetOverlappingComponents(tArr);
 
-		for (int iIdx = 0; iIdx < tArr.Num(); ++iIdx)
-		{
-			if (m_pCollisionCapsule == tArr[iIdx])
+		//for (int iIdx = 0; iIdx < tArr.Num(); ++iIdx)
+		//{
+			//if (m_pCollisionCapsule == tArr[iIdx])
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, m_pCollisionCapsule->GetName());
+				//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, m_pCollisionCapsule->GetName());
+				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, OtherActor->GetName());
 			}
-		}
+		//}
 
 		m_pCollisionCapsule->SetVisibility(true);
 	}
