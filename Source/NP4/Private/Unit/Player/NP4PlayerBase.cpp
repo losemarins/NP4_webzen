@@ -65,8 +65,9 @@ ANP4PlayerBase::ANP4PlayerBase()
 	m_ComboStep = Combo_None;
 
 	/* Create Hit Capsule Component */
-	MeleeCollisionComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("HitCollision"));
 	GetMesh()->BodyInstance.SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	MeleeCollisionComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("HitCollision"));
 	MeleeCollisionComp->AttachTo(RootComponent);
 	MeleeCollisionComp->bHiddenInGame = false;
 	MeleeCollisionComp->SetVisibility(true);
@@ -77,6 +78,59 @@ ANP4PlayerBase::ANP4PlayerBase()
 	MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel1, ECollisionResponse::ECR_Ignore);
 	MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
 	MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Overlap);
+
+	/* Create Attack Capsule Component */
+	//Left Punch
+	m_pLeftPunchCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("LeftPunchCollision"));
+	m_pLeftPunchCapsule->AttachTo(pMesh, "hand_l");
+	m_pLeftPunchCapsule->bHiddenInGame = false;
+	m_pLeftPunchCapsule->SetVisibility(true);
+
+	m_pLeftPunchCapsule->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel1);
+	m_pLeftPunchCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
+
+	m_pLeftPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
+	m_pLeftPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
+	m_pLeftPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
+
+	//Right Punch
+	m_pRightPunchCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("RightPunchCollision"));
+	m_pRightPunchCapsule->AttachTo(pMesh, "hand_r");
+	m_pRightPunchCapsule->bHiddenInGame = false;
+	m_pRightPunchCapsule->SetVisibility(true);
+
+	m_pRightPunchCapsule->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel1);
+	m_pRightPunchCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
+
+	m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
+	m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
+	m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
+
+	//Left Kick
+	m_pLeftKickCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("LeftKickCollision"));
+	m_pLeftKickCapsule->AttachTo(pMesh, "foot_l");
+	m_pLeftKickCapsule->bHiddenInGame = false;
+	m_pLeftKickCapsule->SetVisibility(true);
+
+	m_pLeftKickCapsule->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel1);
+	m_pLeftKickCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
+
+	m_pLeftKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
+	m_pLeftKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
+	m_pLeftKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
+
+	//Right Kick
+	m_pRightKickCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("RightKickCollision"));
+	m_pRightKickCapsule->AttachTo(pMesh, "foot_r");
+	m_pRightKickCapsule->bHiddenInGame = false;
+	m_pRightKickCapsule->SetVisibility(true);
+
+	m_pRightKickCapsule->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel1);
+	m_pRightKickCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
+
+	m_pRightKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
+	m_pRightKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
+	m_pRightKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
 
 	/* Set Team */
 	MyTeamNum = EGameTeam::Player;
@@ -541,7 +595,13 @@ void ANP4PlayerBase::ActionAttack()
 			//Request_MakeActionCamera(ECameraValue::eAction_1, this, fAnimDuationVal);
 
 			///* Collision Active */
-			Super::SetColliderEnabled(true);
+			//if(m_pCurrentEquipWeapon)
+			//	Super::SetColliderEnabled(true);
+
+			//else
+			//{
+				//SetColliderEnabled(true);
+			//}
 		}
 
 
@@ -572,7 +632,7 @@ void ANP4PlayerBase::StopAttack()
 		m_ComboStep = eCombo_Interpol::Combo_None;
 
 		/* Collision no Active */
-		Super::SetColliderEnabled(false);
+		//Super::SetColliderEnabled(false);
 	}
 
 	else
@@ -886,4 +946,86 @@ void ANP4PlayerBase::SetCurrentComboStep(eCombo_Interpol _newStep)
 	m_ComboStep = _newStep;
 }
 
+/* Collision */
+void ANP4PlayerBase::SetColliderEnabled(bool _bActive, eCollisionType _eColl)
+{
+	if (_bActive)
+	{
+		if (_eColl == eCollisionType::eCollision_LeftPunch)
+		{
+			//Left
+			m_pLeftPunchCapsule->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "LEFT_PUNCH_ActiveCollision");
+			m_pLeftPunchCapsule->SetVisibility(false);
+		}
 
+		else if (_eColl == eCollisionType::eCollision_RightPunch)
+		{
+			//Right
+			m_pRightPunchCapsule->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "RIGHT_PUNCH_ActiveCollision");
+			m_pRightPunchCapsule->SetVisibility(false);
+		}
+
+		else if (_eColl == eCollisionType::eCollision_LeftKick)
+		{
+			//Left
+			m_pLeftKickCapsule->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "LEFT_KICK_ActiveCollision");
+			m_pLeftKickCapsule->SetVisibility(false);
+		}
+
+		else if (_eColl == eCollisionType::eCollision_RightKick)
+		{
+			//Right
+			m_pRightKickCapsule->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "RIGHT_KICK_ActiveCollision");
+			m_pRightKickCapsule->SetVisibility(false);
+		}
+
+		else if (_eColl == eCollisionType::eCollision_Weapon)
+		{
+			Super::SetWeaponColliderEnabled(_bActive);
+		}		
+	}
+
+	else
+	{
+		if (_eColl == eCollisionType::eCollision_LeftPunch)
+		{
+			//Left
+			m_pLeftPunchCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "LEFT_PUNCH_No Collision");
+			m_pLeftPunchCapsule->SetVisibility(true);
+		}
+
+		else if (_eColl == eCollisionType::eCollision_RightPunch)
+		{
+			//Right
+			m_pRightPunchCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "RIGHT_PUNCH_No Collision");
+			m_pRightPunchCapsule->SetVisibility(true);
+		}
+
+		else if (_eColl == eCollisionType::eCollision_LeftKick)
+		{
+			//Left
+			m_pLeftKickCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "LEFT_KICK_No Collision");
+			m_pLeftKickCapsule->SetVisibility(true);
+		}
+
+		else if (_eColl == eCollisionType::eCollision_RightKick)
+		{
+			//Right
+			m_pRightKickCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "RIGHT_KICK_No Collision");
+			m_pRightKickCapsule->SetVisibility(true);
+		}
+
+		else if (_eColl == eCollisionType::eCollision_Weapon)
+		{
+			Super::SetWeaponColliderEnabled(_bActive);
+		}	
+	}
+}

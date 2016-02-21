@@ -71,7 +71,7 @@ public:
 
 public:
 	/* Collision */
-	void SetColliderEnabled(bool _bActive);
+	void SetWeaponColliderEnabled(bool _bActive);
 
 	/* Attack Value Set,Get */
 	void SetWeaponAttackValue(float _fAttackValue);
