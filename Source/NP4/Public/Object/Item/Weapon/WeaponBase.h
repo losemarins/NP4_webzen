@@ -28,6 +28,10 @@ class NP4_API AWeaponBase : public AItemBase
 {
 	GENERATED_BODY()
 
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerAttack")
+	float m_AttackValue;
+
 protected:
 	class ANP4CharacterBase* m_pWeaponOwner;
 
@@ -75,4 +79,8 @@ public:
 	void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 	eWeaponType GetWeaponType();
+
+	/* Attack Value Set,Get */
+	void SetWeaponAttackValue(float _fAttackValue);
+	float GetWeaponAttackValue();
 };

@@ -123,10 +123,22 @@ void AWeaponBase::NotifyActorBeginOverlap(AActor* OtherActor)
 		//}
 
 		m_pCollisionCapsule->SetVisibility(true);
+
+
 	}
 }
 
 eWeaponType AWeaponBase::GetWeaponType()
 {
 	return m_iWeaponType;
+}
+
+void AWeaponBase::SetWeaponAttackValue(float _fAttackValue)
+{
+	m_AttackValue = _fAttackValue;
+}
+
+float AWeaponBase::GetWeaponAttackValue()
+{
+	return m_AttackValue;
 }

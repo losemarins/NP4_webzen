@@ -160,15 +160,20 @@ FHitResult ANP4TownPlayerController::GetSelectActor(FVector2D MousePos)
 	DeprojectScreenPositionToWorld(MousePos.X, MousePos.Y, WorldOrigin, WorldDirection);
 
 	TraceEnd = WorldOrigin + WorldDirection * 65536.0f;
-	GetWorld()->LineTraceSingle(TraceHitResult, WorldOrigin, TraceEnd, TraceParam, TraceObjectParam);
-
+	//GetWorld()->LineTraceSingle(TraceHitResult, WorldOrigin, TraceEnd, TraceParam, TraceObjectParam);
+	GetWorld()->LineTraceSingleByObjectType(TraceHitResult, WorldOrigin, TraceEnd, TraceObjectParam, TraceParam);
 	return TraceHitResult;
 }
 
 FVector2D ANP4TownPlayerController::GetMousePos()
 {
 	const ULocalPlayer* LP = Cast<ULocalPlayer>(Player);
-	FVector2D MousePos = LP->ViewportClient->GetMousePosition();
+	//FVector2D MousePos = LP->ViewportClient->GetMousePosition();
+	FVector2D MousePos;
+	if (LP->ViewportClient->GetMousePosition(MousePos) == true)
+	{
+		/* 윈도우 내부에 마우스 포지션이 있음. */
+	}
 
 	return MousePos;
 }

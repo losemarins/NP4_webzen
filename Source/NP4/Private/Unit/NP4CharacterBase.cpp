@@ -14,6 +14,7 @@ ANP4CharacterBase::ANP4CharacterBase()
 	GetMesh()->AttachTo(RootComponent);
 	Health = 100;
 	HealthMax = 100;
+	m_AttackValue = 0.0f;
 
 	m_pCurrentEquipWeapon = NULL;
 	m_iCurrentEquip_InvenIndex = 0;
@@ -153,4 +154,14 @@ bool ANP4CharacterBase::CheckIndex_inInventory(int _idx)
 	}
 
 	return true;
+}
+
+void ANP4CharacterBase::SetWeaponAttackValue(float _fAttackValue)
+{
+	m_AttackValue = _fAttackValue;
+}
+
+float ANP4CharacterBase::GetWeaponAttackValue()
+{
+	return m_AttackValue;
 }

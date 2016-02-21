@@ -21,7 +21,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "PlayerHPBar")
 	float HealthMax;
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerAttack")
+	float m_AttackValue;
 
 public:
 	TArray<AWeaponBase*> m_pItemInven_Temp; //юс╫ц
@@ -71,4 +72,8 @@ public:
 public:
 	/* Collision */
 	void SetColliderEnabled(bool _bActive);
+
+	/* Attack Value Set,Get */
+	void SetWeaponAttackValue(float _fAttackValue);
+	float GetWeaponAttackValue();
 };

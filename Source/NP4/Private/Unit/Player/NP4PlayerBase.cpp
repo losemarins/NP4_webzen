@@ -80,6 +80,8 @@ ANP4PlayerBase::ANP4PlayerBase()
 
 	/* Set Team */
 	MyTeamNum = EGameTeam::Player;
+
+	/* Set Attack */
 }
 
 void ANP4PlayerBase::BeginPlay()
@@ -117,10 +119,6 @@ void ANP4PlayerBase::BeginPlay()
 	{
 		m_pPlayerState = (Cast<ANP4PlayerState>(PlayerState));
 		m_pPlayerState->SetStateOwner(this);
-
-		//hp setting
-		m_pPlayerState->setPlayerHealth(100.f);
-		m_pPlayerState->setPlayerMaxHealth(100.f);
 	}
 
 	//임시로 무기를 인벤토리에 생성한다.
