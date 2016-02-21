@@ -48,6 +48,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName m_strEquipSocketName;
 
+
 public:
 	AWeaponBase();
 

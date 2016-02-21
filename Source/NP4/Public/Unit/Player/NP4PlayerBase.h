@@ -55,9 +55,11 @@ public:
 		USpringArmComponent* m_OurCameraSpringArm;
 
 	/* Anim Montage */
-	//TArray<UAnimMontage*> m_ArrAnimMontage[100];
-
 	TArray<UAnimMontage*> m_ArrAnimMontage;
+
+	/* Hit Capsule Component */
+	UPROPERTY(VisibleAnywhere, Category = "Hit")
+	UCapsuleComponent* MeleeCollisionComp;
 
 	/* Camera Value */
 	float m_ZoomFactor;
