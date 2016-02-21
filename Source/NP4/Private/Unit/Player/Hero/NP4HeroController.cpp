@@ -9,7 +9,10 @@
 #include "NP4GameState.h"
 #include "AIDirector.h"
 #include "Building_Castle.h"
+<<<<<<< HEAD
+=======
 
+>>>>>>> 34994c38d56d436c06051ca5acea5670272c8570
 
 ANP4HeroController::ANP4HeroController()
 {

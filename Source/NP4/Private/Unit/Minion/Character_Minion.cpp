@@ -9,17 +9,10 @@ ACharacter_Minion::ACharacter_Minion()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	
-	//GetMesh()->BodyInstance.SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
-	MeleeCollisionComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("MeleeCollision"));
-	MeleeCollisionComp->SetRelativeLocation(FVector(50, 0, 20));
-	MeleeCollisionComp->SetCapsuleHalfHeight(60);
-	MeleeCollisionComp->SetCapsuleRadius(80, false);
-	MeleeCollisionComp->SetCollisionResponseToAllChannels(ECR_Ignore);
-	MeleeCollisionComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
-	MeleeCollisionComp->AttachParent = GetCapsuleComponent();
-
+	//
 	AIControllerClass = AAIController_Minion::StaticClass();
+	MeleeCollisionComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("MeleeCollision"));
+	AttackCollisionComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("AttackCollision"));
 	PawnSensingComp = CreateDefaultSubobject<UMyPawnSensingComponent>(TEXT("PawnSensingComp"));
 	PawnSensingComp->SetPeripheralVisionAngle(70);
 	PawnSensingComp->SightRadius = 300;
@@ -45,6 +38,11 @@ void ACharacter_Minion::BeginPlay()
 		MeleeCollisionComp->OnComponentBeginOverlap.AddDynamic(this, &ACharacter_Minion::OnMeleeCompBeginOverlap);
 	}
 
+	if (AttackCollisionComp)
+	{
+		//MeleeCollisionComp->OnComponentBeginOverlap.AddDynamic(this, &ACharacter_Minion::AttackCollisionComp);
+	}
+
 	AAIController_Minion* MinionController = Cast<AAIController_Minion>(GetController());
 	UpdatePawnData();
 
@@ -53,6 +51,56 @@ void ACharacter_Minion::BeginPlay()
 	
 	Rot.Yaw += 90;
 	SetActorRotation(Rot);
+}
+
+void ACharacter_Minion::SetCollisionChannel(uint8 TeamNum)
+{
+	GetMesh()->BodyInstance.SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	MeleeCollisionComp->SetRelativeLocation(FVector(50, 0, 20));
+	MeleeCollisionComp->SetCapsuleHalfHeight(60);
+	MeleeCollisionComp->SetCapsuleRadius(80, false);
+	MeleeCollisionComp->AttachParent = GetCapsuleComponent();
+	MeleeCollisionComp->bHiddenInGame = false;
+	MeleeCollisionComp->SetVisibility(true);
+
+	AttackCollisionComp->AttachTo(GetMesh(), "ring_03_r");
+	AttackCollisionComp->bHiddenInGame = false;
+	AttackCollisionComp->SetVisibility(true);
+
+	if (TeamNum == EGameTeam::Player)
+	{
+		AttackCollisionComp->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel1);
+		MeleeCollisionComp->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel2);
+		
+		MeleeCollisionComp->SetCollisionResponseToAllChannels(ECR_Ignore);
+		AttackCollisionComp->SetCollisionResponseToAllChannels(ECR_Ignore);
+
+		//MeleeCollisionComp->SetCollisionResponseToChannel(ECC_Pawn,ECR_Overlap);
+		MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel1, ECollisionResponse::ECR_Ignore);
+		MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
+		MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4,ECollisionResponse::ECR_Overlap);
+		
+		AttackCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
+		AttackCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);		
+		AttackCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Overlap);
+	}
+
+	else
+	{
+		AttackCollisionComp->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel3);
+		MeleeCollisionComp->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel4);
+
+		MeleeCollisionComp->SetCollisionResponseToAllChannels(ECR_Ignore);
+		AttackCollisionComp->SetCollisionResponseToAllChannels(ECR_Ignore);
+
+		MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel1, ECollisionResponse::ECR_Ignore);
+		MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Overlap);
+		MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
+		
+		AttackCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel1, ECollisionResponse::ECR_Ignore);
+		AttackCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Overlap);
+		AttackCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
+	}
 }
 
 void ACharacter_Minion::Tick(float DeltaSeconds)
@@ -77,7 +125,9 @@ void ACharacter_Minion::UpdatePawnData()
 //시야에 적이 보이면 호출되는 함수
 void ACharacter_Minion::OnSeeEnemy(APawn* Pawn)
 {
-	if (!IsAlive())
+	AAIController_Minion* MinionController = Cast<AAIController_Minion>(GetController());
+
+	if (!IsAlive() || MinionController->GetTargetEnemy())
 		return;
 
 	//사운드설정
@@ -89,7 +139,6 @@ void ACharacter_Minion::OnSeeEnemy(APawn* Pawn)
 	LastSeenTime = GetWorld()->GetTimeSeconds();
 	bSensedTarget = true;
 
-	AAIController_Minion* MinionController = Cast<AAIController_Minion>(GetController());
 	ANP4CharacterBase* SensedPawn = Cast<ANP4CharacterBase>(Pawn);
 
 	if (MinionController && SensedPawn->IsAlive() && MyTeamNum != SensedPawn->GetTeamNum())
@@ -151,7 +200,7 @@ void ACharacter_Minion::PerformMeleeStrike(AActor* HitActor)
 
 			if (MyPS && OtherPS)
 			{*/
-				if (MyTeamNum == Cast<ANP4CharacterBase>(OtherPawn)->GetTeamNum())
+			if (MyTeamNum == Cast<ANP4CharacterBase>(OtherPawn)->GetTeamNum())
 				{
 					/* Do not attack other zombies. */
 					return;

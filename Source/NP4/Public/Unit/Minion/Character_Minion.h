@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Define.h"
 #include "Unit/NP4CharacterBase.h"
 #include "Character_Minion.generated.h"
 
@@ -26,6 +27,10 @@ class NP4_API ACharacter_Minion : public ANP4CharacterBase
 protected :
 	UPROPERTY(VisibleAnywhere, Category = "Attacking")
 	UCapsuleComponent* MeleeCollisionComp;
+
+	UPROPERTY(VisibleAnywhere, Category = "Attacking")
+	UCapsuleComponent* AttackCollisionComp;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Attacking")
 	UAnimMontage* MeleeAnimMontage;
 
@@ -40,9 +45,12 @@ public :
 	UFUNCTION(Reliable, NetMulticast)
 	void SimulateMeleeStrike();
 	void SimulateMeleeStrike_Implementation();
+
 	UFUNCTION()
 	void OnSeeEnemy(APawn* Pawn);
 	void SetEnemyCastle(ABuilding_Castle* Castle);
+	void SetCollisionChannel(uint8 TeamNum);
+
 	UFUNCTION()
 	void OnMeleeCompBeginOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 	void PerformMeleeStrike(AActor* HitActor);
