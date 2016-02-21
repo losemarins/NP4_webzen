@@ -10,7 +10,6 @@
 #include "AIDirector.h"
 #include "Building_Castle.h"
 
-
 ANP4HeroController::ANP4HeroController()
 {
 	//ANP4PlayerController::ANP4PlayerController();
@@ -343,7 +342,7 @@ void ANP4HeroController::SheathWeapon()
 {
 	if (m_pPossessCharacter != NULL)
 	{
-		m_pPossessCharacter->TempSheathWeapon();
+		m_pPossessCharacter->SheathWeapon();
 	}
 }
 

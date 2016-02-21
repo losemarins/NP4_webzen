@@ -26,6 +26,7 @@ class NP4_API AAIController_Minion : public AAIController_Base
 public:
 	void SetTargetEnemy(APawn* NewTarget);
 	void SetEnemyCastle(ABuilding_Castle* EnemyCastle);
+	UObject* GetTargetEnemy();
 
 public :
 	AAIController_Minion(const FObjectInitializer& ObjectInitializer);

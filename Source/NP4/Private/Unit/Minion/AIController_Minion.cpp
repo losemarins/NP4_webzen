@@ -71,3 +71,12 @@ void AAIController_Minion::SetEnemyCastle(ABuilding_Castle* EnemyCastle)
 		BlackboardComp->SetValueAsObject(TargetCastleKeyName, EnemyCastle);
 	}
 }
+
+UObject* AAIController_Minion::GetTargetEnemy()
+{
+	if (BlackboardComp)
+	{
+		return BlackboardComp->GetValueAsObject(TargetEnemyKeyName);
+	}
+	return nullptr;
+}
