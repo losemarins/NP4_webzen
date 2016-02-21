@@ -384,19 +384,33 @@ void ANP4TownPlayerController::OnSwipeStarted(/*const FVector2D& AnchorPosition,
 	}
 	else
 	{
-		// 건설모드가 아닐경우 카메라 이동처리만 해주면된다.
-
+		// 건설모드가 아닐경우 카메라 이동처리 또는 빌딩 클릭처리를 해주어야한다.
+				
 		if (HitResult.bBlockingHit)
-			m_vStartSwipeCoords = HitResult.ImpactPoint;
-		/*else
 		{
-		FVector WorldLocation, WorldDirection;
-		DeprojectScreenPositionToWorld(MousePos.X, MousePos.Y, WorldLocation, WorldDirection);
-		WorldLocation.Z = m_pPossessPawn->GetActorLocation().Z;
-		m_vStartSwipeCoords = WorldLocation;
-		}*/
+
+
+			ATownBuilding* pBuilding = Cast<ATownBuilding>(HitResult.GetActor());
+
+			if (pBuilding)
+			{
+				pBuilding->WindowOpen();
+
+			}
+			else
+			{
+				m_vStartSwipeCoords = HitResult.ImpactPoint;
+				m_bIsSwipe = true;
+			}
+
+		
+			// 주희의 BP함수를 호출하여 빌딩마다 다른 창이 뜨도록해야한다.
+			
+
+		}
+		
 	}
-	m_bIsSwipe = true;
+	
 
 	//m_vPrevSwipeScreenPosition = MousePos;
 

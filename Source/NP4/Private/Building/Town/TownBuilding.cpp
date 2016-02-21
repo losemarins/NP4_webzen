@@ -10,3 +10,16 @@ void ATownBuilding::Init()
 {
 	MeshComp->SetSimulatePhysics(true);
 }
+
+void ATownBuilding::WindowOpen()
+{
+	switch (m_EBuildingType)
+	{
+	case EBuilding::Barrack:
+		break;
+	case EBuilding::HeroManagement:
+		break;
+	case EBuilding::Laboratory:
+		break;
+	}
+}

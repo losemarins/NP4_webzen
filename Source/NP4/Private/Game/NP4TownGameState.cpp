@@ -3,6 +3,8 @@
 #include "NP4.h"
 #include "NP4TownGameState.h"
 #include "HeroManagementBuilding.h"
+#include "laboratory.h"
+#include "Barrack.h"
 #include "Tile.h"
 
 
@@ -78,11 +80,14 @@ void ANP4TownGameState::CreateBuilding(FVector SpawnPos, EBuilding::Type Buildin
 	switch (BuildingType)
 	{
 	case EBuilding::Barrack:
+		pBuilding = (ABarrack*)GetWorld()->SpawnActor(ABarrack::StaticClass(), &Location, &Rotation);
 		break;
 	case EBuilding::HeroManagement:
+		Location.X -= 200;
 		pBuilding = (AHeroManagementBuilding*)GetWorld()->SpawnActor(AHeroManagementBuilding::StaticClass(), &Location, &Rotation);
 		break;
 	case EBuilding::Laboratory:
+		pBuilding = (Alaboratory*)GetWorld()->SpawnActor(Alaboratory::StaticClass(), &Location, &Rotation);
 		break;
 	}
 

@@ -6,12 +6,13 @@
 void ABarrack::Init()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	ConstructorHelpers::FObjectFinder<UStaticMesh> MeshLoad(TEXT("StaticMesh '/Game/Environment/Meshes/Hero1.Hero1'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> MeshLoad(TEXT("StaticMesh '/Game/Environment/Meshes/CannonTower_StaticElement.CannonTower_StaticElement'"));
 	if (MeshLoad.Succeeded())
 		MeshComp->SetStaticMesh(MeshLoad.Object);
 
-	MeshComp->SetRelativeScale3D(FVector(4.0, 4.0, 4.0));
+	MeshComp->SetRelativeScale3D(FVector(2.0, 2.0, 2.0));
 	RootComponent = MeshComp;
+	m_EBuildingType = EBuilding::Barrack;
 	Super::Init();
 
 }
