@@ -381,15 +381,15 @@ void ANP4TownPlayerController::OnSwipeStarted(/*const FVector2D& AnchorPosition,
 			ANP4TownGameState* MyGameState = GetWorld()->GetGameState<ANP4TownGameState>();
 			MyGameState->CreateBuilding(TilePos, m_EBuildType);
 		}
-	}
-	else
-	{
-		// 건설모드가 아닐경우 카메라 이동처리 또는 빌딩 클릭처리를 해주어야한다.
+	}닐경우 카메라 이동처리 또는 빌딩 클릭처리를 해주어야한다.
 				
 		if (HitResult.bBlockingHit)
 		{
 
 
+	else
+	{
+		// 건설모드가 아
 			ATownBuilding* pBuilding = Cast<ATownBuilding>(HitResult.GetActor());
 
 			if (pBuilding)
