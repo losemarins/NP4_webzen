@@ -165,3 +165,20 @@ float ANP4CharacterBase::GetWeaponAttackValue()
 {
 	return m_AttackValue;
 }
+
+bool ANP4CharacterBase::Damaged_Call(float _fAttackValue)
+{
+	if (IsAlive() == false)
+	{
+		return false;
+	}
+
+	else
+	{
+		Health -= _fAttackValue;
+		if (Health < 0)
+		{
+			Health = 0;
+		}
+	}
+}

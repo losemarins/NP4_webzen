@@ -119,6 +119,8 @@ void AWeaponBase::NotifyActorBeginOverlap(AActor* OtherActor)
 			{
 				//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, m_pCollisionCapsule->GetName());
 				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, OtherActor->GetName());
+
+				ANP4CharacterBase* pCharacter = Cast<ANP4CharacterBase>(OtherActor);
 			}
 		//}
 

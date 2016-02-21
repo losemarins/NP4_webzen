@@ -76,4 +76,7 @@ public:
 	/* Attack Value Set,Get */
 	void SetWeaponAttackValue(float _fAttackValue);
 	float GetWeaponAttackValue();
+
+	/* Damage! */
+	bool Damaged_Call(float _fAttackValue);
 };
