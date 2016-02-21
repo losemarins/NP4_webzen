@@ -12,6 +12,7 @@ void ABarrack::Init()
 
 	MeshComp->SetRelativeScale3D(FVector(4.0, 4.0, 4.0));
 	RootComponent = MeshComp;
+	Super::Init();
 
 }
 
