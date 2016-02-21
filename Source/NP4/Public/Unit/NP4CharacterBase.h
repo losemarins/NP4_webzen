@@ -60,12 +60,13 @@ public:
 
 	/* Set,Get WeaponSocket */
 	AWeaponBase* GetCurrentWeapon();
-	void NextInventoryIndex();
+	void JustSetCurrentWeapon_NotEquip(int _InvenIdx);
 
 public:
 	void OnUnEquipWeapon();
 	void OnEqipWeapon(AWeaponBase* _pWeapon);
-	void OnEqipWeapon_byInventoryIndex();
+	void OnEqipWeapon_byInventoryIndex(int _InvenIdx);
+	bool CheckIndex_inInventory(int _idx);
 
 public:
 	/* Collision */

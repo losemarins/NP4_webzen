@@ -137,8 +137,9 @@ public:
 	void ActionSkill_1();
 	void ActionSkill_2();
 	void StopSkill(UAnimMontage* _pSkillAnim);
-	void DrawWeapon();
-	void SheathWeapon();
+	float DrawWeapon();
+	void SheathWeapon(int _InvenIdx);
+	void TempSheathWeapon();
 
 	/* Notify Combo */
 	void SetbNotifyEnter(bool _bEnter);
@@ -147,4 +148,8 @@ public:
 	bool GetbComboOn();
 	eCombo_Interpol GetCurrentComboStep();
 	void SetCurrentComboStep(eCombo_Interpol _newStep);
+
+
+	/* 무기 착용을 위한 임시 변수 */
+	int tempidx;
 };

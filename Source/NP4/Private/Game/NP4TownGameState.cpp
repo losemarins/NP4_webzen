@@ -73,7 +73,7 @@ void ANP4TownGameState::CreateBuilding(FVector SpawnPos, EBuilding::Type Buildin
 
 	ABuilding* pBuilding = NULL;
 	FVector Location = SpawnPos;
-	Location.Z += 200;
+	Location.Z += 800;
 	FRotator Rotation = FRotator(0, 90, 0);
 	switch (BuildingType)
 	{

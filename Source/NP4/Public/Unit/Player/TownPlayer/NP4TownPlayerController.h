@@ -6,8 +6,8 @@
 #include "NP4TownPlayerController.generated.h"
 
 /**
- * 
- */
+*
+*/
 class UNP4Input;
 
 UCLASS()
@@ -21,7 +21,7 @@ protected:
 	/** update input detection */
 	virtual void ProcessPlayerInput(const float DeltaTime, const bool bGamePaused) override;
 	virtual void SetupInputComponent() override;
-	
+
 public:
 	virtual void Possess(APawn* InPawn) override;
 	virtual void Tick(float DeltaSeconds) override;
@@ -71,7 +71,7 @@ public:
 	void MouseScrolling(float DeltaTime);
 
 	UPROPERTY(config)
-	float m_fCameraScrollSpeed;
+		float m_fCameraScrollSpeed;
 	/* List of zones to exclude from scrolling during the camera movement update. */
 	TArray<FBox>	m_NoScrollZones;
 	/** The initial position of the swipe/drag. */
@@ -88,20 +88,21 @@ public:
 	bool m_bZoomingIn;
 	float m_ZoomDistance;
 	bool m_bIsSwipe;
-	
+
 public:
 	FHitResult GetSelectActor(FVector2D MousePos);
 	FVector2D GetMousePos();
 	void TileDetecting();
 
 	UFUNCTION(BlueprintCallable, Category = "TownBuilding")
-	void SetBuildMode(EBuilding::Type EBuildType);
+		void SetBuildMode(EBuilding::Type EBuildType);
 
 private:
 	bool m_bBuildMode;
 	bool m_bIsBuildpossibility;
 	AActor* m_OldSelectActor;
 	EBuilding::Type m_EBuildType;
+
 protected:
 	/** if set, input and camera updates will be ignored */
 	uint8 bIgnoreInput : 1;

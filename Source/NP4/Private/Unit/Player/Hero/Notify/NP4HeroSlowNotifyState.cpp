@@ -60,6 +60,7 @@ void UNP4HeroSlowNotifyState::NotifyEnd(USkeletalMeshComponent * MeshComp, UAnim
 				{
 					//pPlayerCast->
 					UGameplayStatics::SetGlobalTimeDilation(pPlayerCast, 1.0f);
+					//UGameplayStatics::SetGlobalTimeDilation(pPlayerCast, MeshComp->GetAnimInstance()->GetCurrentActiveMontage()->RateScale);
 				}
 			}
 		}

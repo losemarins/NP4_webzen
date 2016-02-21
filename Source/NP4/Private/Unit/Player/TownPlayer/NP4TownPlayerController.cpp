@@ -16,10 +16,10 @@ ANP4TownPlayerController::ANP4TownPlayerController()
 	m_fMaxZoomLevel = 1.0f;
 	m_ZoomDistance = 2000;
 	m_bIsSwipe = false;
-	m_bBuildMode = true;
+	m_bBuildMode = false;
 	m_bIsBuildpossibility = false;
 	m_OldSelectActor = NULL;
-	m_fCameraScrollSpeed = 4000.f;
+	m_fCameraScrollSpeed = 2500.f;
 	m_EBuildType = EBuilding::Defualt;
 }
 
@@ -27,12 +27,13 @@ void ANP4TownPlayerController::Possess(APawn* InPawn)
 {
 	Super::Possess(InPawn);
 	m_pPossessPawn = Cast<ANP4TownPlayer>(InPawn);
+	m_pPossessPawn->SetActorEnableCollision(false);
 }
 
 void ANP4TownPlayerController::Tick(float DeltaSeconds)
 {
-	UpdateCamera(DeltaSeconds);	
-	MouseScrolling(DeltaSeconds);
+	UpdateCamera(DeltaSeconds);
+
 
 	if (!m_bBuildMode && m_bIsSwipe)
 	{
@@ -42,7 +43,7 @@ void ANP4TownPlayerController::Tick(float DeltaSeconds)
 	if (m_bBuildMode)
 	{
 		TileDetecting();
-		
+		MouseScrolling(DeltaSeconds);
 	}
 }
 
@@ -62,7 +63,7 @@ void ANP4TownPlayerController::SetupInputComponent()
 	//BIND_2P_ACTION(InputHandler, EGameKey::SwipeTwoPoints, IE_Repeat, &ANP4TownPlayerController::OnSwipeTwoPointsUpdate);
 	//BIND_2P_ACTION(InputHandler, EGameKey::Pinch, IE_Pressed, &ANP4TownPlayerController::OnPinchStarted);
 	//BIND_2P_ACTION(InputHandler, EGameKey::Pinch, IE_Repeat, &ANP4TownPlayerController::OnPinchUpdate);
-	
+
 	//InputComponent->BindAction("MouseLClick", IE_Pressed, this, &ANP4TownPlayerController::OnSwipeStarted);
 	//InputComponent->BindAction("MouseLClick", IE_Repeat, this, &ANP4TownPlayerController::OnSwipeUpdate);
 	//InputComponent->BindAction("MouseLClick", IE_Released, this, &ANP4TownPlayerController::OnSwipeReleased);
@@ -79,7 +80,7 @@ void ANP4TownPlayerController::SetupInputComponent()
 void ANP4TownPlayerController::OnZoomOut()
 {
 	m_bZoomingIn = false;
-	if(m_ZoomDistance < 3000)
+	if (m_ZoomDistance < 3000)
 		m_ZoomDistance += 150;
 }
 
@@ -91,8 +92,8 @@ void ANP4TownPlayerController::UpdateCamera(float DeltaTime)
 
 void ANP4TownPlayerController::MouseScrolling(float DeltaTime)
 {
-	FVector2D MosePos = GetMousePos();
-	ULocalPlayer* const LocalPlayer = Cast<ULocalPlayer>(m_pPossessPawn);
+	FVector2D MousePos = GetMousePos();
+	ULocalPlayer* const LocalPlayer = Cast<ULocalPlayer>(Player);
 
 	if (LocalPlayer && LocalPlayer->ViewportClient && LocalPlayer->ViewportClient->Viewport)
 	{
@@ -104,55 +105,42 @@ void ANP4TownPlayerController::MouseScrolling(float DeltaTime)
 		const uint32 ViewTop = FMath::TruncToInt(LocalPlayer->Origin.Y * ViewportSize.Y);
 		const uint32 ViewBottom = ViewTop + FMath::TruncToInt(LocalPlayer->Size.Y * ViewportSize.Y);
 
-		const float MaxSpeed = m_fCameraScrollSpeed * FMath::Clamp(m_ZoomDistance, 0.3f, 1.0f);
 
-		/*ANP4TownGameState const* const MyGameState = GetWorld()->GetGameState<ANP4TownGameState>();
-		bool bNoScrollZone = false;
-		FVector MouseCoords(MousePosition, 0.0f);*/
-		const uint32 MouseX = MosePos.X;
-		const uint32 MouseY = MosePos.Y;
-		float SpectatorCameraSpeed = MaxSpeed;
 
-		float CameraActiveBorder = 20.f;
+		const uint32 MouseX = MousePos.X;
+		const uint32 MouseY = MousePos.Y;
+		float CameraActiveBorder = 80.f;
+		FVector vLocation = m_pPossessPawn->GetActorLocation();
 
 		if (MouseX >= ViewLeft && MouseX <= (ViewLeft + CameraActiveBorder))
 		{
-			const float delta = 1.0f - float(MouseX - ViewLeft) / CameraActiveBorder;
-			SpectatorCameraSpeed = delta * MaxSpeed;
-			//MoveRight(-ScrollSpeed * delta);
-
-			if (SpectatorCameraSpeed != 0.f)
-			{
-				const FRotationMatrix R(PlayerCameraManager->GetCameraRotation());
-				const FVector WorldSpaceAccel = R.GetScaledAxis(EAxis::Y) * 100.0f;
-				m_pPossessPawn->AddMovementInput(WorldSpaceAccel, SpectatorCameraSpeed);
-			}
-			/*FVector vLocation = m_pPossessPawn->GetActorLocation();
-			vLocation += delta;
-			m_pPossessPawn->SetActorRelativeLocation(vLocation);*/
-
+			vLocation.Y -= m_fCameraScrollSpeed * DeltaTime;
+			Viewport->SetMouse(CameraActiveBorder, MouseY);
 
 		}
-		else if (MouseX >= (ViewRight - CameraActiveBorder) && MouseX <= ViewRight)
+		if (MouseX >= (ViewRight - CameraActiveBorder) && MouseX <= ViewRight)
 		{
-			const float delta = float(MouseX - ViewRight + CameraActiveBorder) / CameraActiveBorder;
-			SpectatorCameraSpeed = delta * MaxSpeed;
-			//MoveRight(ScrollSpeed * delta);
+			vLocation.Y += m_fCameraScrollSpeed * DeltaTime;
+			Viewport->SetMouse(ViewRight - CameraActiveBorder, MouseY);
 		}
 
 		if (MouseY >= ViewTop && MouseY <= (ViewTop + CameraActiveBorder))
 		{
-			const float delta = 1.0f - float(MouseY - ViewTop) / CameraActiveBorder;
-			SpectatorCameraSpeed = delta * MaxSpeed;
-			//MoveForward(ScrollSpeed * delta);
+			vLocation.X += m_fCameraScrollSpeed * DeltaTime;
+			Viewport->SetMouse(MouseX, ViewTop + CameraActiveBorder);
 		}
-		else if (MouseY >= (ViewBottom - CameraActiveBorder) && MouseY <= ViewBottom)
+		if (MouseY >= (ViewBottom - CameraActiveBorder) && MouseY <= ViewBottom)
 		{
-			const float delta = float(MouseY - (ViewBottom - CameraActiveBorder)) / CameraActiveBorder;
-			SpectatorCameraSpeed = delta * MaxSpeed;
-			//MoveForward(-ScrollSpeed * delta);
+			vLocation.X -= m_fCameraScrollSpeed * DeltaTime;
+			Viewport->SetMouse(MouseX, ViewBottom - CameraActiveBorder);
 		}
+
+		if (vLocation.X > 3100 || vLocation.X < -5800 || vLocation.Y < -4600 || vLocation.Y > 4000)
+			return;
+		m_pPossessPawn->SetActorLocation(vLocation);
+
 	}
+
 }
 
 FHitResult ANP4TownPlayerController::GetSelectActor(FVector2D MousePos)
@@ -181,7 +169,7 @@ FVector2D ANP4TownPlayerController::GetMousePos()
 {
 	const ULocalPlayer* LP = Cast<ULocalPlayer>(Player);
 	FVector2D MousePos = LP->ViewportClient->GetMousePosition();
-	
+
 	return MousePos;
 }
 
@@ -189,7 +177,7 @@ void ANP4TownPlayerController::TileDetecting()
 {
 	FVector2D MousePos = GetMousePos();
 	FHitResult HitResult = GetSelectActor(MousePos);
-	
+
 	ATile* pTile = Cast<ATile>(HitResult.GetActor());
 
 	if (!pTile)
@@ -199,7 +187,7 @@ void ANP4TownPlayerController::TileDetecting()
 		m_OldSelectActor = pTile;
 	else
 		Cast<ATile>(m_OldSelectActor)->SetMeshMetarial(EColor::Original);
-		
+
 
 	if (pTile->GetBuilding())
 	{
@@ -218,7 +206,7 @@ void ANP4TownPlayerController::TileDetecting()
 void ANP4TownPlayerController::SetBuildMode(EBuilding::Type EBuildType)
 {
 	m_bBuildMode = true;
-	m_EBuildType = EBuildType;	
+	m_EBuildType = EBuildType;
 }
 
 void ANP4TownPlayerController::OnZoomIn()
@@ -233,7 +221,7 @@ void ANP4TownPlayerController::OnToggleInGameMenu()
 	/*AStrategyHUD* const MyHUD = Cast<AStrategyHUD>(GetHUD());
 	if (MyHUD)
 	{
-		MyHUD->TogglePauseMenu();
+	MyHUD->TogglePauseMenu();
 	}*/
 }
 
@@ -293,7 +281,7 @@ void ANP4TownPlayerController::SetCameraTarget(const FVector& CameraTarget)
 	//없어도됨
 	/*if (GetCameraComponent() != NULL)
 	{
-		GetCameraComponent()->SetCameraTarget(CameraTarget);
+	GetCameraComponent()->SetCameraTarget(CameraTarget);
 	}*/
 }
 
@@ -329,10 +317,10 @@ void ANP4TownPlayerController::OnTapPressed(const FVector2D& ScreenPosition, flo
 
 	if (HitActor && HitActor->GetClass()->ImplementsInterface(UStrategyInputInterface::StaticClass()))
 	{
-		IStrategyInputInterface::Execute_OnInputTap(HitActor);
+	IStrategyInputInterface::Execute_OnInputTap(HitActor);
 	}*/
 	FVector WorldPosition(0.f);
-	
+
 }
 
 void ANP4TownPlayerController::OnHoldPressed(const FVector2D& ScreenPosition, float DownTime)
@@ -344,7 +332,7 @@ void ANP4TownPlayerController::OnHoldPressed(const FVector2D& ScreenPosition, fl
 
 	if (HitActor && HitActor->GetClass()->ImplementsInterface(UStrategyInputInterface::StaticClass()))
 	{
-		IStrategyInputInterface::Execute_OnInputHold(HitActor);
+	IStrategyInputInterface::Execute_OnInputHold(HitActor);
 	}*/
 }
 
@@ -353,7 +341,7 @@ void ANP4TownPlayerController::OnHoldReleased(const FVector2D& ScreenPosition, f
 	/*AActor* const Selected = SelectedActor.Get();
 	if (Selected && Selected->GetClass()->ImplementsInterface(UStrategyInputInterface::StaticClass()))
 	{
-		IStrategyInputInterface::Execute_OnInputHoldReleased(Selected, DownTime);
+	IStrategyInputInterface::Execute_OnInputHoldReleased(Selected, DownTime);
 	}*/
 }
 
@@ -382,7 +370,7 @@ void ANP4TownPlayerController::OnSwipeStarted(/*const FVector2D& AnchorPosition,
 		{
 			//건물이 건설되어 있을경우 눌러도 아무 반응도 하면안됨.
 			// 삐빅! 이런 싸운드를 출력하게한다.
-		
+
 		}
 		else
 		{
@@ -394,24 +382,24 @@ void ANP4TownPlayerController::OnSwipeStarted(/*const FVector2D& AnchorPosition,
 			MyGameState->CreateBuilding(TilePos, m_EBuildType);
 		}
 	}
-	else 
+	else
 	{
 		// 건설모드가 아닐경우 카메라 이동처리만 해주면된다.
-		
+
 		if (HitResult.bBlockingHit)
 			m_vStartSwipeCoords = HitResult.ImpactPoint;
 		/*else
 		{
-			FVector WorldLocation, WorldDirection;
-			DeprojectScreenPositionToWorld(MousePos.X, MousePos.Y, WorldLocation, WorldDirection);
-			WorldLocation.Z = m_pPossessPawn->GetActorLocation().Z;
-			m_vStartSwipeCoords = WorldLocation;
+		FVector WorldLocation, WorldDirection;
+		DeprojectScreenPositionToWorld(MousePos.X, MousePos.Y, WorldLocation, WorldDirection);
+		WorldLocation.Z = m_pPossessPawn->GetActorLocation().Z;
+		m_vStartSwipeCoords = WorldLocation;
 		}*/
 	}
 	m_bIsSwipe = true;
-	
+
 	//m_vPrevSwipeScreenPosition = MousePos;
-	
+
 	//if (GetCameraComponent())
 	//{
 	//	bool bResult = false;
@@ -474,7 +462,7 @@ void ANP4TownPlayerController::OnSwipeUpdate(/*const FVector2D& ScreenPosition, 
 	FVector2D MousePos = GetMousePos();
 	FHitResult TraceHitResult = GetSelectActor(MousePos);
 
-	
+
 	FVector Delta;
 	if (TraceHitResult.bBlockingHit)
 	{
@@ -491,19 +479,21 @@ void ANP4TownPlayerController::OnSwipeUpdate(/*const FVector2D& ScreenPosition, 
 	//	Delta = m_vStartSwipeCoords - NewSwipeCoords;
 	//}
 
-	
+
 	if (Delta.IsNearlyZero() == false && TraceHitResult.bBlockingHit)
 	{
 		{
 			FVector vLocation = m_pPossessPawn->GetActorLocation();
 			vLocation += Delta;
+			if (vLocation.X > 3100 || vLocation.X < -5800 || vLocation.Y < -4600 || vLocation.Y > 4000)
+				return;
 			m_pPossessPawn->SetActorRelativeLocation(vLocation);
 		}
 	}
 	//		}
 	//	}
 	//}
-	
+
 	//m_vPrevSwipeScreenPosition = ScreenPosition;
 }
 
@@ -520,37 +510,37 @@ void ANP4TownPlayerController::OnSwipeReleased(/*const FVector2D& ScreenPosition
 		ATile* pTile = Cast<ATile>(HitResult.GetActor());
 		if (!pTile)
 			return;
-		
+
 		pTile->SetBuilding(true);
 		pTile->SetMeshMetarial(EColor::Original);
 	}
-		
+
 	/*AActor* const Selected = m_SelectedActor.Get();
 	if (Selected && Selected->GetClass()->ImplementsInterface(UStrategyInputInterface::StaticClass()))
 	{
-		ULocalPlayer* const MyPlayer = Cast<ULocalPlayer>(this->Player);
-		const FPlane GroundPlane = FPlane(FVector(0, 0, SelectedActor->GetActorLocation().Z), FVector(0, 0, 1));
+	ULocalPlayer* const MyPlayer = Cast<ULocalPlayer>(this->Player);
+	const FPlane GroundPlane = FPlane(FVector(0, 0, SelectedActor->GetActorLocation().Z), FVector(0, 0, 1));
 
-		FVector RayOrigin, RayDirection;
-		FStrategyHelpers::DeprojectScreenToWorld(ScreenPosition, MyPlayer, RayOrigin, RayDirection);
-		const FVector ScreenPosition3D = FStrategyHelpers::IntersectRayWithPlane(RayOrigin, RayDirection, GroundPlane);
+	FVector RayOrigin, RayDirection;
+	FStrategyHelpers::DeprojectScreenToWorld(ScreenPosition, MyPlayer, RayOrigin, RayDirection);
+	const FVector ScreenPosition3D = FStrategyHelpers::IntersectRayWithPlane(RayOrigin, RayDirection, GroundPlane);
 
-		IStrategyInputInterface::Execute_OnInputSwipeReleased(Selected, ScreenPosition3D - SwipeAnchor3D, DownTime);
+	IStrategyInputInterface::Execute_OnInputSwipeReleased(Selected, ScreenPosition3D - SwipeAnchor3D, DownTime);
 	}
 	else*/
 	/*{
-		if (GetCameraComponent() != NULL)
-		{
-			if (m_vStartSwipeCoords.IsNearlyZero() == false)
-			{
-				FHitResult Hit;
-				if (GetHitResultAtScreenPosition(ScreenPosition, COLLISION_PANCAMERA, true, Hit))
-				{
-					FVector EndSwipeCoords = Hit.ImpactPoint;
-				}
-				EndSwipeNow();
-			}
-		}
+	if (GetCameraComponent() != NULL)
+	{
+	if (m_vStartSwipeCoords.IsNearlyZero() == false)
+	{
+	FHitResult Hit;
+	if (GetHitResultAtScreenPosition(ScreenPosition, COLLISION_PANCAMERA, true, Hit))
+	{
+	FVector EndSwipeCoords = Hit.ImpactPoint;
+	}
+	EndSwipeNow();
+	}
+	}
 	}*/
 	int a = 0;
 }
@@ -570,7 +560,7 @@ void ANP4TownPlayerController::OnSwipeTwoPointsUpdate(const FVector2D& ScreenPos
 	const FVector WorldSpaceAccel = R.TransformVector(MoveDir) * SwipeSpeed;
 	if (GetSpectatorPawn())
 	{
-		GetSpectatorPawn()->AddMovementInput(WorldSpaceAccel, 1.f);
+	GetSpectatorPawn()->AddMovementInput(WorldSpaceAccel, 1.f);
 	}
 
 	PrevSwipeMidPoint = SwipeMidPoint;*/
@@ -581,7 +571,7 @@ void ANP4TownPlayerController::OnPinchStarted(const FVector2D& AnchorPosition1, 
 	// Pass the pinch through to the camera component.
 	/*if (GetCameraComponent() != NULL)
 	{
-		GetCameraComponent()->OnPinchStarted(AnchorPosition1, AnchorPosition2, DownTime);
+	GetCameraComponent()->OnPinchStarted(AnchorPosition1, AnchorPosition2, DownTime);
 	}*/
 }
 
@@ -590,7 +580,7 @@ void ANP4TownPlayerController::OnPinchUpdate(const FVector2D& ScreenPosition1, c
 	// Pass the pinch through to the camera component.
 	/*if (GetCameraComponent() != NULL)
 	{
-		GetCameraComponent()->OnPinchUpdate(InputHandler, ScreenPosition1, ScreenPosition2, DownTime);
+	GetCameraComponent()->OnPinchUpdate(InputHandler, ScreenPosition1, ScreenPosition2, DownTime);
 	}*/
 }
 UCameraComponent* ANP4TownPlayerController::GetCameraComponent() const
@@ -624,16 +614,16 @@ void ANP4TownPlayerController::EndSwipeNow()
 
 AActor* ANP4TownPlayerController::GetFriendlyTarget(const FVector2D& ScreenPoint, FVector& WorldPoint) const
 {
-//	FHitResult Hit;
-//	if (GetHitResultAtScreenPosition(ScreenPoint, COLLISION_BUILDING, true, Hit))
-//	{
-//		//if (!ANP4TownPlayerController::OnEnemyTeam(Hit.GetActor(), this))
-//		{
-//			WorldPoint = Hit.ImpactPoint;
-//			return Hit.GetActor();
-//		}
-//	}
-//
+	//	FHitResult Hit;
+	//	if (GetHitResultAtScreenPosition(ScreenPoint, COLLISION_BUILDING, true, Hit))
+	//	{
+	//		//if (!ANP4TownPlayerController::OnEnemyTeam(Hit.GetActor(), this))
+	//		{
+	//			WorldPoint = Hit.ImpactPoint;
+	//			return Hit.GetActor();
+	//		}
+	//	}
+	//
 	return NULL;
 }
 
@@ -647,7 +637,7 @@ void ANP4TownPlayerController::SetSelectedActor(AActor* NewSelectedActor, const 
 		{
 			/*if (IStrategySelectionInterface::Execute_OnSelectionLost(OldSelection, NewPosition, NewSelectedActor))
 			{
-				SelectedActor = NULL;
+			SelectedActor = NULL;
 			}*/
 		}
 
@@ -656,7 +646,7 @@ void ANP4TownPlayerController::SetSelectedActor(AActor* NewSelectedActor, const 
 			// attempt to select new selection
 			//if (NewSelectedActor && NewSelectedActor->GetClass()->ImplementsInterface(UStrategySelectionInterface::StaticClass()))
 			{
-			//	if (IStrategySelectionInterface::Execute_OnSelectionGained(NewSelectedActor))
+				//	if (IStrategySelectionInterface::Execute_OnSelectionGained(NewSelectedActor))
 				{
 					m_SelectedActor = NewSelectedActor;
 				}
