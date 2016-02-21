@@ -181,4 +181,6 @@ bool ANP4CharacterBase::Damaged_Call(float _fAttackValue)
 			Health = 0;
 		}
 	}
+
+	return true;
 }
