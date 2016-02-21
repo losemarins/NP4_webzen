@@ -11,7 +11,6 @@ void Alaboratory::Init()
 
 	MeshComp->SetRelativeScale3D(FVector(4.0, 4.0, 4.0));
 	RootComponent = MeshComp;
-	m_EBuildingType = EBuilding::Laboratory;
 	Super::Init();
 }
 

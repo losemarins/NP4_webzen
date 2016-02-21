@@ -14,10 +14,6 @@ class NP4_API ATownBuilding : public ABuilding
 	GENERATED_BODY()
 public:
 	virtual void Init() ;
-	void WindowOpen();
-protected:
-	EBuilding::Type m_EBuildingType;
-	bool m_bIsWindow;
 	
 	
 };
