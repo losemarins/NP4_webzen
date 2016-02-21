@@ -74,8 +74,9 @@ void UAIDirector::SpawnMinions()
 
 			if ((SpawnChar != nullptr))
 			{
-				SpawnChar->SetTeamNum(GetTeamNum());
+				SpawnChar->SetTeamNum(MyTeamNum);
 				SpawnChar->SpawnDefaultController();
+				Cast<ACharacter_Minion>(SpawnChar)->SetCollisionChannel(MyTeamNum);
 				Cast<ACharacter_Minion>(SpawnChar)->SetEnemyCastle(GetEnemyCastle());
 				ProductNum -= 1;
 			}
