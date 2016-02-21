@@ -399,7 +399,9 @@ void ANP4TownPlayerController::OnSwipeStarted(/*const FVector2D& AnchorPosition,
 
 			if (pBuilding)
 			{
-				pBuilding->WindowOpen();
+				//pBuilding->WindowOpen();
+				ConsoleCommand(TEXT("CE BuildingClick_Event HeroManagement"));
+
 
 			}
 			else
