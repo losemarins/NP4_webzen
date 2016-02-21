@@ -95,7 +95,7 @@ public:
 	void TileDetecting();
 
 	UFUNCTION(BlueprintCallable, Category = "TownBuilding")
-		void SetBuildMode(EBuilding::Type EBuildType);
+	void SetBuildMode(EBuilding::Type EBuildType);
 
 private:
 	bool m_bBuildMode;
