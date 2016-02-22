@@ -5,7 +5,6 @@
 #include "WeaponBase.h"
 #include "NP4ItemManager.h"
 
-
 // Sets default values
 ANP4CharacterBase::ANP4CharacterBase()
 {
@@ -183,7 +182,6 @@ bool ANP4CharacterBase::Damaged_Call(float _fAttackValue)
 		return true;
 	}
 }
-
 
 /* Collision */
 void ANP4CharacterBase::SetColliderEnabled(bool _bActive, eCollisionType _eColl)

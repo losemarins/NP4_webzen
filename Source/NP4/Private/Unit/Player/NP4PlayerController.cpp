@@ -79,3 +79,38 @@ eErrorType ANP4PlayerController::Request_GetDefaultCameraInfo(ECameraValue _Came
 
 	return eErrorType::eSuccess;
 }
+
+FVector2D ANP4PlayerController::GetMousePos()
+{
+	const ULocalPlayer* LP = Cast<ULocalPlayer>(Player);
+	//FVector2D MousePos = LP->ViewportClient->GetMousePosition();
+	FVector2D MousePos;
+	if (LP->ViewportClient->GetMousePosition(MousePos) == true)
+	{
+		/* 윈도우 내부에 마우스 포지션이 있음. */
+	}
+
+	return MousePos;
+}
+
+FHitResult ANP4PlayerController::GetSelectActor(FVector2D MousePos)
+{
+	FVector WorldOrigin, WorldDirection, TraceEnd; // 마우스 커서의 월드 위치, 가리키는 방향, 트레이스 끝지점
+	FVector MouseWorldPosition_3D;
+	FHitResult TraceHitResult;
+	FCollisionObjectQueryParams TraceObjectParam; // 충돌이 어떤 유형의 오브젝트에 유효할것인지
+	FCollisionQueryParams TraceParam;
+	TraceObjectParam.AddObjectTypesToQuery(ECollisionChannel::ECC_WorldStatic);
+	TraceObjectParam.AddObjectTypesToQuery(ECollisionChannel::ECC_WorldDynamic);
+	TraceObjectParam.AddObjectTypesToQuery(ECollisionChannel::ECC_Pawn);
+
+	TraceParam.bTraceComplex = true;
+	TraceParam.bTraceAsyncScene = true;
+	TraceParam.bReturnPhysicalMaterial = false;
+	DeprojectScreenPositionToWorld(MousePos.X, MousePos.Y, WorldOrigin, WorldDirection);
+
+	TraceEnd = WorldOrigin + WorldDirection * 65536.0f;
+	//GetWorld()->LineTraceSingle(TraceHitResult, WorldOrigin, TraceEnd, TraceParam, TraceObjectParam);
+	GetWorld()->LineTraceSingleByObjectType(TraceHitResult, WorldOrigin, TraceEnd, TraceObjectParam, TraceParam);
+	return TraceHitResult;
+}

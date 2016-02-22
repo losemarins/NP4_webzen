@@ -7,14 +7,12 @@
 
 ACharacter_Minion::ACharacter_Minion()
 {
-	PrimaryActorTick.bCanEverTick = true;
-	
+	PrimaryActorTick.bCanEverTick = true;	
 	//
 	AIControllerClass = AAIController_Minion::StaticClass();
 	
 	MeleeCollisionComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("MeleeCollision"));
 	m_pRightPunchCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("RightPunchCollision"));
-	
 	PawnSensingComp = CreateDefaultSubobject<UMyPawnSensingComponent>(TEXT("PawnSensingComp"));
 	PawnSensingComp->SetPeripheralVisionAngle(70);
 	PawnSensingComp->SightRadius = 300;
@@ -22,7 +20,7 @@ ACharacter_Minion::ACharacter_Minion()
 	PawnSensingComp->SensingInterval = 0.1f;
 	
 	MeleeStrikeCooldown = 1.f;
-	SenseTimeOut = 1.f;
+	SenseTimeOut = 2.f;
 	bSensedTarget = false;
 
 	m_pRightPunchCapsule->AttachTo(GetMesh(), "ring_03_r");
@@ -103,7 +101,6 @@ void ACharacter_Minion::SetCollisionChannel(uint8 TeamNum)
 	MeleeCollisionComp->bHiddenInGame = false;
 	MeleeCollisionComp->SetVisibility(true);
 
-	
 	/*AttackCollisionComp->AttachTo(RootComponent);
 	AttackCollisionComp->SetRelativeLocation(FVector(50, 0, 20));
 	AttackCollisionComp->SetCapsuleHalfHeight(60);
@@ -158,6 +155,8 @@ void ACharacter_Minion::Tick(float DeltaSeconds)
 		if (MinionController)
 		{
 			MinionController->SetTargetEnemy(nullptr);
+			if (!AnimInstance->Montage_IsPlaying(MeleeAnimMontage))
+				MinionController->SetIsClose(false);
 		}
 	}
 }
@@ -279,6 +278,7 @@ void ACharacter_Minion::SimulateMeleeStrike_Implementation()
 	{
 		isAttack = true;
 		PlayAnimMontage(MeleeAnimMontage);
+		Cast<AAIController_Minion>(GetController())->SetIsClose(true);
 	}
 }
 

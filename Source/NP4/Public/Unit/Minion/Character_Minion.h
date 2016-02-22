@@ -14,7 +14,7 @@ UCLASS()
 class NP4_API ACharacter_Minion : public ANP4CharacterBase
 {
 	GENERATED_BODY()
-
+	
 	UPROPERTY(VisibleAnywhere, Category = "AI")
 	class UMyPawnSensingComponent* PawnSensingComp;
 	UAnimInstance* AnimInstance;
@@ -23,6 +23,7 @@ class NP4_API ACharacter_Minion : public ANP4CharacterBase
 	float LastMeleeAttackTime;
 	float SenseTimeOut;
 	float LastSeenTime;
+
 	//공격시 딜레이를 위한 변수
 	float AttackStartTime;
 	bool bSensedTarget;

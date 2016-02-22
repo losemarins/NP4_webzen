@@ -21,25 +21,22 @@ ANP4TownPlayer::ANP4TownPlayer()
 	////카메라 셋팅
 	m_OurCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("OurCamera"));
 	m_OurCamera->AttachTo(m_OurCameraSpringArm, USpringArmComponent::SocketName);
-
-	
 }
 
 USpringArmComponent* ANP4TownPlayer::GetSpringArm()
 {
 	return m_OurCameraSpringArm;
 }
+
 void ANP4TownPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 	//CheckState(DeltaTime);
 }
 
 void ANP4TownPlayer::PossessedBy(AController* _pController)
 {
 	Super::PossessedBy(_pController);
-
 	m_pPlayerController = Cast<ANP4TownPlayerController>(_pController);
 }
 
@@ -47,18 +44,17 @@ void ANP4TownPlayer::PossessedBy(AController* _pController)
 void ANP4TownPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	
 	// 컨트롤러 셋팅
 	//if (IsPlayerControllerNull())
 	{
 		m_pTownController = Cast<ANP4TownPlayerController>(GetNP4PlayerController());
 	}
+
 	/* 스프링암을 세팅된 값으로 기본 세팅한다. */
 	FtCameraLocationInfo LocationInfo;
 	if (!IsPlayerControllerNull())
 	{
 		eErrorType eType = m_pTownController->Request_GetDefaultCameraInfo(ECameraValue::eTownCamera, LocationInfo);
-
 		SetSpringArm(LocationInfo);
 
 		if (LocationInfo.bApplySpringArm)
@@ -71,7 +67,6 @@ void ANP4TownPlayer::BeginPlay()
 		}
 	}
 }
-
 
 void ANP4TownPlayer::SetSpringArm(FtCameraLocationInfo _Info)
 {
@@ -101,7 +96,6 @@ void ANP4TownPlayer::SetCameraRotaion(FRotator _Rot)
 {
 	m_OurCamera->SetRelativeRotation(_Rot);
 }
-
 
 UCameraComponent * ANP4TownPlayer::GetCamera()
 {
