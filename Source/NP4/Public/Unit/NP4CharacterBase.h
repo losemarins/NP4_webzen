@@ -5,6 +5,7 @@
 #include "GameFramework/Character.h"
 #include "WeaponBase.h"
 #include "ItemBase.h"
+#include "NP4AttackCollisionActiveNotifyState.h"
 #include "NP4CharacterBase.generated.h"
 
 UCLASS()
@@ -23,6 +24,23 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerAttack")
 	float m_AttackValue;
+
+	/* Hit Capsule Component */
+	UPROPERTY(VisibleAnywhere, Category = "Hit")
+	UCapsuleComponent* MeleeCollisionComp;
+
+	/* Attack Capsule Component */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UCapsuleComponent* m_pLeftPunchCapsule;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UCapsuleComponent* m_pRightPunchCapsule;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UCapsuleComponent* m_pLeftKickCapsule;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UCapsuleComponent* m_pRightKickCapsule;
 
 public:
 	TArray<AWeaponBase*> m_pItemInven_Temp; //юс╫ц
@@ -72,6 +90,8 @@ public:
 public:
 	/* Collision */
 	void SetWeaponColliderEnabled(bool _bActive);
+	/* Active Collision */
+	void SetColliderEnabled(bool _bActive, eCollisionType _eColl);
 
 	/* Attack Value Set,Get */
 	void SetWeaponAttackValue(float _fAttackValue);

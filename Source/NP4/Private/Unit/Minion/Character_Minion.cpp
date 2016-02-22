@@ -13,7 +13,7 @@ ACharacter_Minion::ACharacter_Minion()
 	AIControllerClass = AAIController_Minion::StaticClass();
 	
 	MeleeCollisionComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("MeleeCollision"));
-	AttackCollisionComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("AttackCollision"));
+	m_pRightPunchCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("RightPunchCollision"));
 	
 	PawnSensingComp = CreateDefaultSubobject<UMyPawnSensingComponent>(TEXT("PawnSensingComp"));
 	PawnSensingComp->SetPeripheralVisionAngle(70);
@@ -41,9 +41,9 @@ void ACharacter_Minion::BeginPlay()
 		MeleeCollisionComp->OnComponentBeginOverlap.AddDynamic(this, &ACharacter_Minion::OnMeleeCompBeginOverlap);
 	}
 
-	if (AttackCollisionComp)
+	if (m_pRightPunchCapsule)
 	{
-		AttackCollisionComp->OnComponentBeginOverlap.AddDynamic(this, &ACharacter_Minion::OnAttackCompEndOverlap);
+		m_pRightPunchCapsule->OnComponentBeginOverlap.AddDynamic(this, &ACharacter_Minion::OnAttackCompEndOverlap);
 		//OnComponentEndOverlap.AddDynamic(this, &ACharacter_Minion::OnAttackCompEndOverlap);
 	}
 
@@ -87,28 +87,28 @@ void ACharacter_Minion::SetCollisionChannel(uint8 TeamNum)
 	MeleeCollisionComp->bHiddenInGame = false;
 	MeleeCollisionComp->SetVisibility(true);
 
-	AttackCollisionComp->AttachTo(GetMesh(), "ring_03_r");
-	AttackCollisionComp->bHiddenInGame = false;
-	AttackCollisionComp->SetVisibility(true);
+	m_pRightPunchCapsule->AttachTo(GetMesh(), "ring_03_r");
+	m_pRightPunchCapsule->bHiddenInGame = false;
+	m_pRightPunchCapsule->SetVisibility(true);
 	/*AttackCollisionComp->AttachTo(RootComponent);
 	AttackCollisionComp->SetRelativeLocation(FVector(50, 0, 20));
 	AttackCollisionComp->SetCapsuleHalfHeight(60);
 	AttackCollisionComp->SetCapsuleRadius(80, false);*/
 
-	AttackCollisionComp->bHiddenInGame = false;
-	AttackCollisionComp->SetVisibility(true);
+	m_pRightPunchCapsule->bHiddenInGame = false;
+	m_pRightPunchCapsule->SetVisibility(true);
 
 	if (TeamNum == EGameTeam::Player)
 	{
-		AttackCollisionComp->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel1);
+		m_pRightPunchCapsule->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel1);
 		MeleeCollisionComp->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel2);
 		
 		MeleeCollisionComp->SetCollisionResponseToAllChannels(ECR_Ignore);
-		AttackCollisionComp->SetCollisionResponseToAllChannels(ECR_Ignore);
+		m_pRightPunchCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
 		
-		AttackCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
-		AttackCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Overlap);
-		AttackCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Overlap);
+		m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
+		m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Overlap);
+		m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Overlap);
 
 		MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel1, ECollisionResponse::ECR_Ignore);
 		MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
@@ -117,15 +117,15 @@ void ACharacter_Minion::SetCollisionChannel(uint8 TeamNum)
 
 	else
 	{
-		AttackCollisionComp->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel3);
+		m_pRightPunchCapsule->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel3);
 		MeleeCollisionComp->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel4);
 
 		MeleeCollisionComp->SetCollisionResponseToAllChannels(ECR_Ignore);
-		AttackCollisionComp->SetCollisionResponseToAllChannels(ECR_Ignore);
+		m_pRightPunchCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
 
-		AttackCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel1, ECollisionResponse::ECR_Overlap);
-		AttackCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Overlap);
-		AttackCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
+		m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel1, ECollisionResponse::ECR_Overlap);
+		m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Overlap);
+		m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
 
 		MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel1, ECollisionResponse::ECR_Ignore);
 		MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Overlap);

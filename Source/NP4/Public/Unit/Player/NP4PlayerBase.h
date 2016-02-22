@@ -6,7 +6,6 @@
 #include "NP4PlayerState.h"
 #include "NP4CameraManager.h"
 #include "WeaponBase.h"
-#include "NP4AttackCollisionActiveNotifyState.h"
 #include "NP4PlayerBase.generated.h"
 
 class ANP4HeroController;
@@ -57,23 +56,6 @@ public:
 
 	/* Anim Montage */
 	TArray<UAnimMontage*> m_ArrAnimMontage;
-
-	/* Hit Capsule Component */
-	UPROPERTY(VisibleAnywhere, Category = "Hit")
-	UCapsuleComponent* MeleeCollisionComp;
-
-	/* Attack Capsule Component */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UCapsuleComponent* m_pLeftPunchCapsule;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UCapsuleComponent* m_pRightPunchCapsule;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UCapsuleComponent* m_pLeftKickCapsule;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UCapsuleComponent* m_pRightKickCapsule;
 
 	/* Camera Value */
 	float m_ZoomFactor;
@@ -165,9 +147,7 @@ public:
 	eCombo_Interpol GetCurrentComboStep();
 	void SetCurrentComboStep(eCombo_Interpol _newStep);
 
-	/* Punch Collision */
-	void SetColliderEnabled(bool _bActive, eCollisionType _eColl);
-
+	
 
 	/* 무기 착용을 위한 임시 변수 */
 	int tempidx;

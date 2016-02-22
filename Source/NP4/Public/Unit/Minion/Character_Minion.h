@@ -29,11 +29,11 @@ class NP4_API ACharacter_Minion : public ANP4CharacterBase
 	bool isAttack;
 
 protected :
-	UPROPERTY(VisibleAnywhere, Category = "Attacking")
-	UCapsuleComponent* MeleeCollisionComp;
+	//UPROPERTY(VisibleAnywhere, Category = "Attacking")
+	//UCapsuleComponent* MeleeCollisionComp;
 
-	UPROPERTY(VisibleAnywhere, Category = "Attacking")
-	UCapsuleComponent* AttackCollisionComp;
+	//UPROPERTY(VisibleAnywhere, Category = "Attacking")
+	//UCapsuleComponent* AttackCollisionComp;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Attacking")
 	UAnimMontage* MeleeAnimMontage;
