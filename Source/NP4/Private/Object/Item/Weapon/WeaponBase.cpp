@@ -19,25 +19,20 @@ AWeaponBase::AWeaponBase()
 	m_pCollisionCapsule->SetVisibility(true);
 	m_pCollisionCapsule->bHiddenInGame = false;
 
-	
 	//State의 팀에 따라서 채널이 바뀌어야 한다.
 	m_pCollisionCapsule->SetCollisionObjectType(ECollisionChannel::ECC_GameTraceChannel1);
 	m_pCollisionCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
 	m_pCollisionCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
 	m_pCollisionCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
 	m_pCollisionCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
-
 }
 
 void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
-
 	m_pItemMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
 	m_pCollisionCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
-
 
 void AWeaponBase::SetOwningPawn(ANP4CharacterBase* NewOwner)
 {
@@ -88,15 +83,13 @@ void AWeaponBase::SetColliderEnabled(bool _bActive)
 	if (_bActive)
 	{
 		m_pCollisionCapsule->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "ActiveCollision");
-
 		m_pCollisionCapsule->SetVisibility(false);
 	}
+
 	else
 	{
 		m_pCollisionCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "No Collision");
 
 		m_pCollisionCapsule->SetVisibility(true);
@@ -119,28 +112,14 @@ void AWeaponBase::NotifyActorBeginOverlap(AActor* OtherActor)
 			{
 				//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, m_pCollisionCapsule->GetName());
 				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, OtherActor->GetName());
-
-				ANP4CharacterBase* pCharacter = Cast<ANP4CharacterBase>(OtherActor);
 			}
 		//}
 
 		m_pCollisionCapsule->SetVisibility(true);
-
-
 	}
 }
 
 eWeaponType AWeaponBase::GetWeaponType()
 {
 	return m_iWeaponType;
-}
-
-void AWeaponBase::SetWeaponAttackValue(float _fAttackValue)
-{
-	m_AttackValue = _fAttackValue;
-}
-
-float AWeaponBase::GetWeaponAttackValue()
-{
-	return m_AttackValue;
 }
