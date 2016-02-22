@@ -65,5 +65,5 @@ public :
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
 	float AttackSecond;
-	void Damaged(float Second, ACharacter* OtherActor);
+	void Damaged(float Second, AActor* OtherActor);
 };

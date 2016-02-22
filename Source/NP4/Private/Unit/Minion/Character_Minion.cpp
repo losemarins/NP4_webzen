@@ -24,6 +24,10 @@ ACharacter_Minion::ACharacter_Minion()
 	MeleeStrikeCooldown = 1.f;
 	SenseTimeOut = 1.f;
 	bSensedTarget = false;
+
+	m_pRightPunchCapsule->AttachTo(GetMesh(), "ring_03_r");
+	m_pRightPunchCapsule->bHiddenInGame = false;
+	m_pRightPunchCapsule->SetVisibility(true);
 }
 
 void ACharacter_Minion::BeginPlay()
@@ -57,23 +61,35 @@ void ACharacter_Minion::BeginPlay()
 	SetActorRotation(Rot);
 	m_AttackValue = 5;
 	AnimInstance = GetMesh()->AnimScriptInstance;
+
+	//юс╫ц╥н
+	m_pRightPunchCapsule->AttachTo(GetMesh(), "ring_03_r");
+	m_pRightPunchCapsule->bHiddenInGame = false;
+	m_pRightPunchCapsule->SetVisibility(true);
 }
 
 void ACharacter_Minion::NotifyActorBeginOverlap(AActor* OtherActor)
 {
-	//Super::NotifyActorBeginOverlap(OtherActor);
-
-	//if (AttackCollisionComp->IsCollisionEnabled())
-	//{
-		/*if (OtherActor != this)
-			Damaged(AttackSecond, OtherActor);*/
-	//}
+	/*Super::NotifyActorBeginOverlap(OtherActor);
+	if (OtherActor != this)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "BeginOverlap");
+		if (m_pRightPunchCapsule->IsCollisionEnabled() && isAttack)
+		{
+			isAttack = false;
+			Damaged(AttackSecond, OtherActor);
+		}
+	}*/
 }
 
 void ACharacter_Minion::OnAttackCompEndOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	//if(OtherActor != this)
-		//Damaged(AttackSecond, OtherActor);
+	if (OtherActor != this && isAttack)
+	{
+		isAttack = false;
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "BeginOverlap");
+		Damaged(AttackSecond, OtherActor);
+	}
 }
 
 void ACharacter_Minion::SetCollisionChannel(uint8 TeamNum)
@@ -87,16 +103,11 @@ void ACharacter_Minion::SetCollisionChannel(uint8 TeamNum)
 	MeleeCollisionComp->bHiddenInGame = false;
 	MeleeCollisionComp->SetVisibility(true);
 
-	m_pRightPunchCapsule->AttachTo(GetMesh(), "ring_03_r");
-	m_pRightPunchCapsule->bHiddenInGame = false;
-	m_pRightPunchCapsule->SetVisibility(true);
+	
 	/*AttackCollisionComp->AttachTo(RootComponent);
 	AttackCollisionComp->SetRelativeLocation(FVector(50, 0, 20));
 	AttackCollisionComp->SetCapsuleHalfHeight(60);
 	AttackCollisionComp->SetCapsuleRadius(80, false);*/
-
-	m_pRightPunchCapsule->bHiddenInGame = false;
-	m_pRightPunchCapsule->SetVisibility(true);
 
 	if (TeamNum == EGameTeam::Player)
 	{
@@ -121,12 +132,13 @@ void ACharacter_Minion::SetCollisionChannel(uint8 TeamNum)
 		MeleeCollisionComp->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel4);
 
 		MeleeCollisionComp->SetCollisionResponseToAllChannels(ECR_Ignore);
-		m_pRightPunchCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
+		//m_pRightPunchCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
 
+		m_pRightPunchCapsule->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 		m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel1, ECollisionResponse::ECR_Overlap);
 		m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Overlap);
 		m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
-
+		
 		MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel1, ECollisionResponse::ECR_Ignore);
 		MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Overlap);
 		MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
@@ -251,9 +263,6 @@ void ACharacter_Minion::PerformMeleeStrike(AActor* HitActor)
 				//AAIController_Minion* MinionController = Cast<AAIController_Minion>(GetController());
 				//MinionController->StopMovement();
 				SimulateMeleeStrike();
-
-				if (OtherPawn != this)
-					Damaged(AttackSecond, OtherPawn);
 		//	}
 		}
 	}
@@ -273,19 +282,14 @@ void ACharacter_Minion::SimulateMeleeStrike_Implementation()
 	}
 }
 
-void ACharacter_Minion::Damaged(float Second, ACharacter* OtherActor)
+void ACharacter_Minion::Damaged(float Second, AActor* OtherActor)
 {
 	//float a = GetWorld()->TimeSeconds;
 	//if (1 < (a - Second))
 	
-	if (AnimInstance->Montage_IsPlaying(MeleeAnimMontage) && isAttack)
+	if (AnimInstance->Montage_IsPlaying(MeleeAnimMontage))
 	{
-		float b = AnimInstance->Montage_GetPlayRate(MeleeAnimMontage);
-		if (AnimInstance->Montage_GetPlayRate(MeleeAnimMontage) > 0.5)
-		{
-			Cast<ANP4CharacterBase>(OtherActor)->Damaged_Call(m_AttackValue);
-			isAttack = false;
-		}
+		Cast<ANP4CharacterBase>(OtherActor)->Damaged_Call(m_AttackValue);
 	}
 	//else
 	//	Damaged(Second, OtherActor);
