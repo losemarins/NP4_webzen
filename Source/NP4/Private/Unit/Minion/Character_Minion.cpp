@@ -7,20 +7,25 @@
 
 ACharacter_Minion::ACharacter_Minion()
 {
-	PrimaryActorTick.bCanEverTick = true;
-	
+	PrimaryActorTick.bCanEverTick = true;	
 	//
 	AIControllerClass = AAIController_Minion::StaticClass();
+	
 	MeleeCollisionComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("MeleeCollision"));
-	AttackCollisionComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("AttackCollision"));
+	m_pRightPunchCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("RightPunchCollision"));
 	PawnSensingComp = CreateDefaultSubobject<UMyPawnSensingComponent>(TEXT("PawnSensingComp"));
 	PawnSensingComp->SetPeripheralVisionAngle(70);
 	PawnSensingComp->SightRadius = 300;
 	PawnSensingComp->bOnlySensePlayers = 0;
 	PawnSensingComp->SensingInterval = 0.1f;
+	
 	MeleeStrikeCooldown = 1.f;
-	SenseTimeOut = 1.f;
+	SenseTimeOut = 2.f;
 	bSensedTarget = false;
+
+	m_pRightPunchCapsule->AttachTo(GetMesh(), "ring_03_r");
+	m_pRightPunchCapsule->bHiddenInGame = false;
+	m_pRightPunchCapsule->SetVisibility(true);
 }
 
 void ACharacter_Minion::BeginPlay()
@@ -38,9 +43,10 @@ void ACharacter_Minion::BeginPlay()
 		MeleeCollisionComp->OnComponentBeginOverlap.AddDynamic(this, &ACharacter_Minion::OnMeleeCompBeginOverlap);
 	}
 
-	if (AttackCollisionComp)
+	if (m_pRightPunchCapsule)
 	{
-		//MeleeCollisionComp->OnComponentBeginOverlap.AddDynamic(this, &ACharacter_Minion::AttackCollisionComp);
+		m_pRightPunchCapsule->OnComponentBeginOverlap.AddDynamic(this, &ACharacter_Minion::OnAttackCompEndOverlap);
+		//OnComponentEndOverlap.AddDynamic(this, &ACharacter_Minion::OnAttackCompEndOverlap);
 	}
 
 	AAIController_Minion* MinionController = Cast<AAIController_Minion>(GetController());
@@ -51,6 +57,37 @@ void ACharacter_Minion::BeginPlay()
 	
 	Rot.Yaw += 90;
 	SetActorRotation(Rot);
+	m_AttackValue = 5;
+	AnimInstance = GetMesh()->AnimScriptInstance;
+
+	//юс╫ц╥н
+	m_pRightPunchCapsule->AttachTo(GetMesh(), "ring_03_r");
+	m_pRightPunchCapsule->bHiddenInGame = false;
+	m_pRightPunchCapsule->SetVisibility(true);
+}
+
+void ACharacter_Minion::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	/*Super::NotifyActorBeginOverlap(OtherActor);
+	if (OtherActor != this)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "BeginOverlap");
+		if (m_pRightPunchCapsule->IsCollisionEnabled() && isAttack)
+		{
+			isAttack = false;
+			Damaged(AttackSecond, OtherActor);
+		}
+	}*/
+}
+
+void ACharacter_Minion::OnAttackCompEndOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	if (OtherActor != this && isAttack)
+	{
+		isAttack = false;
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "BeginOverlap");
+		Damaged(AttackSecond, OtherActor);
+	}
 }
 
 void ACharacter_Minion::SetCollisionChannel(uint8 TeamNum)
@@ -64,23 +101,22 @@ void ACharacter_Minion::SetCollisionChannel(uint8 TeamNum)
 	MeleeCollisionComp->bHiddenInGame = false;
 	MeleeCollisionComp->SetVisibility(true);
 
-	AttackCollisionComp->AttachTo(GetMesh(), "ring_03_r");
-	AttackCollisionComp->bHiddenInGame = false;
-	AttackCollisionComp->SetVisibility(true);
+	/*AttackCollisionComp->AttachTo(RootComponent);
+	AttackCollisionComp->SetRelativeLocation(FVector(50, 0, 20));
+	AttackCollisionComp->SetCapsuleHalfHeight(60);
+	AttackCollisionComp->SetCapsuleRadius(80, false);*/
 
 	if (TeamNum == EGameTeam::Player)
 	{
-		AttackCollisionComp->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel1);
+		m_pRightPunchCapsule->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel1);
 		MeleeCollisionComp->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel2);
 		
 		MeleeCollisionComp->SetCollisionResponseToAllChannels(ECR_Ignore);
-		AttackCollisionComp->SetCollisionResponseToAllChannels(ECR_Ignore);
-
-		//MeleeCollisionComp->SetCollisionResponseToChannel(ECC_Pawn,ECR_Overlap);
+		m_pRightPunchCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
 		
-		AttackCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
-		AttackCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);		
-		AttackCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
+		m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
+		m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Overlap);
+		m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Overlap);
 
 		MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel1, ECollisionResponse::ECR_Ignore);
 		MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
@@ -89,16 +125,17 @@ void ACharacter_Minion::SetCollisionChannel(uint8 TeamNum)
 
 	else
 	{
-		AttackCollisionComp->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel3);
+		m_pRightPunchCapsule->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel3);
 		MeleeCollisionComp->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel4);
 
 		MeleeCollisionComp->SetCollisionResponseToAllChannels(ECR_Ignore);
-		AttackCollisionComp->SetCollisionResponseToAllChannels(ECR_Ignore);
+		//m_pRightPunchCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
 
-		AttackCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel1, ECollisionResponse::ECR_Ignore);
-		AttackCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
-		AttackCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
-
+		m_pRightPunchCapsule->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+		m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel1, ECollisionResponse::ECR_Overlap);
+		m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Overlap);
+		m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
+		
 		MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel1, ECollisionResponse::ECR_Ignore);
 		MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Overlap);
 		MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
@@ -109,12 +146,17 @@ void ACharacter_Minion::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
+	//if (AnimInstance->Montage_GetIsStopped(MeleeAnimMontage)
+		//isAttack = false;
+
 	if (bSensedTarget && (GetWorld()->TimeSeconds - LastSeenTime) > SenseTimeOut)
 	{
 		AAIController_Minion* MinionController = Cast<AAIController_Minion>(GetController());
 		if (MinionController)
 		{
 			MinionController->SetTargetEnemy(nullptr);
+			if (!AnimInstance->Montage_IsPlaying(MeleeAnimMontage))
+				MinionController->SetIsClose(false);
 		}
 	}
 }
@@ -232,7 +274,23 @@ void ACharacter_Minion::SetEnemyCastle(ABuilding_Castle* Castle)
 
 void ACharacter_Minion::SimulateMeleeStrike_Implementation()
 {
-	UAnimInstance* AnimInstance = GetMesh()->AnimScriptInstance;
-	if(!AnimInstance->Montage_IsPlaying(MeleeAnimMontage))
+	if (!AnimInstance->Montage_IsPlaying(MeleeAnimMontage))
+	{
+		isAttack = true;
 		PlayAnimMontage(MeleeAnimMontage);
+		Cast<AAIController_Minion>(GetController())->SetIsClose(true);
+	}
+}
+
+void ACharacter_Minion::Damaged(float Second, AActor* OtherActor)
+{
+	//float a = GetWorld()->TimeSeconds;
+	//if (1 < (a - Second))
+	
+	if (AnimInstance->Montage_IsPlaying(MeleeAnimMontage))
+	{
+		Cast<ANP4CharacterBase>(OtherActor)->Damaged_Call(m_AttackValue);
+	}
+	//else
+	//	Damaged(Second, OtherActor);
 }

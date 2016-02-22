@@ -23,7 +23,7 @@ public:
 	/* Possess Character Class */
 	UPROPERTY()
 	ANP4PlayerBase* m_pPossessCharacter;
-	TSubclassOf<class UFormationManager> FormationManager;
+	class UFormationManager* Formation;
 
 public:	/* 컨트롤러가 카메라를 가지고 있는다 */
 
@@ -37,6 +37,7 @@ public:
 	/* About Camera Check Value */
 	bool m_bMouseRightClk;
 	bool m_bZoomingIn;
+	AActor* TargetActor; //나중에 델리게이트로 바꾸면서 삭제할거
 
 public:
 	virtual void BeginPlay() override;
@@ -101,5 +102,4 @@ public:
 	void PlayerSpawn();
 	void EnemySpawn();
 	void FormationSetting();
-
 };

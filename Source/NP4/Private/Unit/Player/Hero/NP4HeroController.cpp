@@ -9,12 +9,15 @@
 #include "NP4GameState.h"
 #include "AIDirector.h"
 #include "Building_Castle.h"
-
+#include "FormationManager.h"
+#include "Character_Minion.h"
+#include "AIController_Minion.h"
 ANP4HeroController::ANP4HeroController()
 {
 	//ANP4PlayerController::ANP4PlayerController();
-
+	
 	PlayerCameraManagerClass = ANP4CameraManager::StaticClass();
+	//GetWorld()->SpawnActor<ANP4CharacterBase>(Owner->CharClass, Loc, Owner->GetActorRotation(), SpawnInfo);
 	
 
 	m_bZoomingIn = false;
@@ -22,6 +25,7 @@ ANP4HeroController::ANP4HeroController()
 
 	m_bUseCameraAction = false;
 	m_bActionCameraActive = false;
+	TargetActor = NULL;
 }
 
 void ANP4HeroController::SetupInputComponent()
@@ -33,6 +37,8 @@ void ANP4HeroController::SetupInputComponent()
 	InputComponent->BindAction("Spawn_2", IE_Pressed, this, &ANP4HeroController::EnemySpawn);
 
 	//부대 전술관련 임시로
+	
+
 	InputComponent->BindAction("Formation", IE_Pressed, this, &ANP4HeroController::FormationSetting);
 
 	//이동 관련
@@ -70,7 +76,8 @@ void ANP4HeroController::BeginPlay()
 	{
 		InitializeActionCameraArray();
 	}
-
+	
+	Formation = Cast<ANP4GameState>(GetWorld()->GetGameState())->FormationManager;
 	/*PlayerSpawn();
 	EnemySpawn();*/
 }
@@ -99,8 +106,20 @@ void ANP4HeroController::Tick(float _DeltaTime)
 
 	else
 	{
-		if(m_pPossessCharacter)
+		if (m_pPossessCharacter)
 			m_pPossessCharacter->ZoomTickFunc(_DeltaTime, m_bZoomingIn);
+	}
+	
+	//임시로
+	if (true)
+	{
+		FVector2D MousePos = GetMousePos();
+		FHitResult HitResult = GetSelectActor(MousePos);
+
+		if (HitResult.GetActor())
+		{
+			TargetActor = HitResult.GetActor();
+		}
 	}
 }
 
@@ -140,7 +159,6 @@ void ANP4HeroController::Push_ActionCameraArray(ANP4CameraActor* _pCreatedCamera
 	m_arr_ActionCamera->Add(_pCreatedCamera);
 	m_bUseCameraAction = true;
 }
-
 
 void ANP4HeroController::DeleteActionCameraOnLevel()
 {
@@ -282,7 +300,6 @@ ANP4PlayerBase* ANP4HeroController::GetPossessCharacter()
 	return m_pPossessCharacter;
 }
 
-
 ////////////////////////////////////////////////* State and Action Start,Stop(Key binding) */
 void ANP4HeroController::ActionAttack()
 {
@@ -364,5 +381,10 @@ void ANP4HeroController::EnemySpawn()
 
 void ANP4HeroController::FormationSetting()
 {
-	//UFormationManager->AllieList;
+	TArray<class ANP4CharacterBase*> list = Formation->GetUnitList();
+
+	for (int32 i = 0; i < list.Num(); i++)
+	{
+		Cast<AAIController_Minion>(list[i]->GetController())->SetTargetEnemy(TargetActor);
+	}
 }

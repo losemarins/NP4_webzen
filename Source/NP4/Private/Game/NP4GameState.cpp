@@ -9,6 +9,7 @@ ANP4GameState::ANP4GameState(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
 	PlayersData.AddZeroed(EGameTeam::MAX);
+	
 }
 
 void ANP4GameState::SetGameDifficulty(EGameDifficulty::Type NewDifficulty)
@@ -19,6 +20,7 @@ void ANP4GameState::SetGameDifficulty(EGameDifficulty::Type NewDifficulty)
 void ANP4GameState::StartGameplayStateMachine()
 {
 	OnGameStart();
+	FormationManager = NewObject<UFormationManager>(this);
 }
 
 void ANP4GameState::OnGameStart()
@@ -40,6 +42,7 @@ void ANP4GameState::SetGameplayState(EGameplayState::Type NewState)
 	FRotator Rotation = FRotator( 0, 0, 0);
 	FVector Location = FVector(10, 0, 0);
 
+	
 	//ANP4TownPlayer* pSpawnActor = (ANP4TownPlayer*)GetWorld()->SpawnActor(ANP4TownPlayer::StaticClass(), &Location, &Rotation);
 }
 

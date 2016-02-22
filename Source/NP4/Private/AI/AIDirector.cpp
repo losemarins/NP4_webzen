@@ -6,6 +6,7 @@
 #include "Building_Castle.h"
 #include "NP4CharacterBase.h"
 #include "Character_Minion.h"
+#include "FormationManager.h"
 // Sets default values for this component's properties
 
 UAIDirector::UAIDirector() :
@@ -72,13 +73,18 @@ void UAIDirector::SpawnMinions()
 			ANP4CharacterBase* const SpawnChar = GetWorld()->SpawnActor<ANP4CharacterBase>(Owner->CharClass, Loc, Owner->GetActorRotation(), SpawnInfo);
 			
 
-			if ((SpawnChar != nullptr))
+			if (SpawnChar != nullptr)
 			{
 				SpawnChar->SetTeamNum(MyTeamNum);
 				SpawnChar->SpawnDefaultController();
 				Cast<ACharacter_Minion>(SpawnChar)->SetCollisionChannel(MyTeamNum);
 				Cast<ACharacter_Minion>(SpawnChar)->SetEnemyCastle(GetEnemyCastle());
 				ProductNum -= 1;
+				//UClass* object = UFormationManager::StaticClass();
+				//int a = 0;
+
+				if(MyTeamNum == EGameTeam::Player)
+					Cast<ANP4GameState>(GetWorld()->GetGameState())->FormationManager->AddUnitList(SpawnChar);
 			}
 		}
 	}

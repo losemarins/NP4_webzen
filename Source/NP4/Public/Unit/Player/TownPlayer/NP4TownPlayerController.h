@@ -90,10 +90,8 @@ public:
 	bool m_bIsSwipe;
 
 public:
-	FHitResult GetSelectActor(FVector2D MousePos);
-	FVector2D GetMousePos();
+	
 	void TileDetecting();
-
 	UFUNCTION(BlueprintCallable, Category = "TownBuilding")
 	void SetBuildMode(EBuilding::Type EBuildType);
 

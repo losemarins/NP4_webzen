@@ -41,5 +41,5 @@ protected:
 
 public :
 	ANP4GameState(const FObjectInitializer& ObjectInitializer);
-
+	class UFormationManager* FormationManager;
 };

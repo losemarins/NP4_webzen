@@ -19,7 +19,7 @@ void UNP4AttackCollisionActiveNotifyState::NotifyBegin(USkeletalMeshComponent * 
 		AActor* pOwnerActor = MeshComp->GetOwner();
 		if (pOwnerActor)
 		{
-			ANP4PlayerBase* pPlayerCast = Cast<ANP4PlayerBase>(pOwnerActor);
+			ANP4CharacterBase* pPlayerCast = Cast<ANP4CharacterBase>(pOwnerActor);
 
 			if (pPlayerCast)
 			{
@@ -40,7 +40,7 @@ void UNP4AttackCollisionActiveNotifyState::NotifyEnd(USkeletalMeshComponent * Me
 		AActor* pOwnerActor = MeshComp->GetOwner();
 		if (pOwnerActor)
 		{
-			ANP4PlayerBase* pPlayerCast = Cast<ANP4PlayerBase>(pOwnerActor);
+			ANP4CharacterBase* pPlayerCast = Cast<ANP4CharacterBase>(pOwnerActor);
 
 			if (pPlayerCast)
 			{

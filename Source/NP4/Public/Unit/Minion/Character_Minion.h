@@ -14,22 +14,27 @@ UCLASS()
 class NP4_API ACharacter_Minion : public ANP4CharacterBase
 {
 	GENERATED_BODY()
-
+	
 	UPROPERTY(VisibleAnywhere, Category = "AI")
 	class UMyPawnSensingComponent* PawnSensingComp;
+	UAnimInstance* AnimInstance;
 	FTimerHandle TimerHandle_MeleeAttack;
 	float MeleeStrikeCooldown;
 	float LastMeleeAttackTime;
 	float SenseTimeOut;
 	float LastSeenTime;
-	bool bSensedTarget;
-	
-protected :
-	UPROPERTY(VisibleAnywhere, Category = "Attacking")
-	UCapsuleComponent* MeleeCollisionComp;
 
-	UPROPERTY(VisibleAnywhere, Category = "Attacking")
-	UCapsuleComponent* AttackCollisionComp;
+	//공격시 딜레이를 위한 변수
+	float AttackStartTime;
+	bool bSensedTarget;
+	bool isAttack;
+
+protected :
+	//UPROPERTY(VisibleAnywhere, Category = "Attacking")
+	//UCapsuleComponent* MeleeCollisionComp;
+
+	//UPROPERTY(VisibleAnywhere, Category = "Attacking")
+	//UCapsuleComponent* AttackCollisionComp;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Attacking")
 	UAnimMontage* MeleeAnimMontage;
@@ -41,6 +46,7 @@ public :
 public :
 	ACharacter_Minion();
 	void UpdatePawnData(); // 나중에 base에서 virtual로 할수도있음
+	void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 	UFUNCTION(Reliable, NetMulticast)
 	void SimulateMeleeStrike();
@@ -53,8 +59,12 @@ public :
 
 	UFUNCTION()
 	void OnMeleeCompBeginOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+	UFUNCTION()
+	void OnAttackCompEndOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 	void PerformMeleeStrike(AActor* HitActor);
 	void OnRetriggerMeleeStrike();
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
+	float AttackSecond;
+	void Damaged(float Second, AActor* OtherActor);
 };

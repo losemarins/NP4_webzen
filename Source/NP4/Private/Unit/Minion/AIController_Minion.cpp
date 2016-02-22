@@ -16,6 +16,8 @@ AAIController_Minion::AAIController_Minion(const FObjectInitializer& ObjectIniti
 	BlackboardComp = ObjectInitializer.CreateDefaultSubobject<UBlackboardComponent>(this, TEXT("BlackboardComp"));
 	TargetEnemyKeyName = "TargetEnemy";
 	TargetCastleKeyName = "EnemyCastle";
+	IsClose = "IsClose";
+
 	isMove = true;
 }
 
@@ -56,7 +58,7 @@ void AAIController_Minion::Tick(float DeltaTime)
 	}
 }
 
-void AAIController_Minion::SetTargetEnemy(APawn* NewTarget)
+void AAIController_Minion::SetTargetEnemy(AActor* NewTarget)
 {
 	if (BlackboardComp)
 	{
@@ -79,4 +81,12 @@ UObject* AAIController_Minion::GetTargetEnemy()
 		return BlackboardComp->GetValueAsObject(TargetEnemyKeyName);
 	}
 	return nullptr;
+}
+
+void AAIController_Minion::SetIsClose(bool value)
+{
+	if (BlackboardComp)
+	{
+		BlackboardComp->SetValueAsBool(IsClose, value);
+	}
 }

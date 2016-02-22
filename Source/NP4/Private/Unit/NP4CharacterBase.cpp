@@ -5,7 +5,6 @@
 #include "WeaponBase.h"
 #include "NP4ItemManager.h"
 
-
 // Sets default values
 ANP4CharacterBase::ANP4CharacterBase()
 {
@@ -180,7 +179,90 @@ bool ANP4CharacterBase::Damaged_Call(float _fAttackValue)
 		{
 			Health = 0;
 		}
+		return true;
+	}
+}
+
+/* Collision */
+void ANP4CharacterBase::SetColliderEnabled(bool _bActive, eCollisionType _eColl)
+{
+	if (_bActive)
+	{
+		if (_eColl == eCollisionType::eCollision_LeftPunch)
+		{
+			//Left
+			m_pLeftPunchCapsule->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "LEFT_PUNCH_ActiveCollision");
+			m_pLeftPunchCapsule->SetVisibility(false);
+		}
+
+		else if (_eColl == eCollisionType::eCollision_RightPunch)
+		{
+			//Right
+			m_pRightPunchCapsule->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "RIGHT_PUNCH_ActiveCollision");
+			m_pRightPunchCapsule->SetVisibility(false);
+		}
+
+		else if (_eColl == eCollisionType::eCollision_LeftKick)
+		{
+			//Left
+			m_pLeftKickCapsule->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "LEFT_KICK_ActiveCollision");
+			m_pLeftKickCapsule->SetVisibility(false);
+		}
+
+		else if (_eColl == eCollisionType::eCollision_RightKick)
+		{
+			//Right
+			m_pRightKickCapsule->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "RIGHT_KICK_ActiveCollision");
+			m_pRightKickCapsule->SetVisibility(false);
+		}
+
+		else if (_eColl == eCollisionType::eCollision_Weapon)
+		{
+			SetWeaponColliderEnabled(_bActive);
+		}
 	}
 
-	return true;
+	else
+	{
+		if (_eColl == eCollisionType::eCollision_LeftPunch)
+		{
+			//Left
+			m_pLeftPunchCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "LEFT_PUNCH_No Collision");
+			m_pLeftPunchCapsule->SetVisibility(true);
+		}
+
+		else if (_eColl == eCollisionType::eCollision_RightPunch)
+		{
+			//Right
+			m_pRightPunchCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "RIGHT_PUNCH_No Collision");
+			m_pRightPunchCapsule->SetVisibility(true);
+		}
+
+		else if (_eColl == eCollisionType::eCollision_LeftKick)
+		{
+			//Left
+			m_pLeftKickCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "LEFT_KICK_No Collision");
+			m_pLeftKickCapsule->SetVisibility(true);
+		}
+
+		else if (_eColl == eCollisionType::eCollision_RightKick)
+		{
+			//Right
+			m_pRightKickCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "RIGHT_KICK_No Collision");
+			m_pRightKickCapsule->SetVisibility(true);
+		}
+
+		else if (_eColl == eCollisionType::eCollision_Weapon)
+		{
+			SetWeaponColliderEnabled(_bActive);
+		}
+	}
 }

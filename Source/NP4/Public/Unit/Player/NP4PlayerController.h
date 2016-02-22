@@ -45,4 +45,8 @@ public:
 	/* bool Check */
 	bool IsCameraMangerNull();
 
+	//마우스 관련 함수
+public : 
+	FHitResult GetSelectActor(FVector2D MousePos);
+	FVector2D GetMousePos();
 };

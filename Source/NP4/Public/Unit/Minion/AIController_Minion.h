@@ -19,14 +19,16 @@ class NP4_API AAIController_Minion : public AAIController_Base
 
 	FName TargetEnemyKeyName;
 	FName TargetCastleKeyName;
+	FName IsClose;
 
 	virtual void Possess(class APawn* InPawn);
 	virtual void UnPossess() override;
 
 public:
-	void SetTargetEnemy(APawn* NewTarget);
+	void SetTargetEnemy(AActor* NewTarget);
 	void SetEnemyCastle(ABuilding_Castle* EnemyCastle);
 	UObject* GetTargetEnemy();
+	void SetIsClose(bool value);
 
 public :
 	AAIController_Minion(const FObjectInitializer& ObjectInitializer);
