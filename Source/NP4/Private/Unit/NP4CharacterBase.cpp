@@ -121,7 +121,7 @@ void ANP4CharacterBase::InitWeapon_TempFunction()
 	}
 }
 
-void ANP4CharacterBase::SetColliderEnabled(bool _bActive)
+void ANP4CharacterBase::SetWeaponColliderEnabled(bool _bActive)
 {
 	if (m_pCurrentEquipWeapon)
 	{
