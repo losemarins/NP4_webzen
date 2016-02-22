@@ -74,7 +74,6 @@ ANP4PlayerBase::ANP4PlayerBase()
 
 	MeleeCollisionComp->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel2);
 	MeleeCollisionComp->SetCollisionResponseToAllChannels(ECR_Ignore);
-
 	MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel1, ECollisionResponse::ECR_Ignore);
 	MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
 	MeleeCollisionComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Overlap);
@@ -134,8 +133,6 @@ ANP4PlayerBase::ANP4PlayerBase()
 
 	/* Set Team */
 	MyTeamNum = EGameTeam::Player;
-
-	/* Set Attack */
 }
 
 void ANP4PlayerBase::BeginPlay()
@@ -173,6 +170,10 @@ void ANP4PlayerBase::BeginPlay()
 	{
 		m_pPlayerState = (Cast<ANP4PlayerState>(PlayerState));
 		m_pPlayerState->SetStateOwner(this);
+
+		//hp setting
+		//m_pPlayerState->setPlayerHealth(100.f);
+		//m_pPlayerState->setPlayerMaxHealth(100.f);
 	}
 
 	//임시로 무기를 인벤토리에 생성한다.
@@ -182,7 +183,6 @@ void ANP4PlayerBase::BeginPlay()
 void ANP4PlayerBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 	CheckState(DeltaTime);
 
 	/* 애니메이션 남은 시간 체크 ! (임시)*/
@@ -200,7 +200,6 @@ void ANP4PlayerBase::Tick(float DeltaTime)
 void ANP4PlayerBase::PossessedBy(AController* _pController)
 {
 	Super::PossessedBy(_pController);
-
 	m_pPlayerController = Cast<ANP4HeroController>(_pController);
 }
 
@@ -230,7 +229,6 @@ void ANP4PlayerBase::InitAnimationMontage()
 	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_BASE_FrontSpell_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_1 + (int)weaponType);
 	////Skill_2
 	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_BASE_UpSpell_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_2 + (int)weaponType);
-
 
 	weaponType = eWeaponType::eType_1;
 	/* Weapon Type _ 1 */
