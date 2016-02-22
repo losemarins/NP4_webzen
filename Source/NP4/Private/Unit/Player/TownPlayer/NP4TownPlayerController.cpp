@@ -8,8 +8,7 @@
 ANP4TownPlayerController::ANP4TownPlayerController()
 	: bIgnoreInput(false)
 {
-	PlayerCameraManagerClass = ANP4CameraManager::StaticClass();
-	PrimaryActorTick.bCanEverTick = true;
+	PlayerCameraManagerClass = ANP4CameraManager::StaticClass();	
 	bHidden = false;
 	bShowMouseCursor = true;
 	m_fMinZoomLevel = 0.4f;
@@ -21,6 +20,8 @@ ANP4TownPlayerController::ANP4TownPlayerController()
 	m_OldSelectActor = NULL;
 	m_fCameraScrollSpeed = 2500.f;
 	m_EBuildType = EBuilding::Defualt;
+	PrimaryActorTick.bCanEverTick = true;
+	//Possess()
 }
 
 void ANP4TownPlayerController::Possess(APawn* InPawn)
@@ -385,6 +386,7 @@ void ANP4TownPlayerController::OnSwipeStarted(/*const FVector2D& AnchorPosition,
 			FVector TilePos = pTile->GetActorLocation();
 			ANP4TownGameState* MyGameState = GetWorld()->GetGameState<ANP4TownGameState>();
 			MyGameState->CreateBuilding(TilePos, m_EBuildType);
+			
 		}
 	}
 	else
