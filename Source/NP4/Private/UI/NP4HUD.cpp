@@ -1,12 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
+/* juhee
+	HP Bar를 C++코드를 사용하여 구현했을 때의 코드이다.
+	날리지 않고 주석처리 해 두었다.
+*/
+
 
 #include "NP4.h"
 
-#include "Define.h"
-#include "NP4GameState.h"
-#include "NP4PlayerBase.h"
-#include "NP4PlayerController.h"
-#include "NP4PlayerBase.h"
+//#include "Define.h"
+//#include "NP4GameState.h"
+//#include "NP4PlayerBase.h"
+//#include "NP4PlayerController.h"
+//#include "NP4PlayerBase.h"
 #include "NP4HUD.h"
 
 
@@ -28,8 +33,8 @@ ANP4HUD::ANP4HUD()
 * This is the main drawing pump. it will determine which hud we need to draw (Game or PostGame). Any drawing that should occur
 * regardless of the game state should go here.
 */
-void ANP4HUD::DrawHUD()
-{
+//void ANP4HUD::DrawHUD()
+//{
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, FString::Printf(TEXT("function DrawHUD call 1 !")));
 
 	//if (GEngine && GEngine->GameViewport)
@@ -50,7 +55,7 @@ void ANP4HUD::DrawHUD()
 
 	//DrawActorsHealth();
 
-}
+//}
 //
 ////코드 실행 확인을 위해 사용한 변수
 //int timetest = 0;

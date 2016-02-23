@@ -1,13 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
+/* juhee
+HP Bar를 C++코드를 사용하여 구현했을 때의 코드이다.
+날리지 않고 주석처리 해 두었다.
+*/
 #pragma once
 
 #include "GameFramework/HUD.h"
 #include "NP4HUD.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class NP4_API ANP4HUD : public AHUD
 {
@@ -17,7 +17,7 @@ public:
 	ANP4HUD();
 
 	// Begin HUD interface
-	virtual void DrawHUD() override;
+	//virtual void DrawHUD() override;
 	// End HUD interface
 
 	/** current UI scale */
