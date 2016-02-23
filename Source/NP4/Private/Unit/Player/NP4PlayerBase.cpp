@@ -81,7 +81,7 @@ ANP4PlayerBase::ANP4PlayerBase()
 	/* Create Attack Capsule Component */
 	//Left Punch
 	m_pLeftPunchCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("LeftPunchCollision"));
-	m_pLeftPunchCapsule->AttachTo(pMesh, "hand_l");
+	m_pLeftPunchCapsule->AttachTo(pMesh, "LeftHand");
 	m_pLeftPunchCapsule->bHiddenInGame = false;
 	m_pLeftPunchCapsule->SetVisibility(true);
 
@@ -94,7 +94,7 @@ ANP4PlayerBase::ANP4PlayerBase()
 
 	//Right Punch
 	m_pRightPunchCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("RightPunchCollision"));
-	m_pRightPunchCapsule->AttachTo(pMesh, "hand_r");
+	m_pRightPunchCapsule->AttachTo(pMesh, "RightHand");
 	m_pRightPunchCapsule->bHiddenInGame = false;
 	m_pRightPunchCapsule->SetVisibility(true);
 
@@ -107,7 +107,7 @@ ANP4PlayerBase::ANP4PlayerBase()
 
 	//Left Kick
 	m_pLeftKickCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("LeftKickCollision"));
-	m_pLeftKickCapsule->AttachTo(pMesh, "foot_l");
+	m_pLeftKickCapsule->AttachTo(pMesh, "LeftFoot");
 	m_pLeftKickCapsule->bHiddenInGame = false;
 	m_pLeftKickCapsule->SetVisibility(true);
 
@@ -120,7 +120,7 @@ ANP4PlayerBase::ANP4PlayerBase()
 
 	//Right Kick
 	m_pRightKickCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("RightKickCollision"));
-	m_pRightKickCapsule->AttachTo(pMesh, "foot_r");
+	m_pRightKickCapsule->AttachTo(pMesh, "RightFoot");
 	m_pRightKickCapsule->bHiddenInGame = false;
 	m_pRightKickCapsule->SetVisibility(true);
 
@@ -184,17 +184,6 @@ void ANP4PlayerBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	CheckState(DeltaTime);
-
-	/* 애니메이션 남은 시간 체크 ! (임시)*/
-	/*USkeletalMeshComponent* mesh = GetMesh();
-	UAnimInstance* AnimInstance = mesh->AnimScriptInstance;
-	float AnimLength = 0.0f;
-	float CurPos = 0.0f;
-	if (AnimInstance != NULL)
-	{
-		AnimLength = AnimInstance->GetCurrentActiveMontage()->GetPlayLength();
-		CurPos = AnimInstance->Montage_GetPosition(AnimInstance->GetCurrentActiveMontage());
-	}*/
 }
 
 void ANP4PlayerBase::PossessedBy(AController* _pController)
