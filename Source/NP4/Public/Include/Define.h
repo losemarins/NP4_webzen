@@ -3,6 +3,15 @@
 
 #pragma once
 
+namespace EGameStrategy
+{
+	enum Type
+	{
+		Defualt,
+		Converging_Attack,
+		IndianFile,
+	};
+}
 UENUM(BlueprintType)
 namespace EBuilding
 {

@@ -22,7 +22,7 @@ public:
 	/* Possess Character Class */
 	UPROPERTY()
 	APawn* m_pPossessPawn;
-
+	
 	/* CameraManager Class*/
 	UPROPERTY()
 	ANP4CameraManager* m_pCameraManager;

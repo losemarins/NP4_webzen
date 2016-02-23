@@ -388,3 +388,16 @@ void ANP4HeroController::FormationSetting()
 		Cast<AAIController_Minion>(list[i]->GetController())->SetTargetEnemy(TargetActor);
 	}
 }
+
+void ANP4HeroController::FormationSetting2()
+{
+	TArray<class ANP4CharacterBase*> list = Formation->GetUnitList();
+
+	FVector2D MousePos = GetMousePos();
+	FVector_NetQuantize pos = GetSelectActor(MousePos).ImpactPoint;
+
+	/*for (int32 i = 0; i < list.Num(); i++)
+	{
+		Cast<AAIController_Minion>(list[i]->GetController())->SetTargetEnemy(TargetActor);
+	}*/
+}

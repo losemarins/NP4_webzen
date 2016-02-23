@@ -62,23 +62,24 @@ void UAIDirector::SpawnMinions()
 			Loc += X + Y;
 
 			if (MyTeamNum == EGameTeam::Player)
-				Loc += FVector(-100, 100, 0);
-				
+				//Loc += FVector(-100, 100, 0);
+				Loc += FVector(100, 100, 0);
 			else
-				Loc += FVector(100, -100, 0);
+				//Loc += FVector(100, -100, 0);
+				Loc += FVector(-100, -100, 0);
 
 			const FVector Scale(CustomScale);
 			FActorSpawnParameters SpawnInfo;
 			SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 			ANP4CharacterBase* const SpawnChar = GetWorld()->SpawnActor<ANP4CharacterBase>(Owner->CharClass, Loc, Owner->GetActorRotation(), SpawnInfo);
 			
-
 			if (SpawnChar != nullptr)
 			{
 				SpawnChar->SetTeamNum(MyTeamNum);
 				SpawnChar->SpawnDefaultController();
-				Cast<ACharacter_Minion>(SpawnChar)->SetCollisionChannel(MyTeamNum);
 				Cast<ACharacter_Minion>(SpawnChar)->SetEnemyCastle(GetEnemyCastle());
+				Cast<ACharacter_Minion>(SpawnChar)->SetCollisionChannel(MyTeamNum);
+				
 				ProductNum -= 1;
 				//UClass* object = UFormationManager::StaticClass();
 				//int a = 0;
