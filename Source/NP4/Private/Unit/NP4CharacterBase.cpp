@@ -67,8 +67,11 @@ bool ANP4CharacterBase::IsAlive()
 
 void ANP4CharacterBase::OnUnEquipWeapon()
 {
-	m_pCurrentEquipWeapon->OnUnEquip();
-	m_pCurrentEquipWeapon = NULL;
+	if (m_pCurrentEquipWeapon)
+	{
+		m_pCurrentEquipWeapon->OnUnEquip();
+		m_pCurrentEquipWeapon = NULL;
+	}
 }
 
 void ANP4CharacterBase::OnEqipWeapon(AWeaponBase* _pWeapon)
