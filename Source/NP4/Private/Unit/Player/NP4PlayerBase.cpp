@@ -693,7 +693,7 @@ void ANP4PlayerBase::ActionSkill_1()
 	if (pSkill_1_Anim && IsSkilling() == false)
 	{
 		float fAnimDuationVal = 0.0f;
-		GetMesh()->AnimScriptInstance->Montage_Stop(0.0f); /* Stop All Montage Anim */
+		//GetMesh()->AnimScriptInstance->Montage_Stop(0.0f); /* Stop All Montage Anim */
 		SetRunning(false);
 		fAnimDuationVal = PlayAnimMontage_CheckCurrent(pSkill_1_Anim, eCharacterState::eSkilling);
 		SetSkilling(true);
@@ -712,7 +712,7 @@ void ANP4PlayerBase::ActionSkill_2()
 
 	if (pSkill_2_Anim && IsSkilling() == false)
 	{
-		GetMesh()->AnimScriptInstance->Montage_Stop(0.0f); /* Stop All Montage Anim */
+		//GetMesh()->AnimScriptInstance->Montage_Stop(0.0f); /* Stop All Montage Anim */
 		SetRunning(false);
 		PlayAnimMontage_CheckCurrent(pSkill_2_Anim, eCharacterState::eSkilling);
 		SetSkilling(true);
