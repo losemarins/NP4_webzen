@@ -690,7 +690,7 @@ void ANP4PlayerBase::ActionSkill_1()
 	UAnimMontage* pSkill_1_Anim = NULL;
 	pSkill_1_Anim = (m_ArrAnimMontage)[eCharacterState::eSkilling + eAnimMontage_Skill_Interpol::eSkill_1 + (int)iWeaponType];;
 
-	if (pSkill_1_Anim && IsSkilling() == false)
+	if (pSkill_1_Anim && IsSkilling() == false && IsAttack() == false)
 	{
 		float fAnimDuationVal = 0.0f;
 		//GetMesh()->AnimScriptInstance->Montage_Stop(0.0f); /* Stop All Montage Anim */
@@ -710,7 +710,7 @@ void ANP4PlayerBase::ActionSkill_2()
 	pSkill_2_Anim = (m_ArrAnimMontage)[eCharacterState::eSkilling + eAnimMontage_Skill_Interpol::eSkill_2 + (int)iWeaponType];;
 
 
-	if (pSkill_2_Anim && IsSkilling() == false)
+	if (pSkill_2_Anim && IsSkilling() == false && IsAttack() == false)
 	{
 		//GetMesh()->AnimScriptInstance->Montage_Stop(0.0f); /* Stop All Montage Anim */
 		SetRunning(false);
@@ -733,7 +733,7 @@ float ANP4PlayerBase::DrawWeapon()
 {
 	float fDrawAnimDuation = 0.0f;
 	/* 끼고 있는 무기가 없으면 의미가 없다. */
-	if (!m_pCurrentEquipWeapon || IsSkilling())
+	if (!m_pCurrentEquipWeapon || IsSkilling() || IsAttack())
 	{
 		/* 이미 어떠한 행동 중이다(해제중 포함) */
 		/* 주희에게 에러 메세지를 돌려보내줘야 한다(0을 리턴했을 경우, 메세지를 띄우게 하자) */
@@ -777,7 +777,7 @@ void ANP4PlayerBase::TempSheathWeapon()
 void ANP4PlayerBase::SheathWeapon(int _InvenIdx)
 {
 	/* 어떠한 행동 중 체크와, 인벤토리 범위 체크를 한다..*/
-	if (IsSkilling() || !CheckIndex_inInventory(_InvenIdx))
+	if (IsSkilling() || !CheckIndex_inInventory(_InvenIdx) || IsAttack())
 	{
 		/* 전해진 번호가 인벤토리 이상이거나 음수이다. */
 		/* 이미 어떠한 행동 중이다(착용중 포함) */
@@ -816,6 +816,9 @@ void ANP4PlayerBase::SheathWeapon(int _InvenIdx)
 	{
 		//이미 끼고 있는 무기가 있다. 착용 해제가 먼저 필요하다.
 		float fDrawAnimDuration = DrawWeapon();
+
+		if (fDrawAnimDuration == 0.0f)
+			return;
 
 		//칼을 넣는 애니메이션이 끝나면 다시 이 함수를 부른다.
 		FTimerHandle TimerHandle_ReCallFunction;
