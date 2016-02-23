@@ -750,7 +750,7 @@ float ANP4PlayerBase::DrawWeapon()
 
 	if (pDraw_Anim)
 	{
-		//GetMesh()->AnimScriptInstance->Montage_Stop(0.0f); /* Stop All Montage Anim */
+		GetMesh()->AnimScriptInstance->Montage_Stop(0.0f); /* Stop All Montage Anim */
 		SetRunning(false);
 		fDrawAnimDuation = PlayAnimMontage_CheckCurrent(pDraw_Anim, eCharacterState::eSkilling);
 		SetSkilling(true);
@@ -822,7 +822,7 @@ void ANP4PlayerBase::SheathWeapon(int _InvenIdx)
 		FTimerDelegate RecallFunctionDelegate =
 			FTimerDelegate::CreateUObject(this, &ANP4PlayerBase::SheathWeapon, _InvenIdx);
 		GetWorldTimerManager().SetTimer(TimerHandle_ReCallFunction,
-			RecallFunctionDelegate, fDrawAnimDuration + 0.14f , false);
+			RecallFunctionDelegate, fDrawAnimDuration + 0.05f , false);
 	}
 }
 
@@ -888,14 +888,12 @@ float ANP4PlayerBase::PlayAnimMontage_CheckCurrent(UAnimMontage* _AnimMontage, e
 				AnimIdx + (int)eAnimMontage_Skill_Interpol::eDrawWeapon] )
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("DrawWeapon")));
-				SubVal = 0.9;
 			}
 
 			else if (_AnimMontage == (m_ArrAnimMontage)[
 				AnimIdx + (int)eAnimMontage_Skill_Interpol::eSheathWeapon] )
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("SheathWeapon")));
-				SubVal = 0.9f;
 			}
 
 				float AnimDuration = PlayNP4AnimationMontage(_AnimMontage);
