@@ -102,4 +102,5 @@ public:
 	void PlayerSpawn();
 	void EnemySpawn();
 	void FormationSetting();
+	void FormationSetting2();
 };
