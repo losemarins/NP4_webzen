@@ -81,7 +81,7 @@ ANP4PlayerBase::ANP4PlayerBase()
 	/* Create Attack Capsule Component */
 	//Left Punch
 	m_pLeftPunchCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("LeftPunchCollision"));
-	m_pLeftPunchCapsule->AttachTo(pMesh, "hand_l");
+	m_pLeftPunchCapsule->AttachTo(pMesh, "LeftHand");
 	m_pLeftPunchCapsule->bHiddenInGame = false;
 	m_pLeftPunchCapsule->SetVisibility(true);
 
@@ -94,7 +94,7 @@ ANP4PlayerBase::ANP4PlayerBase()
 
 	//Right Punch
 	m_pRightPunchCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("RightPunchCollision"));
-	m_pRightPunchCapsule->AttachTo(pMesh, "hand_r");
+	m_pRightPunchCapsule->AttachTo(pMesh, "RightHand");
 	m_pRightPunchCapsule->bHiddenInGame = false;
 	m_pRightPunchCapsule->SetVisibility(true);
 
@@ -107,7 +107,7 @@ ANP4PlayerBase::ANP4PlayerBase()
 
 	//Left Kick
 	m_pLeftKickCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("LeftKickCollision"));
-	m_pLeftKickCapsule->AttachTo(pMesh, "foot_l");
+	m_pLeftKickCapsule->AttachTo(pMesh, "LeftFoot");
 	m_pLeftKickCapsule->bHiddenInGame = false;
 	m_pLeftKickCapsule->SetVisibility(true);
 
@@ -120,7 +120,7 @@ ANP4PlayerBase::ANP4PlayerBase()
 
 	//Right Kick
 	m_pRightKickCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("RightKickCollision"));
-	m_pRightKickCapsule->AttachTo(pMesh, "foot_r");
+	m_pRightKickCapsule->AttachTo(pMesh, "RightFoot");
 	m_pRightKickCapsule->bHiddenInGame = false;
 	m_pRightKickCapsule->SetVisibility(true);
 
@@ -184,17 +184,6 @@ void ANP4PlayerBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	CheckState(DeltaTime);
-
-	/* 애니메이션 남은 시간 체크 ! (임시)*/
-	/*USkeletalMeshComponent* mesh = GetMesh();
-	UAnimInstance* AnimInstance = mesh->AnimScriptInstance;
-	float AnimLength = 0.0f;
-	float CurPos = 0.0f;
-	if (AnimInstance != NULL)
-	{
-		AnimLength = AnimInstance->GetCurrentActiveMontage()->GetPlayLength();
-		CurPos = AnimInstance->Montage_GetPosition(AnimInstance->GetCurrentActiveMontage());
-	}*/
 }
 
 void ANP4PlayerBase::PossessedBy(AController* _pController)
@@ -690,7 +679,7 @@ void ANP4PlayerBase::ActionSkill_1()
 	UAnimMontage* pSkill_1_Anim = NULL;
 	pSkill_1_Anim = (m_ArrAnimMontage)[eCharacterState::eSkilling + eAnimMontage_Skill_Interpol::eSkill_1 + (int)iWeaponType];;
 
-	if (pSkill_1_Anim && IsSkilling() == false)
+	if (pSkill_1_Anim && IsSkilling() == false && IsAttack() == false)
 	{
 		float fAnimDuationVal = 0.0f;
 		//GetMesh()->AnimScriptInstance->Montage_Stop(0.0f); /* Stop All Montage Anim */
@@ -710,7 +699,7 @@ void ANP4PlayerBase::ActionSkill_2()
 	pSkill_2_Anim = (m_ArrAnimMontage)[eCharacterState::eSkilling + eAnimMontage_Skill_Interpol::eSkill_2 + (int)iWeaponType];;
 
 
-	if (pSkill_2_Anim && IsSkilling() == false)
+	if (pSkill_2_Anim && IsSkilling() == false && IsAttack() == false)
 	{
 		//GetMesh()->AnimScriptInstance->Montage_Stop(0.0f); /* Stop All Montage Anim */
 		SetRunning(false);
@@ -733,7 +722,7 @@ float ANP4PlayerBase::DrawWeapon()
 {
 	float fDrawAnimDuation = 0.0f;
 	/* 끼고 있는 무기가 없으면 의미가 없다. */
-	if (!m_pCurrentEquipWeapon || IsSkilling())
+	if (!m_pCurrentEquipWeapon || IsSkilling() || IsAttack())
 	{
 		/* 이미 어떠한 행동 중이다(해제중 포함) */
 		/* 주희에게 에러 메세지를 돌려보내줘야 한다(0을 리턴했을 경우, 메세지를 띄우게 하자) */
@@ -777,7 +766,7 @@ void ANP4PlayerBase::TempSheathWeapon()
 void ANP4PlayerBase::SheathWeapon(int _InvenIdx)
 {
 	/* 어떠한 행동 중 체크와, 인벤토리 범위 체크를 한다..*/
-	if (IsSkilling() || !CheckIndex_inInventory(_InvenIdx))
+	if (IsSkilling() || !CheckIndex_inInventory(_InvenIdx) || IsAttack())
 	{
 		/* 전해진 번호가 인벤토리 이상이거나 음수이다. */
 		/* 이미 어떠한 행동 중이다(착용중 포함) */
@@ -816,6 +805,9 @@ void ANP4PlayerBase::SheathWeapon(int _InvenIdx)
 	{
 		//이미 끼고 있는 무기가 있다. 착용 해제가 먼저 필요하다.
 		float fDrawAnimDuration = DrawWeapon();
+
+		if (fDrawAnimDuration == 0.0f)
+			return;
 
 		//칼을 넣는 애니메이션이 끝나면 다시 이 함수를 부른다.
 		FTimerHandle TimerHandle_ReCallFunction;
