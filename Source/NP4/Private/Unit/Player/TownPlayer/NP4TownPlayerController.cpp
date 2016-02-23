@@ -366,10 +366,18 @@ void ANP4TownPlayerController::OnSwipeStarted(/*const FVector2D& AnchorPosition,
 
 			if (pBuilding)
 			{
-				//pBuilding->WindowOpen();
-				ConsoleCommand(TEXT("CE BuildingClick_Event HeroManagement"));
-
-
+				switch (pBuilding->GetBuildingType())
+				{
+				case EBuilding::Barrack:
+					ConsoleCommand(TEXT("CE BuildingClick_Event Barrack"));
+					break;
+				case EBuilding::HeroManagement:
+					ConsoleCommand(TEXT("CE BuildingClick_Event HeroManagement"));
+					break;
+				case EBuilding::Laboratory:
+					ConsoleCommand(TEXT("CE BuildingClick_Event Laboratory"));
+					break;
+				}
 			}
 			else
 			{

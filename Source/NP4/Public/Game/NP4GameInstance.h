@@ -21,7 +21,7 @@ class NP4_API UNP4GameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 	
-	
+	 
 	
 	
 };

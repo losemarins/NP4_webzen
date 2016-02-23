@@ -9,9 +9,11 @@
 void ATownBuilding::Init()
 {
 	MeshComp->SetSimulatePhysics(true);
+	MeshComp->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	//MeshC->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel1, ECollisionResponse::ECR_Ignore);
 }
 
-void ATownBuilding::WindowOpen()
+EBuilding::Type ATownBuilding::GetBuildingType() const
 {
-	
+	return m_EBuildingType;
 }

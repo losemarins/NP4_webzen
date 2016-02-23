@@ -14,8 +14,7 @@ class NP4_API ATownBuilding : public ABuilding
 	GENERATED_BODY()
 public:
 	virtual void Init() ;
-	UFUNCTION(BlueprintCallable, Category = "TownBuilding")
-	void WindowOpen();
+	EBuilding::Type GetBuildingType() const;
 protected:
 
 	EBuilding::Type m_EBuildingType;
