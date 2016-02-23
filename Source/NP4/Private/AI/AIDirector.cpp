@@ -62,10 +62,10 @@ void UAIDirector::SpawnMinions()
 			Loc += X + Y;
 
 			if (MyTeamNum == EGameTeam::Player)
-				Loc += FVector(100, 100, 0);
+				Loc += FVector(-100, 100, 0);
 				
 			else
-				Loc += FVector(-100, -100, 0);
+				Loc += FVector(100, -100, 0);
 
 			const FVector Scale(CustomScale);
 			FActorSpawnParameters SpawnInfo;
