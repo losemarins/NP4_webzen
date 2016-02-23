@@ -15,6 +15,7 @@ UCLASS()
 class NP4_API ANP4PlayerController : public APlayerController
 {
 	GENERATED_BODY()
+
 public:
 	ANP4PlayerController();
 	

@@ -203,7 +203,7 @@ void ANP4CharacterBase::SetColliderEnabled(bool _bActive, eCollisionType _eColl)
 		{
 			//Right
 			m_pRightPunchCapsule->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-			//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "RIGHT_PUNCH_ActiveCollision");
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "RIGHT_PUNCH_ActiveCollision");
 			m_pRightPunchCapsule->SetVisibility(false);
 		}
 
@@ -243,7 +243,7 @@ void ANP4CharacterBase::SetColliderEnabled(bool _bActive, eCollisionType _eColl)
 		{
 			//Right
 			m_pRightPunchCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-			//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "RIGHT_PUNCH_No Collision");
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "RIGHT_PUNCH_No Collision");
 			m_pRightPunchCapsule->SetVisibility(true);
 		}
 
