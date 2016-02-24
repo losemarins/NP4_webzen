@@ -3,9 +3,6 @@
 #include "NP4.h"
 #include "MyPawnSensingComponent.h"
 
-
-
-
 FVector UMyPawnSensingComponent::GetSensorLocation() const
 {
 	FVector SensorLocation(FVector::ZeroVector);
