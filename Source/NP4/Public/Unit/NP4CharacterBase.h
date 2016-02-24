@@ -44,7 +44,11 @@ protected:
 	UCapsuleComponent* m_pRightKickCapsule;
 
 public:
+
+	// Juhee : UI 연동 변수. Inven Array 다.
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = InvenWeapon)
 	TArray<AWeaponBase*> m_pItemInven_Temp; //임시
+
 	int m_iCurrentEquip_InvenIndex; //임시
 
 											/* 현재 무기 */
