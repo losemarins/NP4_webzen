@@ -14,6 +14,7 @@ class NP4_API ANP4CharacterBase : public ACharacter
 	GENERATED_BODY()
 
 protected:
+	uint8 m_iUniqueID;
 	uint8 MyTeamNum;
 
 	//Juhe UI Add 
@@ -73,6 +74,9 @@ public: /* 구영이가 BP에서 호출하기 위해서 만든 애니메이션 몽타쥬 플레이 */
 public:
 	void SetTeamNum(uint8 NewTeamNum);
 	uint8 GetTeamNum() const;
+	UCapsuleComponent* GetRightPunchCapsule() {
+		return m_pRightPunchCapsule;
+	}
 	bool IsAlive();
 
 public:
@@ -94,11 +98,18 @@ public:
 	void SetWeaponColliderEnabled(bool _bActive);
 	/* Active Collision */
 	void SetColliderEnabled(bool _bActive, eCollisionType _eColl);
-
 	/* Attack Value Set,Get */
 	void SetWeaponAttackValue(float _fAttackValue);
 	float GetWeaponAttackValue();
 
 	/* Damage! */
 	bool Damaged_Call(float _fAttackValue);
+
+	/* ID Get,Set */
+	void SetUniqueID(int _id);
+	int32 GetUniqeID();
+
+	/* Action */
+	virtual void ActionHit( FVector _Dir = FVector(0,0,0) );
+	virtual void StopHit();
 };

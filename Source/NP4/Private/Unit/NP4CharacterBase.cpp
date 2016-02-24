@@ -50,6 +50,16 @@ uint8 ANP4CharacterBase::GetTeamNum() const
 	return MyTeamNum;
 }
 
+void ANP4CharacterBase::SetUniqueID(int _id)
+{
+	m_iUniqueID = _id;
+}
+
+int32 ANP4CharacterBase::GetUniqeID()
+{
+	return m_iUniqueID;
+}
+
 float ANP4CharacterBase::PlayNP4AnimationMontage(UAnimMontage* _pAnimMontage)
 {
 	return PlayAnimMontage(_pAnimMontage);
@@ -201,9 +211,13 @@ void ANP4CharacterBase::SetColliderEnabled(bool _bActive, eCollisionType _eColl)
 
 		else if (_eColl == eCollisionType::eCollision_RightPunch)
 		{
+			if (!m_pRightPunchCapsule)
+			{
+				return;
+			}
 			//Right
 			m_pRightPunchCapsule->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-			//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "RIGHT_PUNCH_ActiveCollision");
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "RIGHT_PUNCH_ActiveCollision");
 			m_pRightPunchCapsule->SetVisibility(false);
 		}
 
@@ -241,9 +255,11 @@ void ANP4CharacterBase::SetColliderEnabled(bool _bActive, eCollisionType _eColl)
 
 		else if (_eColl == eCollisionType::eCollision_RightPunch)
 		{
+			if (!m_pRightPunchCapsule)
+				return;
 			//Right
 			m_pRightPunchCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-			//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "RIGHT_PUNCH_No Collision");
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "RIGHT_PUNCH_No Collision");
 			m_pRightPunchCapsule->SetVisibility(true);
 		}
 
@@ -268,4 +284,14 @@ void ANP4CharacterBase::SetColliderEnabled(bool _bActive, eCollisionType _eColl)
 			SetWeaponColliderEnabled(_bActive);
 		}
 	}
+}
+
+void ANP4CharacterBase::ActionHit(FVector _Dir)
+{
+
+}
+
+void ANP4CharacterBase::StopHit()
+{
+
 }
