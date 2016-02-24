@@ -106,7 +106,7 @@ public:
 
 	/* Find */
 	UAnimMontage* FindAnimationMontage_byPath(const TCHAR* _ObjectToFindPath);
-
+	
 	/* Camera */
 	void SetDefaultCameraActive();
 	void ZoomTickFunc(float _DeltaTime, bool _bZoomIn);
@@ -135,8 +135,10 @@ public:
 	void ActionSkill_1();
 	void ActionSkill_2();
 	void StopSkill(UAnimMontage* _pSkillAnim);
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	float DrawWeapon();
-	void SheathWeapon(int _InvenIdx);
+	UFUNCTION(BlueprintCallable,Category = "Inventory")
+	void SheathWeapon(int32 _InvenIdx);
 	void TempSheathWeapon();
 
 	/* Notify Combo */

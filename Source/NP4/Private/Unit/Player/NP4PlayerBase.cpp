@@ -779,7 +779,7 @@ void ANP4PlayerBase::TempSheathWeapon()
 }
 
 /* 칼 빼기 */
-void ANP4PlayerBase::SheathWeapon(int _InvenIdx)
+void ANP4PlayerBase::SheathWeapon(int32 _InvenIdx)
 {
 	/* 어떠한 행동 중 체크와, 인벤토리 범위 체크를 한다..*/
 	if (IsSkilling() || !CheckIndex_inInventory(_InvenIdx) || IsAttack())
