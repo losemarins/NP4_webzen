@@ -130,8 +130,8 @@ public:
 	void StopRunning();
 	void ActionAttack();
 	void StopAttack();
-	void ActionHit();
-	void StopHit();
+	virtual void ActionHit(FVector _Dir = FVector(0, 0, 0));
+	virtual void StopHit();
 	void ActionSkill_1();
 	void ActionSkill_2();
 	void StopSkill(UAnimMontage* _pSkillAnim);
@@ -146,8 +146,9 @@ public:
 	bool GetbComboOn();
 	eCombo_Interpol GetCurrentComboStep();
 	void SetCurrentComboStep(eCombo_Interpol _newStep);
-
-	
+	UFUNCTION()
+	void OnPunchBeginOverlap2(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+	//void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 	/* 무기 착용을 위한 임시 변수 */
 	int tempidx;

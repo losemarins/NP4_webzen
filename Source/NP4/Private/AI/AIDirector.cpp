@@ -75,6 +75,10 @@ void UAIDirector::SpawnMinions()
 			
 			if (SpawnChar != nullptr)
 			{
+				static int m_iTemp = 0; //임시
+				SpawnChar->SetUniqueID(m_iTemp);
+				m_iTemp++; //임시.
+
 				SpawnChar->SetTeamNum(MyTeamNum);
 				SpawnChar->SpawnDefaultController();
 				Cast<ACharacter_Minion>(SpawnChar)->SetEnemyCastle(GetEnemyCastle());
