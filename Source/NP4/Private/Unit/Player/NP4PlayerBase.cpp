@@ -16,6 +16,7 @@ ANP4PlayerBase::ANP4PlayerBase()
 
 	//Spring Arm 세팅(부드러운 카메라 연출을 위해 사용)
 	m_OurCameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraSpringArm"));
+	
 	m_OurCameraSpringArm->bUsePawnControlRotation = true;
 	m_OurCameraSpringArm->AttachTo(RootComponent);
 	m_MaxSpringArmLength = 400.0f;

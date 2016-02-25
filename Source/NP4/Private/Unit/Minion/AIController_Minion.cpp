@@ -17,8 +17,7 @@ AAIController_Minion::AAIController_Minion(const FObjectInitializer& ObjectIniti
 	TargetEnemyKeyName = "TargetEnemy";
 	TargetCastleKeyName = "EnemyCastle";
 	IsClose = "IsClose";
-
-	isMove = true;
+	IsMove = "IsMove";
 }
 
 void AAIController_Minion::Possess(class APawn* InPawn)
@@ -88,5 +87,13 @@ void AAIController_Minion::SetIsClose(bool value)
 	if (BlackboardComp)
 	{
 		BlackboardComp->SetValueAsBool(IsClose, value);
+	}
+}
+
+void AAIController_Minion::SetIsMove(bool value)
+{
+	if (BlackboardComp)
+	{
+		BlackboardComp->SetValueAsBool(IsMove, value);
 	}
 }

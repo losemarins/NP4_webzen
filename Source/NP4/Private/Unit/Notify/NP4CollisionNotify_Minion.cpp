@@ -7,7 +7,7 @@
 
 UNP4CollisionNotify_Minion::UNP4CollisionNotify_Minion()
 {
-	m_sSocketName = "hand_r";
+	m_sSocketName = "RightHand";
 }
 
 void UNP4CollisionNotify_Minion::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
