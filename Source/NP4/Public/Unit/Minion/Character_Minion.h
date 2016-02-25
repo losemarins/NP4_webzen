@@ -28,7 +28,7 @@ class NP4_API ACharacter_Minion : public ANP4CharacterBase
 	//공격시 딜레이를 위한 변수
 	float AttackStartTime;
 	bool bSensedTarget;
-
+	bool isDie;
 protected :
 	//UPROPERTY(VisibleAnywhere, Category = "Attacking")
 	//UCapsuleComponent* MeleeCollisionComp;
@@ -80,4 +80,6 @@ public :
 	/* Action */
 	virtual void ActionHit(FVector _Dir = FVector(0, 0, 0));
 	virtual void StopHit();
+	virtual void ActionDie();
+	virtual void StopDie();
 };

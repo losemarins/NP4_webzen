@@ -8,13 +8,14 @@
 UNP4CollisionNotify::UNP4CollisionNotify()
 {
 	m_bResetArray = false;
+	m_CollType = eCollisionType::eCollision_None;
 }
 
 void UNP4CollisionNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
 	Super::Notify(MeshComp, Animation);
 	
-	if (MeshComp)
+	if (MeshComp && m_CollType != eCollisionType::eCollision_None)
 	{
 		AActor* pOwnerActor = MeshComp->GetOwner();
 		if (pOwnerActor)
@@ -22,13 +23,21 @@ void UNP4CollisionNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequence
 			ANP4CharacterBase* pMyCast = Cast<ANP4CharacterBase>(pOwnerActor);
 			if (pMyCast)
 			{
+				USphereComponent* pCollSphere = pMyCast->GetCollisionSphere(m_CollType);
+
+				if (!pCollSphere)
+				{
+					//Create Error Messsage.
+					return;
+				}
+
 				TArray<FHitResult> AllResult;
-				float Radius = pMyCast->GetRightPunchCapsule()->GetScaledCapsuleRadius();
+				float Radius = pCollSphere->GetScaledSphereRadius();
 				FVector Start = pMyCast->GetMesh()->GetSocketLocation(m_sSocketName); /*- FVector(Radius*2, Radius*2, Radius*2);*/
 				FVector End = pMyCast->GetMesh()->GetSocketLocation(m_sSocketName) + pMyCast->GetActorForwardVector() * 40;/* FVector(Radius*2, Radius*2, Radius*2);*/
 
-				FQuat Qut = pMyCast->GetRightPunchCapsule()->GetSocketQuaternion(m_sSocketName);
-				FRotator Rot = pMyCast->GetRightPunchCapsule()->GetComponentRotation();
+				FQuat Qut = pCollSphere->GetSocketQuaternion(m_sSocketName);
+				FRotator Rot = pCollSphere->GetComponentRotation();
 
 				pMyCast->GetWorld()->DebugDrawTraceTag = "PlzShowme";
 				FCollisionQueryParams Param;
@@ -52,7 +61,17 @@ void UNP4CollisionNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequence
 							FVector HitDir = pCastOther->GetActorLocation() - pMyCast->GetActorLocation();
 							HitDir.Normalize();
 
-							pCastOther->Damaged_Call(5);
+							float AttVal = pMyCast->GetDefaultAttackValue();
+							if (AttVal == 0)
+							{
+								//Create Error Message(AttackValue is Zero)
+							}
+
+							else
+							{
+								pCastOther->Damaged_Call(AttVal);
+							}
+
 							PushAlreadyDamageArray(id);
 							pCastOther->ActionHit(HitDir);
 						}

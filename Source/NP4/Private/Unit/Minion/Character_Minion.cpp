@@ -19,7 +19,7 @@ ACharacter_Minion::ACharacter_Minion()
 	MeleeCollisionComp->bHiddenInGame = false;
 	MeleeCollisionComp->SetVisibility(true);
 
-	m_pRightPunchCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("RightPunchCollision"));
+	m_pRightPunchCapsule = CreateDefaultSubobject<USphereComponent>(TEXT("RightPunchCollision"));
 	m_pRightPunchCapsule->AttachTo(GetMesh(), "RightHand");
 	m_pRightPunchCapsule->bHiddenInGame = false;
 	m_pRightPunchCapsule->SetVisibility(true);
@@ -33,6 +33,7 @@ ACharacter_Minion::ACharacter_Minion()
 	MeleeStrikeCooldown = 1.f;
 	SenseTimeOut = 2.f;
 	bSensedTarget = false;	
+	isDie = false;
 }
 
 void ACharacter_Minion::BeginPlay()
@@ -144,7 +145,8 @@ void ACharacter_Minion::Tick(float DeltaSeconds)
 				//MinionController->SetIsClose(false);
 
 			if (AnimInstance->Montage_GetIsStopped(MeleeAnimMontage)
-				&& AnimInstance->Montage_GetIsStopped(ReactAnimMontage))
+				&& AnimInstance->Montage_GetIsStopped(ReactAnimMontage)
+				&& AnimInstance->Montage_GetIsStopped(DieAnimMontage))
 			{
 				MinionController->SetIsMove(false);
 			}
@@ -288,16 +290,38 @@ void ACharacter_Minion::Damaged(float Second, AActor* OtherActor)
 
 void ACharacter_Minion::ActionHit(FVector _Dir)
 {
-	if (!AnimInstance->Montage_IsPlaying(ReactAnimMontage))
+	if (!AnimInstance->Montage_IsPlaying(ReactAnimMontage) && isDie == false)
 	{
 		PlayAnimMontage(ReactAnimMontage);
 		AAIController_Minion* MinionController = Cast<AAIController_Minion>(GetController());
 		if (MinionController)
-			MinionController->SetIsMove(true);
+			MinionController->SetIsMove(true);	
 	}
 }
 
 void ACharacter_Minion::StopHit()
 {
 
+}
+
+void ACharacter_Minion::ActionDie()
+{
+	if (!AnimInstance->Montage_IsPlaying(DieAnimMontage))
+	{
+		float fAnimDuration = PlayAnimMontage(DieAnimMontage);
+		AAIController_Minion* MinionController = Cast<AAIController_Minion>(GetController());
+		if (MinionController)
+		{
+			MinionController->SetIsDie(true);
+			isDie = true;
+			//TurnOff();
+			//SetActorHiddenInGame(true);
+			SetLifeSpan(fAnimDuration - 0.25f);
+		}
+	}
+}
+
+void ACharacter_Minion::StopDie()
+{
+	
 }

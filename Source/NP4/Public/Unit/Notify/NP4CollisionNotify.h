@@ -18,6 +18,8 @@ public:
 	
 public :
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
+	eCollisionType m_CollType;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
 	bool m_bResetArray;
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
 	FName m_sSocketName;

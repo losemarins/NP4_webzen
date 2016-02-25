@@ -80,7 +80,7 @@ ANP4PlayerBase::ANP4PlayerBase()
 
 	/* Create Attack Capsule Component */
 	//Left Punch
-	m_pLeftPunchCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("LeftPunchCollision"));
+	m_pLeftPunchCapsule = CreateDefaultSubobject<USphereComponent>(TEXT("LeftPunchCollision"));
 	m_pLeftPunchCapsule->AttachTo(pMesh, "LeftHand");
 	m_pLeftPunchCapsule->bHiddenInGame = false;
 	m_pLeftPunchCapsule->SetVisibility(true);
@@ -88,23 +88,23 @@ ANP4PlayerBase::ANP4PlayerBase()
 	m_pLeftPunchCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	//Right Punch
-	m_pRightPunchCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("RightPunchCollision"));
+	m_pRightPunchCapsule = CreateDefaultSubobject<USphereComponent>(TEXT("RightPunchCollision"));
 	m_pRightPunchCapsule->AttachTo(pMesh, "RightHand");
 	m_pRightPunchCapsule->bHiddenInGame = false;
 	m_pRightPunchCapsule->SetVisibility(true);
 	m_pRightPunchCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	//Left Kick
-	m_pLeftKickCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("LeftKickCollision"));
+	m_pLeftKickCapsule = CreateDefaultSubobject<USphereComponent>(TEXT("LeftKickCollision"));
 	m_pLeftKickCapsule->AttachTo(pMesh, "LeftFoot");
 	m_pLeftKickCapsule->bHiddenInGame = false;
 	m_pLeftKickCapsule->SetVisibility(true);
 
 	////Right Kick
-	//m_pRightKickCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("RightKickCollision"));
-	//m_pRightKickCapsule->AttachTo(pMesh, "RightFoot");
-	//m_pRightKickCapsule->bHiddenInGame = false;
-	//m_pRightKickCapsule->SetVisibility(true);
+	m_pRightKickCapsule = CreateDefaultSubobject<USphereComponent>(TEXT("RightKickCollision"));
+	m_pRightKickCapsule->AttachTo(pMesh, "RightFoot");
+	m_pRightKickCapsule->bHiddenInGame = false;
+	m_pRightKickCapsule->SetVisibility(true);
 
 	/* Set Team */
 	MyTeamNum = EGameTeam::Player;
@@ -473,7 +473,6 @@ void ANP4PlayerBase::StopRunning()
 		m_pPlayerState->SetPlayerState(eCharacterState::eNone);
 }
 
-
 void ANP4PlayerBase::ActionAttack()
 {
 	eCharacterState CurState = m_pPlayerState->GetPlayerState();
@@ -493,11 +492,8 @@ void ANP4PlayerBase::ActionAttack()
 			fAnimDuationVal = PlayAnimMontage_CheckCurrent(pAttackAnim, eCharacterState::eAttack);
 			if(m_pPlayerState)
 				m_pPlayerState->SetPlayerState(eCharacterState::eAttack);
-
 			//Request_MakeActionCamera(ECameraValue::eAction_1, this, fAnimDuationVal);
-
 		}
-
 
 		else
 		{
@@ -724,6 +720,18 @@ void ANP4PlayerBase::SheathWeapon(int32 _InvenIdx)
 		GetWorldTimerManager().SetTimer(TimerHandle_ReCallFunction,
 			RecallFunctionDelegate, fDrawAnimDuration + 0.14f , false);
 	}
+}
+
+void ANP4PlayerBase::ActionDie()
+{
+	Super::ActionDie();
+
+
+}
+
+void ANP4PlayerBase::StopDie()
+{
+	Super::StopDie();
 }
 
 

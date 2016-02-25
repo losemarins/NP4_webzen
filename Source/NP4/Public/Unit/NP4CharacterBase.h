@@ -33,16 +33,16 @@ protected:
 
 	/* Attack Capsule Component */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UCapsuleComponent* m_pLeftPunchCapsule;
+	USphereComponent* m_pLeftPunchCapsule;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UCapsuleComponent* m_pRightPunchCapsule;
+	USphereComponent* m_pRightPunchCapsule;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UCapsuleComponent* m_pLeftKickCapsule;
+	USphereComponent* m_pLeftKickCapsule;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UCapsuleComponent* m_pRightKickCapsule;
+	USphereComponent* m_pRightKickCapsule;
 
 public:
 
@@ -58,16 +58,7 @@ public:
 public:
 	// Sets default values for this character's properties
 	ANP4CharacterBase();
-
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	// Called every frame
-	virtual void Tick(float DeltaSeconds) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
-
+	
 public: /* 구영이가 BP에서 호출하기 위해서 만든 애니메이션 몽타쥬 플레이 */
 	UFUNCTION(BlueprintCallable, Category = "NP4Animation")
 		float PlayNP4AnimationMontage(UAnimMontage* _pAnimMontage);
@@ -78,9 +69,7 @@ public: /* 구영이가 BP에서 호출하기 위해서 만든 애니메이션 몽타쥬 플레이 */
 public:
 	void SetTeamNum(uint8 NewTeamNum);
 	uint8 GetTeamNum() const;
-	UCapsuleComponent* GetRightPunchCapsule() {
-		return m_pRightPunchCapsule;
-	}
+	USphereComponent* GetCollisionSphere(eCollisionType _CollType);
 	bool IsAlive();
 
 public:
@@ -103,8 +92,8 @@ public:
 	/* Active Collision */
 	void SetColliderEnabled(bool _bActive, eCollisionType _eColl);
 	/* Attack Value Set,Get */
-	void SetWeaponAttackValue(float _fAttackValue);
-	float GetWeaponAttackValue();
+	void SetDefaultAttackValue(float _fAttackValue);
+	float GetDefaultAttackValue();
 
 	/* Damage! */
 	bool Damaged_Call(float _fAttackValue);
@@ -112,8 +101,10 @@ public:
 	/* ID Get,Set */
 	void SetUniqueID(int _id);
 	int32 GetUniqeID();
-
+	
 	/* Action */
 	virtual void ActionHit( FVector _Dir = FVector(0,0,0) );
 	virtual void StopHit();
+	virtual void ActionDie();
+	virtual void StopDie();
 };
