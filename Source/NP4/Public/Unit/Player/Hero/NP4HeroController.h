@@ -101,6 +101,7 @@ public:
 	//몬스터 스폰 임시로
 	void PlayerSpawn();
 	void EnemySpawn();
-	void FormationSetting();
-	void FormationSetting2();
+	void Formation1();
+	void Formation2();
+	void Formation3();
 };

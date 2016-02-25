@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Define.h"
 #include "AIController_Base.h"
 #include "AIController_Minion.generated.h"
 
@@ -21,7 +22,7 @@ class NP4_API AAIController_Minion : public AAIController_Base
 	FName TargetCastleKeyName;
 	FName IsDie;
 	FName IsMove;
-
+	FName Strategy;
 	virtual void Possess(class APawn* InPawn);
 	virtual void UnPossess() override;
 
@@ -31,6 +32,7 @@ public:
 	UObject* GetTargetEnemy();
 	void SetIsDie(bool value);
 	void SetIsMove(bool value);
+	void SetStrategyType(uint8 type);
 
 public :
 	AAIController_Minion(const FObjectInitializer& ObjectInitializer);

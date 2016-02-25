@@ -18,6 +18,7 @@ AAIController_Minion::AAIController_Minion(const FObjectInitializer& ObjectIniti
 	TargetCastleKeyName = "EnemyCastle";
 	IsDie = "IsDie";
 	IsMove = "IsMove";
+	Strategy = "Strategy";
 }
 
 void AAIController_Minion::Possess(class APawn* InPawn)
@@ -95,5 +96,13 @@ void AAIController_Minion::SetIsMove(bool value)
 	if (BlackboardComp)
 	{
 		BlackboardComp->SetValueAsBool(IsMove, value);
+	}
+}
+
+void AAIController_Minion::SetStrategyType(uint8 type)
+{
+	if (BlackboardComp)
+	{
+		BlackboardComp->SetValueAsEnum(Strategy, type);
 	}
 }

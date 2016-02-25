@@ -37,9 +37,9 @@ void ANP4HeroController::SetupInputComponent()
 	InputComponent->BindAction("Spawn_2", IE_Pressed, this, &ANP4HeroController::EnemySpawn);
 
 	//부대 전술관련 임시로
-	
-
-	InputComponent->BindAction("Formation", IE_Pressed, this, &ANP4HeroController::FormationSetting);
+	InputComponent->BindAction("Formation1", IE_Pressed, this, &ANP4HeroController::Formation1);
+	InputComponent->BindAction("Formation2", IE_Pressed, this, &ANP4HeroController::Formation2);
+	InputComponent->BindAction("Formation3", IE_Pressed, this, &ANP4HeroController::Formation3);
 
 	//이동 관련
 	InputComponent->BindAxis(TEXT("MoveForward"), this, &ANP4HeroController::MoveFoward);
@@ -77,7 +77,7 @@ void ANP4HeroController::BeginPlay()
 		InitializeActionCameraArray();
 	}
 	
-	Formation = Cast<ANP4GameState>(GetWorld()->GetGameState())->FormationManager;
+	//Formation = Cast<ANP4GameState>(GetWorld()->GetGameState())->FormationManager;
 	/*PlayerSpawn();
 	EnemySpawn();*/
 }
@@ -379,18 +379,33 @@ void ANP4HeroController::EnemySpawn()
 	}
 }
 
-void ANP4HeroController::FormationSetting()
+void ANP4HeroController::Formation1()
 {
+	Formation = Cast<ANP4GameState>(GetWorld()->GetGameState())->FormationManager;
 	TArray<class ANP4CharacterBase*> list = Formation->GetUnitList();
 
 	for (int32 i = 0; i < list.Num(); i++)
 	{
+		Cast<AAIController_Minion>(list[i]->GetController())->SetStrategyType((uint8)EGameStrategy::Defualt);
+		Cast<AAIController_Minion>(list[i]->GetController())->SetTargetEnemy(nullptr);
+	}
+}
+
+void ANP4HeroController::Formation2()
+{
+	Formation = Cast<ANP4GameState>(GetWorld()->GetGameState())->FormationManager;
+	TArray<class ANP4CharacterBase*> list = Formation->GetUnitList();
+
+	for (int32 i = 0; i < list.Num(); i++)
+	{
+		Cast<AAIController_Minion>(list[i]->GetController())->SetStrategyType((uint8)EGameStrategy::Converging_Attack);
 		Cast<AAIController_Minion>(list[i]->GetController())->SetTargetEnemy(TargetActor);
 	}
 }
 
-void ANP4HeroController::FormationSetting2()
+void ANP4HeroController::Formation3()
 {
+	Formation = Cast<ANP4GameState>(GetWorld()->GetGameState())->FormationManager;
 	TArray<class ANP4CharacterBase*> list = Formation->GetUnitList();
 
 	FVector2D MousePos = GetMousePos();
@@ -398,6 +413,6 @@ void ANP4HeroController::FormationSetting2()
 
 	/*for (int32 i = 0; i < list.Num(); i++)
 	{
-		Cast<AAIController_Minion>(list[i]->GetController())->SetTargetEnemy(TargetActor);
+	Cast<AAIController_Minion>(list[i]->GetController())->SetTargetEnemy(TargetActor);
 	}*/
 }
