@@ -3,6 +3,25 @@
 
 #pragma once
 
+namespace EMinionUpgrade
+{
+	enum Type
+	{
+		KnightLevel,
+		MagicianLevel,
+		ArchorLevel,
+	};
+}
+namespace EMinion
+{
+	enum Type
+	{
+		Knight,
+		Magician,
+		Archor,
+	};
+}
+
 namespace EGameStrategy
 {
 	enum Type
