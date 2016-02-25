@@ -19,7 +19,7 @@ class NP4_API AAIController_Minion : public AAIController_Base
 
 	FName TargetEnemyKeyName;
 	FName TargetCastleKeyName;
-	FName IsClose;
+	FName IsDie;
 	FName IsMove;
 
 	virtual void Possess(class APawn* InPawn);
@@ -29,7 +29,7 @@ public:
 	void SetTargetEnemy(AActor* NewTarget);
 	void SetEnemyCastle(ABuilding_Castle* EnemyCastle);
 	UObject* GetTargetEnemy();
-	void SetIsClose(bool value);
+	void SetIsDie(bool value);
 	void SetIsMove(bool value);
 
 public :
