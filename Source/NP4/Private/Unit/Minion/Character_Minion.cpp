@@ -16,12 +16,13 @@ ACharacter_Minion::ACharacter_Minion()
 	MeleeCollisionComp->SetRelativeLocation(FVector(50, 0, 20));
 	MeleeCollisionComp->SetCapsuleHalfHeight(60);
 	MeleeCollisionComp->SetCapsuleRadius(80, false);
+	MeleeCollisionComp->bHiddenInGame = false;
+	MeleeCollisionComp->SetVisibility(true);
 
 	m_pRightPunchCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("RightPunchCollision"));
-	m_pRightPunchCapsule->AttachTo(RootComponent);
-	m_pRightPunchCapsule->SetRelativeLocation(FVector(50, 0, 20));
-	m_pRightPunchCapsule->SetCapsuleHalfHeight(60);
-	m_pRightPunchCapsule->SetCapsuleRadius(80, false);
+	m_pRightPunchCapsule->AttachTo(GetMesh(), "RightHand");
+	m_pRightPunchCapsule->bHiddenInGame = false;
+	m_pRightPunchCapsule->SetVisibility(true);
 
 	PawnSensingComp = CreateDefaultSubobject<UMyPawnSensingComponent>(TEXT("PawnSensingComp"));
 	PawnSensingComp->SetPeripheralVisionAngle(70);
@@ -31,11 +32,7 @@ ACharacter_Minion::ACharacter_Minion()
 	
 	MeleeStrikeCooldown = 1.f;
 	SenseTimeOut = 2.f;
-	bSensedTarget = false;
-
-	//m_pRightPunchCapsule->AttachTo(GetMesh(), "ring_03_r");
-	//m_pRightPunchCapsule->bHiddenInGame = false;
-	//m_pRightPunchCapsule->SetVisibility(true);
+	bSensedTarget = false;	
 }
 
 void ACharacter_Minion::BeginPlay()
@@ -59,7 +56,7 @@ void ACharacter_Minion::BeginPlay()
 	//	//OnComponentEndOverlap.AddDynamic(this, &ACharacter_Minion::OnAttackCompEndOverlap);
 	//}
 
-	AAIController_Minion* MinionController = Cast<AAIController_Minion>(GetController());
+	//MinionController = Cast<AAIController_Minion>(GetController());
 	UpdatePawnData();
 
 	GetCharacterMovement()->MaxWalkSpeed = 100;
@@ -69,11 +66,7 @@ void ACharacter_Minion::BeginPlay()
 	SetActorRotation(Rot);
 	m_AttackValue = 5;
 	AnimInstance = GetMesh()->AnimScriptInstance;
-
-	//юс╫ц╥н
-	//m_pRightPunchCapsule->AttachTo(GetMesh(), "ring_03_r");
-	//m_pRightPunchCapsule->bHiddenInGame = false;
-	//m_pRightPunchCapsule->SetVisibility(true);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 }
 
 void ACharacter_Minion::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -92,9 +85,8 @@ void ACharacter_Minion::NotifyActorBeginOverlap(AActor* OtherActor)
 
 void ACharacter_Minion::OnAttackCompEndOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	if (OtherActor != this && isAttack)
+	if (OtherActor != this/* && isAttack*/)
 	{
-		isAttack = false;
 		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "BeginOverlap");
 		Damaged(AttackSecond, OtherActor);
 	}
@@ -102,25 +94,10 @@ void ACharacter_Minion::OnAttackCompEndOverlap(class AActor* OtherActor, class U
 
 void ACharacter_Minion::SetCollisionChannel(uint8 TeamNum)
 {
-	GetMesh()->BodyInstance.SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	/*MeleeCollisionComp->AttachTo(RootComponent);
-	MeleeCollisionComp->SetRelativeLocation(FVector(30, 0, 20));
-	MeleeCollisionComp->SetCapsuleHalfHeight(60);
-	MeleeCollisionComp->SetCapsuleRadius(80, false);
-
-	MeleeCollisionComp->bHiddenInGame = false;
-	MeleeCollisionComp->SetVisibility(true);
-
-	AttackCollisionComp->AttachTo(RootComponent);
-	AttackCollisionComp->SetRelativeLocation(FVector(50, 0, 20));
-	AttackCollisionComp->SetCapsuleHalfHeight(60);
-	AttackCollisionComp->SetCapsuleRadius(80, false);*/
-
 	if (TeamNum == EGameTeam::Player)
 	{
 		//m_pRightPunchCapsule->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel1);
 		MeleeCollisionComp->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel2);
-		
 		MeleeCollisionComp->SetCollisionResponseToAllChannels(ECR_Ignore);
 		//m_pRightPunchCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
 		
@@ -156,18 +133,21 @@ void ACharacter_Minion::SetCollisionChannel(uint8 TeamNum)
 void ACharacter_Minion::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-
-	//if (AnimInstance->Montage_GetIsStopped(MeleeAnimMontage)
-		//isAttack = false;
-
+	
 	if (bSensedTarget && (GetWorld()->TimeSeconds - LastSeenTime) > SenseTimeOut)
 	{
 		AAIController_Minion* MinionController = Cast<AAIController_Minion>(GetController());
 		if (MinionController)
 		{
 			MinionController->SetTargetEnemy(nullptr);
-			if (!AnimInstance->Montage_IsPlaying(MeleeAnimMontage))
-				MinionController->SetIsClose(false);
+			//if (!AnimInstance->Montage_IsPlaying(MeleeAnimMontage))
+				//MinionController->SetIsClose(false);
+
+			if (AnimInstance->Montage_GetIsStopped(MeleeAnimMontage)
+				&& AnimInstance->Montage_GetIsStopped(ReactAnimMontage))
+			{
+				MinionController->SetIsMove(false);
+			}
 		}
 	}
 }
@@ -287,28 +267,34 @@ void ACharacter_Minion::SimulateMeleeStrike_Implementation()
 {
 	if (!AnimInstance->Montage_IsPlaying(MeleeAnimMontage))
 	{
-		isAttack = true;
 		PlayAnimMontage(MeleeAnimMontage);
-		Cast<AAIController_Minion>(GetController())->SetIsClose(true);
+
+		AAIController_Minion* MinionController = Cast<AAIController_Minion>(GetController());
+		if (MinionController)
+		{
+			MinionController->SetIsMove(true);
+			//MinionController->SetIsClose(true);
+		}
 	}
 }
 
 void ACharacter_Minion::Damaged(float Second, AActor* OtherActor)
 {
-	//float a = GetWorld()->TimeSeconds;
-	//if (1 < (a - Second))
-	
 	if (AnimInstance->Montage_IsPlaying(MeleeAnimMontage))
 	{
 		Cast<ANP4CharacterBase>(OtherActor)->Damaged_Call(m_AttackValue);
 	}
-	//else
-	//	Damaged(Second, OtherActor);
 }
 
 void ACharacter_Minion::ActionHit(FVector _Dir)
 {
-
+	if (!AnimInstance->Montage_IsPlaying(ReactAnimMontage))
+	{
+		PlayAnimMontage(ReactAnimMontage);
+		AAIController_Minion* MinionController = Cast<AAIController_Minion>(GetController());
+		if (MinionController)
+			MinionController->SetIsMove(true);
+	}
 }
 
 void ACharacter_Minion::StopHit()

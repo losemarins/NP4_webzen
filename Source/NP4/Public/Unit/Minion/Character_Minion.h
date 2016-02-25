@@ -17,6 +17,7 @@ class NP4_API ACharacter_Minion : public ANP4CharacterBase
 	
 	UPROPERTY(VisibleAnywhere, Category = "AI")
 	class UMyPawnSensingComponent* PawnSensingComp;
+	//class AAIController_Minion* MinionController;
 	UAnimInstance* AnimInstance;
 	FTimerHandle TimerHandle_MeleeAttack;
 	float MeleeStrikeCooldown;
@@ -27,7 +28,6 @@ class NP4_API ACharacter_Minion : public ANP4CharacterBase
 	//공격시 딜레이를 위한 변수
 	float AttackStartTime;
 	bool bSensedTarget;
-	bool isAttack;
 
 protected :
 	//UPROPERTY(VisibleAnywhere, Category = "Attacking")
@@ -38,6 +38,12 @@ protected :
 
 	UPROPERTY(EditDefaultsOnly, Category = "Attacking")
 	UAnimMontage* MeleeAnimMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Die")
+	UAnimMontage* DieAnimMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "React")
+	UAnimMontage* ReactAnimMontage;
 
 public :
 	UPROPERTY(EditDefaultsOnly, Category = "AI")

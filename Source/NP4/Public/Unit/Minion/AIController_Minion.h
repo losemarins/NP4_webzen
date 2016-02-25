@@ -20,6 +20,7 @@ class NP4_API AAIController_Minion : public AAIController_Base
 	FName TargetEnemyKeyName;
 	FName TargetCastleKeyName;
 	FName IsClose;
+	FName IsMove;
 
 	virtual void Possess(class APawn* InPawn);
 	virtual void UnPossess() override;
@@ -29,6 +30,7 @@ public:
 	void SetEnemyCastle(ABuilding_Castle* EnemyCastle);
 	UObject* GetTargetEnemy();
 	void SetIsClose(bool value);
+	void SetIsMove(bool value);
 
 public :
 	AAIController_Minion(const FObjectInitializer& ObjectInitializer);
