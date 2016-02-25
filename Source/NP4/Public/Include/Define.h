@@ -3,15 +3,14 @@
 
 #pragma once
 
-namespace EGameStrategy
+UENUM()
+enum class EGameStrategy : uint8
 {
-	enum Type
-	{
-		Defualt,
-		Converging_Attack,
-		IndianFile,
-	};
-}
+	Defualt,
+	Converging_Attack,
+	Indian_File,
+};
+
 UENUM(BlueprintType)
 namespace EBuilding
 {

@@ -173,7 +173,6 @@ void ACharacter_Minion::OnSeeEnemy(APawn* Pawn)
 
 	LastSeenTime = GetWorld()->GetTimeSeconds();
 	bSensedTarget = true;
-
 	ANP4CharacterBase* SensedPawn = Cast<ANP4CharacterBase>(Pawn);
 
 	if (MinionController && SensedPawn->IsAlive() && MyTeamNum != SensedPawn->GetTeamNum())
@@ -194,6 +193,7 @@ void ACharacter_Minion::OnRetriggerMeleeStrike()
 	/* Apply damage to a single random pawn in range. */
 	TArray<AActor*> Overlaps;
 	MeleeCollisionComp->GetOverlappingActors(Overlaps, ANP4CharacterBase::StaticClass());
+	
 	for (int32 i = 0; i < Overlaps.Num(); i++)
 	{
 		ANP4CharacterBase* OverlappingPawn = Cast<ANP4CharacterBase>(Overlaps[i]);

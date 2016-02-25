@@ -259,8 +259,6 @@ void ANP4PlayerBase::InitAnimationMontage()
 	////Sheath Weapon ->Ä® »©±â
 	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Sheath_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSheathWeapon + (int)weaponType);
 
-
-
 	weaponType = eWeaponType::eType_2;
 	/* Weapon Type _ 2 */
 	////Idle
@@ -480,7 +478,6 @@ void ANP4PlayerBase::CheckState(float _Deltatime)
 	}
 }
 
-
 /////////////////////////////////////////////////* Set StateMachine */
 void ANP4PlayerBase::SetRunning(bool _bRunning)
 {
@@ -577,7 +574,6 @@ void ANP4PlayerBase::StopRunning()
 	SetRunning(false);
 }
 
-
 void ANP4PlayerBase::ActionAttack()
 {
 	if (!IsHit() && !IsSkilling() && IsAttack() == false)
@@ -607,8 +603,6 @@ void ANP4PlayerBase::ActionAttack()
 				//SetColliderEnabled(true);
 			//}
 		}
-
-
 		else
 		{
 			//Hit Motion Animation is not vaild
@@ -645,14 +639,12 @@ void ANP4PlayerBase::StopAttack()
 	}
 }
 
-
 void ANP4PlayerBase::ActionHit(FVector _Dir)
 {
 	eWeaponType iWeaponType = GetCurrentWeapon() == NULL ? eWeaponType::eType_None : GetCurrentWeapon()->GetWeaponType();
 	if (!IsSkilling() && IsHit() == false)
 	{
 		SetRunning(false);
-
 		UAnimMontage* pHitAnim = NULL;
 		pHitAnim = (m_ArrAnimMontage)[eCharacterState::eHit + (int)iWeaponType];;
 
@@ -662,7 +654,6 @@ void ANP4PlayerBase::ActionHit(FVector _Dir)
 			SetHit(true);
 			if (m_pPlayerState)
 				m_pPlayerState->SetPlayerState(eCharacterState::eHit);
-
 		}
 
 		else
@@ -715,7 +706,6 @@ void ANP4PlayerBase::ActionSkill_2()
 	UAnimMontage* pSkill_2_Anim = NULL;
 	pSkill_2_Anim = (m_ArrAnimMontage)[eCharacterState::eSkilling + eAnimMontage_Skill_Interpol::eSkill_2 + (int)iWeaponType];;
 
-
 	if (pSkill_2_Anim && IsSkilling() == false && IsAttack() == false)
 	{
 		//GetMesh()->AnimScriptInstance->Montage_Stop(0.0f); /* Stop All Montage Anim */
@@ -724,7 +714,6 @@ void ANP4PlayerBase::ActionSkill_2()
 		SetSkilling(true);
 		if(m_pPlayerState)
 			m_pPlayerState->SetPlayerState(eCharacterState::eSkilling);
-
 	}
 }
 
@@ -747,10 +736,8 @@ float ANP4PlayerBase::DrawWeapon()
 		return fDrawAnimDuation;
 	}
 		
-
 	/* ³¢°í ÀÖ´Â ¹«±â°¡ ÀÖ´Ù. */
 	eWeaponType iWeaponType = GetCurrentWeapon()->GetWeaponType();
-	
 	UAnimMontage* pDraw_Anim = NULL;
 	pDraw_Anim = (m_ArrAnimMontage)[eCharacterState::eSkilling + eAnimMontage_Skill_Interpol::eDrawWeapon + (int)iWeaponType];;
 
@@ -834,7 +821,6 @@ void ANP4PlayerBase::SheathWeapon(int32 _InvenIdx)
 			RecallFunctionDelegate, fDrawAnimDuration + 0.14f , false);
 	}
 }
-
 
 float ANP4PlayerBase::PlayAnimMontage_CheckCurrent(UAnimMontage* _AnimMontage, eCharacterState _eAnimType)
 {
