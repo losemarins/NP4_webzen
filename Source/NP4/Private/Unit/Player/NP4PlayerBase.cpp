@@ -87,13 +87,6 @@ ANP4PlayerBase::ANP4PlayerBase()
 	m_pLeftPunchCapsule->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 	m_pLeftPunchCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	/*m_pLeftPunchCapsule->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel1);
-	m_pLeftPunchCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
-
-	m_pLeftPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
-	m_pLeftPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
-	m_pLeftPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
-*/
 	//Right Punch
 	m_pRightPunchCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("RightPunchCollision"));
 	m_pRightPunchCapsule->AttachTo(pMesh, "RightHand");
@@ -101,38 +94,17 @@ ANP4PlayerBase::ANP4PlayerBase()
 	m_pRightPunchCapsule->SetVisibility(true);
 	m_pRightPunchCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	//m_pRightPunchCapsule->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel6);
-	//m_pRightPunchCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
-	//m_pRightPunchCapsule->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
-	/*m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
-	m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
-	m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Overlap);
-*/
 	//Left Kick
 	m_pLeftKickCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("LeftKickCollision"));
 	m_pLeftKickCapsule->AttachTo(pMesh, "LeftFoot");
 	m_pLeftKickCapsule->bHiddenInGame = false;
 	m_pLeftKickCapsule->SetVisibility(true);
 
-	//m_pLeftKickCapsule->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel1);
-	//m_pLeftKickCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
-
-	//m_pLeftKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
-	//m_pLeftKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
-	//m_pLeftKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
-
 	////Right Kick
 	//m_pRightKickCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("RightKickCollision"));
 	//m_pRightKickCapsule->AttachTo(pMesh, "RightFoot");
 	//m_pRightKickCapsule->bHiddenInGame = false;
 	//m_pRightKickCapsule->SetVisibility(true);
-
-	//m_pRightKickCapsule->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel1);
-	//m_pRightKickCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
-
-	//m_pRightKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
-	//m_pRightKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
-	//m_pRightKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
 
 	/* Set Team */
 	MyTeamNum = EGameTeam::Player;
@@ -174,26 +146,10 @@ void ANP4PlayerBase::BeginPlay()
 	{
 		m_pPlayerState = (Cast<ANP4PlayerState>(PlayerState));
 		m_pPlayerState->SetStateOwner(this);
-
-		//hp setting
-		//m_pPlayerState->setPlayerHealth(100.f);
-		//m_pPlayerState->setPlayerMaxHealth(100.f);
 	}
 
 	//임시로 무기를 인벤토리에 생성한다.
 	Super::InitWeapon_TempFunction();
-
-	if (m_pLeftPunchCapsule)
-	{
-		//m_pLeftPunchCapsule->OnComponentBeginOverlap.AddDynamic(this, &ANP4PlayerBase::OnPunchBeginOverlap);
-	}
-
-	if (m_pLeftKickCapsule)
-	{
-		//m_pRightPunchCapsule->OnComponentBeginOverlap.Add()
-		//m_pLeftKickCapsule->OnComponentBeginOverlap.AddDynamic(this, &ANP4PlayerBase::OnPunchBeginOverlap2);
-		//m_pRightPunchCapsule->OnComponentBeginOverlap.AddDynamic(this, &ANP4PlayerBase::OnPunchBeginOverlap);
-	}
 	m_AttackValue = 10;
 }
 
@@ -258,31 +214,6 @@ void ANP4PlayerBase::InitAnimationMontage()
 	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Draw_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eDrawWeapon + (int)weaponType);
 	////Sheath Weapon ->칼 빼기
 	m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Sheath_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSheathWeapon + (int)weaponType);
-
-
-
-	weaponType = eWeaponType::eType_2;
-	/* Weapon Type _ 2 */
-	////Idle
-	//m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Idle1_PATH)), (int)eCharacterState::eIdle + (int)eWeaponType::eType_2);
-
-	//////Walk
-	//m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Walk_PATH)), (int)eCharacterState::eWalk + (int)eWeaponType::eType_2);
-
-	//////Run
-	//m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Run_PATH)), (int)eCharacterState::eRun + (int)eWeaponType::eType_2);
-
-	//////Attack
-	//m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Attack_PATH)), (int)eCharacterState::eAttack + (int)eWeaponType::eType_2);
-
-	//////HIT
-	//m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_Hit_PATH)), (int)eCharacterState::eHit + (int)eWeaponType::eType_2);
-
-	//////Skill_1
-	//m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_CastingEarthQuake_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_1 + (int)eWeaponType::eType_2);
-
-	//////Skill_2
-	//m_ArrAnimMontage.Insert(FindAnimationMontage_byPath(TEXT(MainPlayer_Mon_TwoHand_TurnAttack_PATH)), (int)eCharacterState::eSkilling + (int)eAnimMontage_Skill_Interpol::eSkill_2 + (int)eWeaponType::eType_2);
 }
 
 void ANP4PlayerBase::SetPlayerController(ANP4HeroController* _pPlayerController)
@@ -429,15 +360,18 @@ void ANP4PlayerBase::CheckState(float _Deltatime)
 	eCharacterState ExeAnimMontage_Type = eCharacterState::eEnd;
 	float ReturnValue = Animation_Montage_Failed;
 	eWeaponType iWeaponType = GetCurrentWeapon() == NULL ? eWeaponType::eType_None : GetCurrentWeapon()->GetWeaponType();
+	eCharacterState CurState = m_pPlayerState->GetPlayerState();
+
 
 	if (IsSomeAction())
 	{
 		return;
 	}
 
+	
 	else if (IsWalking())
 	{
-		if (IsRunning())
+		if(CurState == eCharacterState::eRun)
 		{
 			ExeAnimMontage = (m_ArrAnimMontage)[eCharacterState::eRun + (int)iWeaponType];
 			ExeAnimMontage_Type = eCharacterState::eRun;
@@ -457,7 +391,7 @@ void ANP4PlayerBase::CheckState(float _Deltatime)
 		}
 	}
 
-	else if (IsRunning())
+	else if (CurState == eCharacterState::eRun)
 	{
 		ExeAnimMontage = (m_ArrAnimMontage)[eCharacterState::eRun + (int)iWeaponType];
 		ExeAnimMontage_Type = eCharacterState::eRun;
@@ -480,29 +414,6 @@ void ANP4PlayerBase::CheckState(float _Deltatime)
 	}
 }
 
-
-/////////////////////////////////////////////////* Set StateMachine */
-void ANP4PlayerBase::SetRunning(bool _bRunning)
-{
-	m_bRunning = _bRunning;
-}
-
-void ANP4PlayerBase::SetAttack(bool _bAttack)
-{
-	m_bAttack = _bAttack;
-}
-
-void ANP4PlayerBase::SetSkilling(bool _bSkill)
-{
-	m_bIsSkilling = _bSkill;
-}
-
-void ANP4PlayerBase::SetHit(bool _bHit)
-{
-	m_bIsHit = _bHit;
-}
-
-
 bool ANP4PlayerBase::IsWalking()
 {
 	if (!GetCharacterMovement())
@@ -521,33 +432,19 @@ bool ANP4PlayerBase::IsWalking()
 	return !GetVelocity().IsZero() && ((GetVelocity().GetSafeNormal2D() | GetActorForwardVector()) > -0.1);
 }
 
-bool ANP4PlayerBase::IsRunning()
-{
-	if (!GetCharacterMovement())
-		return false;
-
-	return IsWalking() && m_bRunning;
-}
-
-bool ANP4PlayerBase::IsAttack()
-{
-	return m_bAttack;
-}
-
-bool ANP4PlayerBase::IsSkilling()
-{
-	return m_bIsSkilling;
-}
-
-bool ANP4PlayerBase::IsHit()
-{
-	return m_bIsHit;
-}
-
 bool ANP4PlayerBase::IsSomeAction()
 {
-	if (IsAttack() || IsHit() || IsSkilling())
+	if (!m_pPlayerState)
+		return false;
+
+	eCharacterState CurState = m_pPlayerState->GetPlayerState();
+
+	if (CurState == eCharacterState::eAttack ||
+		CurState == eCharacterState::eHit ||
+		CurState == eCharacterState::eSkilling)
+	{
 		return true;
+	}
 
 	return false;
 }
@@ -561,7 +458,7 @@ void ANP4PlayerBase::StartRunning()
 	}
 
 	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("Run")));
-	SetRunning(true);
+	//SetRunning(true);
 	
 	/* Change State */
 	if(m_pPlayerState)
@@ -574,17 +471,23 @@ void ANP4PlayerBase::StartRunning()
 
 void ANP4PlayerBase::StopRunning()
 {
-	SetRunning(false);
+	//SetRunning(false);
+	if (m_pPlayerState)
+		m_pPlayerState->SetPlayerState(eCharacterState::eNone);
 }
 
 
 void ANP4PlayerBase::ActionAttack()
 {
-	if (!IsHit() && !IsSkilling() && IsAttack() == false)
+	eCharacterState CurState = m_pPlayerState->GetPlayerState();
+
+	if (CurState != eCharacterState::eAttack &&
+		CurState != eCharacterState::eHit &&
+		CurState != eCharacterState::eSkilling)
 	{
 		eWeaponType iWeaponType = GetCurrentWeapon() == NULL ? eWeaponType::eType_None : GetCurrentWeapon()->GetWeaponType();
 		float fAnimDuationVal = 0.0f;
-		SetRunning(false);
+		//SetRunning(false);
 
 		UAnimMontage* pAttackAnim = NULL;
 		pAttackAnim = (m_ArrAnimMontage)[eCharacterState::eAttack + (int)iWeaponType];;
@@ -592,7 +495,6 @@ void ANP4PlayerBase::ActionAttack()
 		if (pAttackAnim)
 		{
 			fAnimDuationVal = PlayAnimMontage_CheckCurrent(pAttackAnim, eCharacterState::eAttack);
-			SetAttack(true);
 			if(m_pPlayerState)
 				m_pPlayerState->SetPlayerState(eCharacterState::eAttack);
 
@@ -615,8 +517,8 @@ void ANP4PlayerBase::ActionAttack()
 		}
 	}
 
-	//Combo System
-	else if (m_bComboNotifyEnter && IsAttack() == true)
+	////Combo System
+	else if (m_bComboNotifyEnter && CurState == eCharacterState::eAttack)
 	{
 		m_bComboClkOn = true;
 	}
@@ -631,7 +533,7 @@ void ANP4PlayerBase::StopAttack()
 	if (pAttackAnim)
 	{
 		StopNP4AnimationMontage(pAttackAnim);
-		SetAttack(false);
+		m_pPlayerState->SetPlayerState(eCharacterState::eNone);
 		m_bComboClkOn = false;
 		m_ComboStep = eCombo_Interpol::Combo_None;
 
@@ -649,17 +551,19 @@ void ANP4PlayerBase::StopAttack()
 void ANP4PlayerBase::ActionHit(FVector _Dir)
 {
 	eWeaponType iWeaponType = GetCurrentWeapon() == NULL ? eWeaponType::eType_None : GetCurrentWeapon()->GetWeaponType();
-	if (!IsSkilling() && IsHit() == false)
-	{
-		SetRunning(false);
+	
+	eCharacterState CurState = m_pPlayerState->GetPlayerState();
 
+	if (CurState != eCharacterState::eHit &&
+		CurState != eCharacterState::eSkilling)
+	{
 		UAnimMontage* pHitAnim = NULL;
 		pHitAnim = (m_ArrAnimMontage)[eCharacterState::eHit + (int)iWeaponType];;
 
 		if (pHitAnim)
 		{
 			PlayAnimMontage_CheckCurrent(pHitAnim, eCharacterState::eHit);
-			SetHit(true);
+		//	SetHit(true);
 			if (m_pPlayerState)
 				m_pPlayerState->SetPlayerState(eCharacterState::eHit);
 
@@ -681,7 +585,7 @@ void ANP4PlayerBase::StopHit()
 	if (pHitAnim)
 	{
 		StopNP4AnimationMontage(pHitAnim);
-		SetHit(false);
+		m_pPlayerState->SetPlayerState(eCharacterState::eNone);
 	}
 
 	else
@@ -695,14 +599,13 @@ void ANP4PlayerBase::ActionSkill_1()
 	eWeaponType iWeaponType = GetCurrentWeapon() == NULL ? eWeaponType::eType_None : GetCurrentWeapon()->GetWeaponType();
 	UAnimMontage* pSkill_1_Anim = NULL;
 	pSkill_1_Anim = (m_ArrAnimMontage)[eCharacterState::eSkilling + eAnimMontage_Skill_Interpol::eSkill_1 + (int)iWeaponType];;
+	eCharacterState CurState = m_pPlayerState->GetPlayerState();
 
-	if (pSkill_1_Anim && IsSkilling() == false && IsAttack() == false)
+	if (pSkill_1_Anim && CurState != eCharacterState::eSkilling && CurState != eCharacterState::eAttack)
 	{
 		float fAnimDuationVal = 0.0f;
 		//GetMesh()->AnimScriptInstance->Montage_Stop(0.0f); /* Stop All Montage Anim */
-		SetRunning(false);
 		fAnimDuationVal = PlayAnimMontage_CheckCurrent(pSkill_1_Anim, eCharacterState::eSkilling);
-		SetSkilling(true);
 		if(m_pPlayerState)
 			m_pPlayerState->SetPlayerState(eCharacterState::eSkilling);
 
@@ -714,14 +617,12 @@ void ANP4PlayerBase::ActionSkill_2()
 	eWeaponType iWeaponType = GetCurrentWeapon() == NULL ? eWeaponType::eType_None : GetCurrentWeapon()->GetWeaponType();
 	UAnimMontage* pSkill_2_Anim = NULL;
 	pSkill_2_Anim = (m_ArrAnimMontage)[eCharacterState::eSkilling + eAnimMontage_Skill_Interpol::eSkill_2 + (int)iWeaponType];;
+	eCharacterState CurState = m_pPlayerState->GetPlayerState();
 
-
-	if (pSkill_2_Anim && IsSkilling() == false && IsAttack() == false)
+	if (pSkill_2_Anim && CurState != eCharacterState::eSkilling && CurState != eCharacterState::eAttack)
 	{
 		//GetMesh()->AnimScriptInstance->Montage_Stop(0.0f); /* Stop All Montage Anim */
-		SetRunning(false);
 		PlayAnimMontage_CheckCurrent(pSkill_2_Anim, eCharacterState::eSkilling);
-		SetSkilling(true);
 		if(m_pPlayerState)
 			m_pPlayerState->SetPlayerState(eCharacterState::eSkilling);
 
@@ -731,7 +632,8 @@ void ANP4PlayerBase::ActionSkill_2()
 void ANP4PlayerBase::StopSkill(UAnimMontage* _pSkillAnim)
 {
 	StopNP4AnimationMontage(_pSkillAnim);
-	SetSkilling(false);
+	//SetSkilling(false);
+	m_pPlayerState->SetPlayerState(eCharacterState::eNone);
 }
 
 /* 칼 넣기(해제) */
@@ -739,7 +641,10 @@ float ANP4PlayerBase::DrawWeapon()
 {
 	float fDrawAnimDuation = 0.0f;
 	/* 끼고 있는 무기가 없으면 의미가 없다. */
-	if (!m_pCurrentEquipWeapon || IsSkilling() || IsAttack())
+
+	eCharacterState CurState = m_pPlayerState->GetPlayerState();
+
+	if(!m_pCurrentEquipWeapon || CurState == eCharacterState::eSkilling || CurState == eCharacterState::eAttack)
 	{
 		/* 이미 어떠한 행동 중이다(해제중 포함) */
 		/* 주희에게 에러 메세지를 돌려보내줘야 한다(0을 리턴했을 경우, 메세지를 띄우게 하자) */
@@ -756,10 +661,8 @@ float ANP4PlayerBase::DrawWeapon()
 
 	if (pDraw_Anim)
 	{
-		//GetMesh()->AnimScriptInstance->Montage_Stop(0.0f); /* Stop All Montage Anim */
-		SetRunning(false);
+		///GetMesh()->AnimScriptInstance->Montage_Stop(0.0f); /* Stop All Montage Anim */
 		fDrawAnimDuation = PlayAnimMontage_CheckCurrent(pDraw_Anim, eCharacterState::eSkilling);
-		SetSkilling(true);
 		if (m_pPlayerState)
 			m_pPlayerState->SetPlayerState(eCharacterState::eSkilling);
 	}
@@ -782,8 +685,10 @@ void ANP4PlayerBase::TempSheathWeapon()
 /* 칼 빼기 */
 void ANP4PlayerBase::SheathWeapon(int32 _InvenIdx)
 {
+	eCharacterState CurState = m_pPlayerState->GetPlayerState();
+
 	/* 어떠한 행동 중 체크와, 인벤토리 범위 체크를 한다..*/
-	if (IsSkilling() || !CheckIndex_inInventory(_InvenIdx) || IsAttack())
+	if (!CheckIndex_inInventory(_InvenIdx) || CurState == eCharacterState::eSkilling || CurState == eCharacterState::eAttack)
 	{
 		/* 전해진 번호가 인벤토리 이상이거나 음수이다. */
 		/* 이미 어떠한 행동 중이다(착용중 포함) */
@@ -810,9 +715,9 @@ void ANP4PlayerBase::SheathWeapon(int32 _InvenIdx)
 		if (pSheath_Anim)
 		{
 			GetMesh()->AnimScriptInstance->Montage_Stop(0.0f); /* Stop All Montage Anim */
-			SetRunning(false);
+			//SetRunning(false);
 			PlayAnimMontage_CheckCurrent(pSheath_Anim, eCharacterState::eSkilling);
-			SetSkilling(true);
+			//SetSkilling(true);
 			if (m_pPlayerState)
 				m_pPlayerState->SetPlayerState(eCharacterState::eSkilling);
 		}
@@ -954,30 +859,3 @@ void ANP4PlayerBase::SetCurrentComboStep(eCombo_Interpol _newStep)
 {
 	m_ComboStep = _newStep;
 }
-
-void ANP4PlayerBase::OnPunchBeginOverlap2(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
-{
-	if (OtherActor != this)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("Overlap")));
-		//if (AnimInstance->Montage_IsPlaying(MeleeAnimMontage))
-		{
-			Cast<ANP4CharacterBase>(OtherActor)->Damaged_Call(m_AttackValue);
-		}
-	}
-}
-
-//void ANP4PlayerBase::NotifyActorBeginOverlap(AActor* OtherActor)
-//{
-//	if (OtherActor != this)
-//	{
-//		//if (AnimInstance->Montage_IsPlaying(MeleeAnimMontage))
-//		{
-//			ANP4CharacterBase* pOther = Cast<ANP4CharacterBase>(OtherActor);
-//			if (pOther)
-//			{
-//				pOther->Damaged_Call(m_AttackValue);
-//			}
-//		}
-//	}
-//}

@@ -62,12 +62,6 @@ public:
 	float m_MinSpringArmLength;
 	float m_MaxSpringArmLength;
 
-	/* StateMachine Value */
-	bool m_bRunning;
-	bool m_bAttack;
-	bool m_bIsHit;
-	bool m_bIsSkilling;
-
 	/* Notify Combo */
 	bool m_bComboNotifyEnter;
 	bool m_bComboClkOn;
@@ -92,17 +86,9 @@ public:
 	/* Bool Check */
 	bool IsPlayerControllerNull();
 	UFUNCTION(BlueprintCallable, Category = "PlayerCheckState")
-		bool IsWalking();
+	bool IsWalking();
 	UFUNCTION(BlueprintCallable, Category = "PlayerCheckState")
-		bool IsRunning();
-	UFUNCTION(BlueprintCallable, Category = "PlayerCheckState")
-		bool IsAttack();
-	UFUNCTION(BlueprintCallable, Category = "PlayerCheckState")
-		bool IsHit();
-	UFUNCTION(BlueprintCallable, Category = "PlayerCheckState")
-		bool IsSkilling();
-	UFUNCTION(BlueprintCallable, Category = "PlayerCheckState")
-		bool IsSomeAction(); //만약 공격이나 스킬이나 히트나 어떠한 행동패턴의 애니메이션 중인가?
+	bool IsSomeAction(); //만약 공격이나 스킬이나 히트나 어떠한 행동패턴의 애니메이션 중인가?
 
 	/* Find */
 	UAnimMontage* FindAnimationMontage_byPath(const TCHAR* _ObjectToFindPath);
@@ -115,12 +101,6 @@ public:
 	/* check StateMachine */
 	UFUNCTION()
 	void CheckState(float _Deltatime);
-
-	/* Set StateMachine */
-	void SetRunning(bool _bRunning);
-	void SetAttack(bool _bAttack);
-	void SetHit(bool _bHit);
-	void SetSkilling(bool _bSkill);
 
 	/* Play AnimMontage */
 	float PlayAnimMontage_CheckCurrent(UAnimMontage* _AnimMontage, eCharacterState _eAnimType);
@@ -148,9 +128,6 @@ public:
 	bool GetbComboOn();
 	eCombo_Interpol GetCurrentComboStep();
 	void SetCurrentComboStep(eCombo_Interpol _newStep);
-	UFUNCTION()
-	void OnPunchBeginOverlap2(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
-	//void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 	/* 무기 착용을 위한 임시 변수 */
 	int tempidx;
