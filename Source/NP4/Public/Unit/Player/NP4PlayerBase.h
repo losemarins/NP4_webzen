@@ -46,6 +46,8 @@ public:
 
 	UPROPERTY()
 	ANP4PlayerState* m_pPlayerState;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Inventory")
 	UInventory* m_pPlayerInventory;
 
 	/* Camera Value  */
