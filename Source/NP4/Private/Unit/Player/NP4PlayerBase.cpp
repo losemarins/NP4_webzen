@@ -25,7 +25,6 @@ ANP4PlayerBase::ANP4PlayerBase()
 	m_OurCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("OurCamera"));
 	m_OurCamera->AttachTo(m_OurCameraSpringArm, USpringArmComponent::SocketName);
 
-	
 	//케릭터 매쉬가 회전을 먹도록 Setting
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationYaw = false;
@@ -67,7 +66,7 @@ ANP4PlayerBase::ANP4PlayerBase()
 	/* Create Hit Capsule Component */
 	GetMesh()->BodyInstance.SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	MeleeCollisionComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("HitCollision"));
+	MeleeCollisionComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("MeleeCollision"));
 	MeleeCollisionComp->AttachTo(RootComponent);
 	MeleeCollisionComp->bHiddenInGame = false;
 	MeleeCollisionComp->SetVisibility(true);
@@ -84,55 +83,59 @@ ANP4PlayerBase::ANP4PlayerBase()
 	m_pLeftPunchCapsule->AttachTo(pMesh, "LeftHand");
 	m_pLeftPunchCapsule->bHiddenInGame = false;
 	m_pLeftPunchCapsule->SetVisibility(true);
+	m_pLeftPunchCapsule->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	m_pLeftPunchCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	m_pLeftPunchCapsule->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel1);
+	/*m_pLeftPunchCapsule->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel1);
 	m_pLeftPunchCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
 
 	m_pLeftPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
 	m_pLeftPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
 	m_pLeftPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
-
+*/
 	//Right Punch
 	m_pRightPunchCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("RightPunchCollision"));
 	m_pRightPunchCapsule->AttachTo(pMesh, "RightHand");
 	m_pRightPunchCapsule->bHiddenInGame = false;
 	m_pRightPunchCapsule->SetVisibility(true);
+	m_pRightPunchCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	m_pRightPunchCapsule->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel1);
-	m_pRightPunchCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
-
-	m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
+	//m_pRightPunchCapsule->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel6);
+	//m_pRightPunchCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
+	//m_pRightPunchCapsule->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	/*m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
 	m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
-	m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
-
+	m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Overlap);
+*/
 	//Left Kick
 	m_pLeftKickCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("LeftKickCollision"));
 	m_pLeftKickCapsule->AttachTo(pMesh, "LeftFoot");
 	m_pLeftKickCapsule->bHiddenInGame = false;
 	m_pLeftKickCapsule->SetVisibility(true);
 
-	m_pLeftKickCapsule->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel1);
-	m_pLeftKickCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
+	//m_pLeftKickCapsule->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel1);
+	//m_pLeftKickCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
 
-	m_pLeftKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
-	m_pLeftKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
-	m_pLeftKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
+	//m_pLeftKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
+	//m_pLeftKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
+	//m_pLeftKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
 
-	//Right Kick
-	m_pRightKickCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("RightKickCollision"));
-	m_pRightKickCapsule->AttachTo(pMesh, "RightFoot");
-	m_pRightKickCapsule->bHiddenInGame = false;
-	m_pRightKickCapsule->SetVisibility(true);
+	////Right Kick
+	//m_pRightKickCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("RightKickCollision"));
+	//m_pRightKickCapsule->AttachTo(pMesh, "RightFoot");
+	//m_pRightKickCapsule->bHiddenInGame = false;
+	//m_pRightKickCapsule->SetVisibility(true);
 
-	m_pRightKickCapsule->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel1);
-	m_pRightKickCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
+	//m_pRightKickCapsule->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel1);
+	//m_pRightKickCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
 
-	m_pRightKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
-	m_pRightKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
-	m_pRightKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
+	//m_pRightKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
+	//m_pRightKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
+	//m_pRightKickCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
 
 	/* Set Team */
 	MyTeamNum = EGameTeam::Player;
+	
 }
 
 void ANP4PlayerBase::BeginPlay()
@@ -178,6 +181,19 @@ void ANP4PlayerBase::BeginPlay()
 
 	//임시로 무기를 인벤토리에 생성한다.
 	Super::InitWeapon_TempFunction();
+
+	if (m_pLeftPunchCapsule)
+	{
+		//m_pLeftPunchCapsule->OnComponentBeginOverlap.AddDynamic(this, &ANP4PlayerBase::OnPunchBeginOverlap);
+	}
+
+	if (m_pLeftKickCapsule)
+	{
+		//m_pRightPunchCapsule->OnComponentBeginOverlap.Add()
+		//m_pLeftKickCapsule->OnComponentBeginOverlap.AddDynamic(this, &ANP4PlayerBase::OnPunchBeginOverlap2);
+		//m_pRightPunchCapsule->OnComponentBeginOverlap.AddDynamic(this, &ANP4PlayerBase::OnPunchBeginOverlap);
+	}
+	m_AttackValue = 10;
 }
 
 void ANP4PlayerBase::Tick(float DeltaTime)
@@ -629,7 +645,7 @@ void ANP4PlayerBase::StopAttack()
 }
 
 
-void ANP4PlayerBase::ActionHit()
+void ANP4PlayerBase::ActionHit(FVector _Dir)
 {
 	eWeaponType iWeaponType = GetCurrentWeapon() == NULL ? eWeaponType::eType_None : GetCurrentWeapon()->GetWeaponType();
 	if (!IsSkilling() && IsHit() == false)
@@ -763,7 +779,7 @@ void ANP4PlayerBase::TempSheathWeapon()
 }
 
 /* 칼 빼기 */
-void ANP4PlayerBase::SheathWeapon(int _InvenIdx)
+void ANP4PlayerBase::SheathWeapon(int32 _InvenIdx)
 {
 	/* 어떠한 행동 중 체크와, 인벤토리 범위 체크를 한다..*/
 	if (IsSkilling() || !CheckIndex_inInventory(_InvenIdx) || IsAttack())
@@ -937,3 +953,30 @@ void ANP4PlayerBase::SetCurrentComboStep(eCombo_Interpol _newStep)
 {
 	m_ComboStep = _newStep;
 }
+
+void ANP4PlayerBase::OnPunchBeginOverlap2(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	if (OtherActor != this)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("Overlap")));
+		//if (AnimInstance->Montage_IsPlaying(MeleeAnimMontage))
+		{
+			Cast<ANP4CharacterBase>(OtherActor)->Damaged_Call(m_AttackValue);
+		}
+	}
+}
+
+//void ANP4PlayerBase::NotifyActorBeginOverlap(AActor* OtherActor)
+//{
+//	if (OtherActor != this)
+//	{
+//		//if (AnimInstance->Montage_IsPlaying(MeleeAnimMontage))
+//		{
+//			ANP4CharacterBase* pOther = Cast<ANP4CharacterBase>(OtherActor);
+//			if (pOther)
+//			{
+//				pOther->Damaged_Call(m_AttackValue);
+//			}
+//		}
+//	}
+//}

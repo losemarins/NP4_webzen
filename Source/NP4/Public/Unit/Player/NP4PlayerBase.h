@@ -106,7 +106,7 @@ public:
 
 	/* Find */
 	UAnimMontage* FindAnimationMontage_byPath(const TCHAR* _ObjectToFindPath);
-
+	
 	/* Camera */
 	void SetDefaultCameraActive();
 	void ZoomTickFunc(float _DeltaTime, bool _bZoomIn);
@@ -130,13 +130,15 @@ public:
 	void StopRunning();
 	void ActionAttack();
 	void StopAttack();
-	void ActionHit();
-	void StopHit();
+	virtual void ActionHit(FVector _Dir = FVector(0, 0, 0));
+	virtual void StopHit();
 	void ActionSkill_1();
 	void ActionSkill_2();
 	void StopSkill(UAnimMontage* _pSkillAnim);
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	float DrawWeapon();
-	void SheathWeapon(int _InvenIdx);
+	UFUNCTION(BlueprintCallable,Category = "Inventory")
+	void SheathWeapon(int32 _InvenIdx);
 	void TempSheathWeapon();
 
 	/* Notify Combo */
@@ -146,8 +148,9 @@ public:
 	bool GetbComboOn();
 	eCombo_Interpol GetCurrentComboStep();
 	void SetCurrentComboStep(eCombo_Interpol _newStep);
-
-	
+	UFUNCTION()
+	void OnPunchBeginOverlap2(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+	//void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 	/* 무기 착용을 위한 임시 변수 */
 	int tempidx;
