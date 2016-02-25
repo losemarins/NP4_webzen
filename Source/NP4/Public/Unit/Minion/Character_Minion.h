@@ -49,6 +49,9 @@ public :
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	class UBehaviorTree* BehaviorTree;
 
+	UPROPERTY(EditAnywhere, Category = "AI")
+	EGameStrategy StrategyType;
+
 public :
 	ACharacter_Minion();
 	void UpdatePawnData(); // 나중에 base에서 virtual로 할수도있음
