@@ -9,6 +9,7 @@ class ANP4PlayerBase;
 
 enum eCharacterState
 {
+	eNone = -1,
 	eIdle = 0,
 	eWalk = 2,
 	eRun = 4,
