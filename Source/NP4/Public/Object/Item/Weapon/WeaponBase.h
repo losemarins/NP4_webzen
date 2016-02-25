@@ -41,7 +41,7 @@ protected:
 
 	/* Collision Value */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UCapsuleComponent* m_pCollisionCapsule;
+	UBoxComponent* m_pCollisionBox;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	eWeaponType m_iWeaponType;
@@ -83,4 +83,6 @@ public:
 	/* Attack Value Set,Get */
 	void SetWeaponAttackValue(float _fAttackValue);
 	float GetWeaponAttackValue();
+
+	UBoxComponent* GetWeaponCollisionBox();
 };

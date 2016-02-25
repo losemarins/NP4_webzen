@@ -13,25 +13,25 @@ AWeaponBase::AWeaponBase()
 	RootComponent = m_pItemMesh;
 
 	//Collision 셋팅
-	m_pCollisionCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("WeaponCollision"));
-	m_pCollisionCapsule->AttachTo(RootComponent, "WeaponCollision");
+	m_pCollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("WeaponCollision"));
+	m_pCollisionBox->AttachTo(RootComponent, "WeaponCollision");
 	//m_pCollisionCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	m_pCollisionCapsule->SetVisibility(true);
-	m_pCollisionCapsule->bHiddenInGame = false;
+	m_pCollisionBox->SetVisibility(true);
+	m_pCollisionBox->bHiddenInGame = false;
 
 	//State의 팀에 따라서 채널이 바뀌어야 한다.
-	m_pCollisionCapsule->SetCollisionObjectType(ECollisionChannel::ECC_GameTraceChannel1);
-	m_pCollisionCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
-	m_pCollisionCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
-	m_pCollisionCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
-	m_pCollisionCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
+	m_pCollisionBox->SetCollisionObjectType(ECollisionChannel::ECC_GameTraceChannel1);
+	m_pCollisionBox->SetCollisionResponseToAllChannels(ECR_Ignore);
+	m_pCollisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Ignore);
+	m_pCollisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel3, ECollisionResponse::ECR_Ignore);
+	m_pCollisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel4, ECollisionResponse::ECR_Ignore);
 }
 
 void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 	m_pItemMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	m_pCollisionCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	m_pCollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void AWeaponBase::SetOwningPawn(ANP4CharacterBase* NewOwner)
@@ -74,7 +74,7 @@ void AWeaponBase::SetMeshComponent(USkeletalMesh* _pMeshCom)
 /* Check Collision */
 bool AWeaponBase::IsColliderEnabled(void)
 {
-	return m_pCollisionCapsule->IsCollisionEnabled();
+	return m_pCollisionBox->IsCollisionEnabled();
 }
 
 /* Collision Set */
@@ -82,17 +82,17 @@ void AWeaponBase::SetColliderEnabled(bool _bActive)
 {
 	if (_bActive)
 	{
-		m_pCollisionCapsule->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		m_pCollisionBox->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "ActiveCollision");
-		m_pCollisionCapsule->SetVisibility(false);
+		m_pCollisionBox->SetVisibility(false);
 	}
 
 	else
 	{
-		m_pCollisionCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		m_pCollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, "No Collision");
 
-		m_pCollisionCapsule->SetVisibility(true);
+		m_pCollisionBox->SetVisibility(true);
 	}
 }
 
@@ -115,11 +115,16 @@ void AWeaponBase::NotifyActorBeginOverlap(AActor* OtherActor)
 			}
 		//}
 
-		m_pCollisionCapsule->SetVisibility(true);
+		m_pCollisionBox->SetVisibility(true);
 	}
 }
 
 eWeaponType AWeaponBase::GetWeaponType()
 {
 	return m_iWeaponType;
+}
+
+UBoxComponent* AWeaponBase::GetWeaponCollisionBox()
+{
+	return m_pCollisionBox;
 }
