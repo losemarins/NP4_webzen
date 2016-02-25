@@ -167,6 +167,8 @@ void ACharacter_Minion::OnSeeEnemy(APawn* Pawn)
 	if (!IsAlive() || MinionController->GetTargetEnemy())
 		return;
 
+	if (MyTeamNum == Cast<ANP4CharacterBase>(Pawn)->GetTeamNum())
+		return;
 	//사운드설정
 	/*if (!bSensedTarget)
 	{
@@ -177,7 +179,7 @@ void ACharacter_Minion::OnSeeEnemy(APawn* Pawn)
 	bSensedTarget = true;
 	ANP4CharacterBase* SensedPawn = Cast<ANP4CharacterBase>(Pawn);
 
-	if (MinionController && SensedPawn->IsAlive() && MyTeamNum != SensedPawn->GetTeamNum())
+	if (MinionController && SensedPawn->IsAlive())
 	{
 		MinionController->SetTargetEnemy(SensedPawn);
 	}
