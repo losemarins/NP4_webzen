@@ -5,6 +5,8 @@
 #include "GameFramework/Character.h"
 #include "WeaponBase.h"
 #include "ItemBase.h"
+#include "Inventory.h"
+#include "WeaponBase.h"
 #include "NP4AttackCollisionActiveNotifyState.h"
 #include "NP4CharacterBase.generated.h"
 
@@ -45,14 +47,7 @@ protected:
 	USphereComponent* m_pRightKickCapsule;
 
 public:
-
-	// Juhee : UI 연동 변수. Inven Array 다.
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = InvenWeapon)
-	TArray<AWeaponBase*> m_pItemInven_Temp; //임시
-
-	int m_iCurrentEquip_InvenIndex; //임시
-
-											/* 현재 무기 */
+	/* 현재 무기 */
 	AWeaponBase* m_pCurrentEquipWeapon;
 
 public:
@@ -61,10 +56,10 @@ public:
 	
 public: /* 구영이가 BP에서 호출하기 위해서 만든 애니메이션 몽타쥬 플레이 */
 	UFUNCTION(BlueprintCallable, Category = "NP4Animation")
-		float PlayNP4AnimationMontage(UAnimMontage* _pAnimMontage);
+	float PlayNP4AnimationMontage(UAnimMontage* _pAnimMontage);
 
 	UFUNCTION(BlueprintCallable, Category = "NP4Animation")
-		void StopNP4AnimationMontage(UAnimMontage* _pAnimMontage);
+	void StopNP4AnimationMontage(UAnimMontage* _pAnimMontage);
 
 public:
 	void SetTeamNum(uint8 NewTeamNum);
@@ -73,12 +68,9 @@ public:
 	bool IsAlive();
 
 public:
-	/* Init */
-	void InitWeapon_TempFunction();
-
 	/* Set,Get WeaponSocket */
 	AWeaponBase* GetCurrentWeapon();
-	void JustSetCurrentWeapon_NotEquip(int _InvenIdx);
+	void JustSetCurrentWeapon_NotEquip(AWeaponBase* _pWeaponEquip);
 
 public:
 	void OnUnEquipWeapon();

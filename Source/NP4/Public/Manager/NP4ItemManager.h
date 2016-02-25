@@ -20,6 +20,10 @@ public:
 	TArray<TSubclassOf<class AWeaponBase>> m_ArrDefaultItem;
 
 public:
+	void InitItemManager();
 	int GetItemArrNum();
 	TSubclassOf<class AWeaponBase> GetItemByIndex(int _idx);
+	TSubclassOf<class AWeaponBase> GetItemByName(FName ItemName);
+	AWeaponBase* Spawn_NewWeaponItem(eItemID _ItemID);
+	
 };

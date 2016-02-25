@@ -3,7 +3,7 @@
 #include "NP4.h"
 #include "NP4CharacterBase.h"
 #include "WeaponBase.h"
-#include "NP4ItemManager.h"
+
 
 // Sets default values
 ANP4CharacterBase::ANP4CharacterBase()
@@ -16,7 +16,6 @@ ANP4CharacterBase::ANP4CharacterBase()
 	m_AttackValue = 0.0f;
 
 	m_pCurrentEquipWeapon = NULL;
-	m_iCurrentEquip_InvenIndex = 0;
 }
 
 void ANP4CharacterBase::SetTeamNum(uint8 NewTeamNum)
@@ -74,39 +73,6 @@ void ANP4CharacterBase::OnEqipWeapon(AWeaponBase* _pWeapon)
 	}
 }
 
-void ANP4CharacterBase::OnEqipWeapon_byInventoryIndex(int _InvenIdx)
-{
-	if (_InvenIdx >= m_pItemInven_Temp.Num())
-		return;
-
-	else
-	{
-		OnEqipWeapon(m_pItemInven_Temp[_InvenIdx]);
-	}
-}
-
-void ANP4CharacterBase::InitWeapon_TempFunction()
-{
-	UObject* ClassPackage = ANY_PACKAGE;
-	ANP4ItemManager* pItemLoadManager = NULL;
-	UClass* BPClass = StaticLoadClass(UObject::StaticClass(), NULL, TEXT("/Game/Blueprint/NP4ItemLoadManager.NP4ItemLoadManager_C"), NULL, LOAD_None, NULL);
-
-	if (BPClass)
-	{
-		pItemLoadManager = Cast<ANP4ItemManager>(BPClass->GetDefaultObject());
-
-		if (pItemLoadManager)
-		{
-			FActorSpawnParameters SpawnInfo;
-			for (int i = 0; i < pItemLoadManager->GetItemArrNum(); ++i)
-			{
-				AWeaponBase* pItem = (AWeaponBase*)GetWorld()->SpawnActor<AWeaponBase>(pItemLoadManager->GetItemByIndex(i),SpawnInfo);
-				m_pItemInven_Temp.AddUnique(pItem);
-			}
-		}
-	}
-}
-
 void ANP4CharacterBase::SetWeaponColliderEnabled(bool _bActive)
 {
 	if (m_pCurrentEquipWeapon)
@@ -115,30 +81,14 @@ void ANP4CharacterBase::SetWeaponColliderEnabled(bool _bActive)
 	}
 }
 
-void ANP4CharacterBase::JustSetCurrentWeapon_NotEquip(int _InvenIdx)
+void ANP4CharacterBase::JustSetCurrentWeapon_NotEquip(AWeaponBase* _pWeaponEquip)
 {
-	if (_InvenIdx >= m_pItemInven_Temp.Num())
-		return;
-
-	else
-	{
-		m_pCurrentEquipWeapon = m_pItemInven_Temp[_InvenIdx];
-	}
+	m_pCurrentEquipWeapon = _pWeaponEquip;
 }
 
 AWeaponBase* ANP4CharacterBase::GetCurrentWeapon()
 {
 	return m_pCurrentEquipWeapon;
-}
-
-bool ANP4CharacterBase::CheckIndex_inInventory(int _idx)
-{
-	if (m_pItemInven_Temp.Num() <= _idx || _idx < 0)
-	{
-		return false;
-	}
-
-	return true;
 }
 
 void ANP4CharacterBase::SetDefaultAttackValue(float _fAttackValue)

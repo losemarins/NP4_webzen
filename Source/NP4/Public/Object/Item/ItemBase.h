@@ -20,9 +20,11 @@ class NP4_API AItemBase : public AActor
 	GENERATED_BODY()
 		
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+	int32 m_iDBKey; //같은 블랙핸드스워드라도 번호가 다름.
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
-	int32 m_iItemID;
+	eItemID m_eItemID; //아무리 블랙핸드스워드가 인벤에 많아도 이 ID는 같음.
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
 	UTexture2D* m_tItemImage;
@@ -55,5 +57,10 @@ public:
 	
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
+
+public:
+	int32 GetDataBaseKey();
+	FName GetItemName();
+	eItemID GetItemID();
 	
 };

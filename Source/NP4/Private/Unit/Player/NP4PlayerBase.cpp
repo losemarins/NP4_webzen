@@ -4,6 +4,8 @@
 #include "NP4HeroController.h"
 #include "NP4CameraActor.h"
 #include "NP4PlayerBase.h"
+#include "NP4ItemManager.h"
+#include "NP4GameState.h"
 
 // Sets default values
 const FRotator ANP4PlayerBase::msBaseRotation(0, -90, 0);
@@ -149,7 +151,7 @@ void ANP4PlayerBase::BeginPlay()
 	}
 
 	//임시로 무기를 인벤토리에 생성한다.
-	Super::InitWeapon_TempFunction();
+	InitWeapon_TempFunction();
 	m_AttackValue = 10;
 }
 
@@ -520,9 +522,6 @@ void ANP4PlayerBase::StopAttack()
 		m_pPlayerState->SetPlayerState(eCharacterState::eNone);
 		m_bComboClkOn = false;
 		m_ComboStep = eCombo_Interpol::Combo_None;
-
-		/* Collision no Active */
-		//Super::SetColliderEnabled(false);
 	}
 
 	else
@@ -547,7 +546,6 @@ void ANP4PlayerBase::ActionHit(FVector _Dir)
 		if (pHitAnim)
 		{
 			PlayAnimMontage_CheckCurrent(pHitAnim, eCharacterState::eHit);
-		//	SetHit(true);
 			if (m_pPlayerState)
 				m_pPlayerState->SetPlayerState(eCharacterState::eHit);
 
@@ -616,7 +614,6 @@ void ANP4PlayerBase::ActionSkill_2()
 void ANP4PlayerBase::StopSkill(UAnimMontage* _pSkillAnim)
 {
 	StopNP4AnimationMontage(_pSkillAnim);
-	//SetSkilling(false);
 	m_pPlayerState->SetPlayerState(eCharacterState::eNone);
 }
 
@@ -654,25 +651,13 @@ float ANP4PlayerBase::DrawWeapon()
 	return fDrawAnimDuation;
 }
 
-void ANP4PlayerBase::TempSheathWeapon()
-{
-	if (tempidx >= 1) //무기 개수는 3개.
-	{
-		tempidx = 0;
-	}
-	else
-		++tempidx;
-
-	SheathWeapon(tempidx); /* 실제로는 주희 UMG에서 선택한 아이템의 번호를 넘겨준다. */
-}
-
 /* 칼 빼기 */
-void ANP4PlayerBase::SheathWeapon(int32 _InvenIdx)
+void ANP4PlayerBase::SheathWeapon(int32 _UniqueItemID)
 {
 	eCharacterState CurState = m_pPlayerState->GetPlayerState();
 
 	/* 어떠한 행동 중 체크와, 인벤토리 범위 체크를 한다..*/
-	if (!CheckIndex_inInventory(_InvenIdx) || CurState == eCharacterState::eSkilling || CurState == eCharacterState::eAttack)
+	if (!m_pPlayerInventory || CurState == eCharacterState::eSkilling || CurState == eCharacterState::eAttack)
 	{
 		/* 전해진 번호가 인벤토리 이상이거나 음수이다. */
 		/* 이미 어떠한 행동 중이다(착용중 포함) */
@@ -683,14 +668,17 @@ void ANP4PlayerBase::SheathWeapon(int32 _InvenIdx)
 
 	UAnimMontage* pSheath_Anim = NULL;
 	eWeaponType iWeaponType = eWeaponType::eType_None;
+	
+	AWeaponBase* pWeapon = Cast<AWeaponBase>(m_pPlayerInventory->GetitemPointer_fromInven(_UniqueItemID));
+	if (!pWeapon)
+		return;
 
 	//이미 끼고 있는 무기가 있는가?
 	if (!GetCurrentWeapon())
 	{
 		/* 없다. */
 		//바로 착용.
-		//OnEqipWeapon_byInventoryIndex(_InvenIdx);
-		JustSetCurrentWeapon_NotEquip(_InvenIdx);
+		Super::JustSetCurrentWeapon_NotEquip(pWeapon);
 
 		//착용 후 착용 된 무기의 타입을 얻어온다.
 		eWeaponType iWeaponType = GetCurrentWeapon()->GetWeaponType();
@@ -716,7 +704,7 @@ void ANP4PlayerBase::SheathWeapon(int32 _InvenIdx)
 		//칼을 넣는 애니메이션이 끝나면 다시 이 함수를 부른다.
 		FTimerHandle TimerHandle_ReCallFunction;
 		FTimerDelegate RecallFunctionDelegate =
-			FTimerDelegate::CreateUObject(this, &ANP4PlayerBase::SheathWeapon, _InvenIdx);
+			FTimerDelegate::CreateUObject(this, &ANP4PlayerBase::SheathWeapon, _UniqueItemID);
 		GetWorldTimerManager().SetTimer(TimerHandle_ReCallFunction,
 			RecallFunctionDelegate, fDrawAnimDuration + 0.14f , false);
 	}
@@ -852,4 +840,41 @@ eCombo_Interpol ANP4PlayerBase::GetCurrentComboStep()
 void ANP4PlayerBase::SetCurrentComboStep(eCombo_Interpol _newStep)
 {
 	m_ComboStep = _newStep;
+}
+
+void ANP4PlayerBase::OnEqipWeapon_byInventoryIndex(int _UniqueItemID)
+{
+	if (m_pPlayerInventory == NULL)
+		return;
+
+	AWeaponBase* pWeaponItem = Cast<AWeaponBase>(m_pPlayerInventory->GetitemPointer_fromInven(_UniqueItemID));
+
+	if(pWeaponItem)
+		Super::OnEqipWeapon(pWeaponItem);
+}
+
+void ANP4PlayerBase::InitWeapon_TempFunction()
+{
+	if (m_pPlayerInventory == NULL)
+		return;
+
+	AWeaponBase* pItem = NULL;
+
+	ANP4GameState* pGameState = Cast<ANP4GameState>(GetWorld()->GetGameState());
+
+	if (pGameState)
+	{
+		ANP4ItemManager* pMgr = pGameState->GetItemLoadManager();
+
+		if (pMgr)
+		{
+			pItem = pMgr->Spawn_NewWeaponItem(eItemID::BlackTwoHandSword);
+			if(pItem)
+				m_pPlayerInventory->AddWeapon_ToInven(pItem);
+
+			pItem = pMgr->Spawn_NewWeaponItem(eItemID::WhiteAxe);
+			if(pItem)
+				m_pPlayerInventory->AddWeapon_ToInven(pItem);
+		}
+	}
 }

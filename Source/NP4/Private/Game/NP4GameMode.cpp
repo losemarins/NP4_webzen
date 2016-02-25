@@ -43,6 +43,7 @@ void ANP4GameMode::InitGameState()
 		GameState->SetGameMap(EGameMapState::Town);
 		// start the game!
 		GameState->StartGameplayStateMachine();
+		GameState->InitItemLoadManager();
 	}
 }
 

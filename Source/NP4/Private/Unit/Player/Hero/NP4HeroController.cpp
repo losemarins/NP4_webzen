@@ -61,8 +61,8 @@ void ANP4HeroController::SetupInputComponent()
 	InputComponent->BindAction("Attack", IE_Pressed, this, &ANP4HeroController::ActionAttack);
 	InputComponent->BindAction("Skill_1", IE_Pressed, this, &ANP4HeroController::ActionSkill_1);
 	InputComponent->BindAction("Skill_2", IE_Pressed, this, &ANP4HeroController::ActionSkill_2);
-	InputComponent->BindAction("DrawWeapon", IE_Pressed, this, &ANP4HeroController::DrawWeapon);
-	InputComponent->BindAction("SheathWeapon", IE_Pressed, this, &ANP4HeroController::SheathWeapon);
+	//InputComponent->BindAction("DrawWeapon", IE_Pressed, this, &ANP4HeroController::DrawWeapon);
+	//InputComponent->BindAction("SheathWeapon", IE_Pressed, this, &ANP4HeroController::SheathWeapon);
 
 	InputComponent->BindAction("Test_Hit", IE_Pressed, this, &ANP4HeroController::TestTestTest);
 }
@@ -355,11 +355,11 @@ void ANP4HeroController::DrawWeapon()
 	}
 }
 
-void ANP4HeroController::SheathWeapon()
+void ANP4HeroController::SheathWeapon(int _ItemUniqueID)
 {
 	if (m_pPossessCharacter != NULL)
 	{
-		m_pPossessCharacter->TempSheathWeapon();
+		m_pPossessCharacter->SheathWeapon(_ItemUniqueID);
 	}
 }
 
