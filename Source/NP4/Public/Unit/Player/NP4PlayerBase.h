@@ -120,6 +120,8 @@ public:
 	UFUNCTION(BlueprintCallable,Category = "Inventory")
 	void SheathWeapon(int32 _InvenIdx);
 	void TempSheathWeapon();
+	virtual void ActionDie();
+	virtual void StopDie();
 
 	/* Notify Combo */
 	void SetbNotifyEnter(bool _bEnter);

@@ -19,27 +19,6 @@ ANP4CharacterBase::ANP4CharacterBase()
 	m_iCurrentEquip_InvenIndex = 0;
 }
 
-// Called when the game starts or when spawned
-void ANP4CharacterBase::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void ANP4CharacterBase::Tick( float DeltaTime )
-{
-	Super::Tick( DeltaTime );
-
-}
-
-// Called to bind functionality to input
-void ANP4CharacterBase::SetupPlayerInputComponent(class UInputComponent* InputComponent)
-{
-	Super::SetupPlayerInputComponent(InputComponent);
-
-}
-
 void ANP4CharacterBase::SetTeamNum(uint8 NewTeamNum)
 {
 	MyTeamNum = NewTeamNum;
@@ -124,11 +103,6 @@ void ANP4CharacterBase::InitWeapon_TempFunction()
 				AWeaponBase* pItem = (AWeaponBase*)GetWorld()->SpawnActor<AWeaponBase>(pItemLoadManager->GetItemByIndex(i),SpawnInfo);
 				m_pItemInven_Temp.AddUnique(pItem);
 			}
-
-			/*if (m_pItemInven_Temp.Num() > 0)
-			{
-				OnEqipWeapon(m_pItemInven_Temp[0]);
-			}*/
 		}
 	}
 }
@@ -148,7 +122,6 @@ void ANP4CharacterBase::JustSetCurrentWeapon_NotEquip(int _InvenIdx)
 
 	else
 	{
-		//OnEqipWeapon(m_pItemInven_Temp[_InvenIdx]);
 		m_pCurrentEquipWeapon = m_pItemInven_Temp[_InvenIdx];
 	}
 }
@@ -168,29 +141,31 @@ bool ANP4CharacterBase::CheckIndex_inInventory(int _idx)
 	return true;
 }
 
-void ANP4CharacterBase::SetWeaponAttackValue(float _fAttackValue)
+void ANP4CharacterBase::SetDefaultAttackValue(float _fAttackValue)
 {
 	m_AttackValue = _fAttackValue;
 }
 
-float ANP4CharacterBase::GetWeaponAttackValue()
+float ANP4CharacterBase::GetDefaultAttackValue()
 {
 	return m_AttackValue;
 }
 
 bool ANP4CharacterBase::Damaged_Call(float _fAttackValue)
 {
-	if (IsAlive() == false)
+	/*if (IsAlive() == false)
 	{
 		return false;
-	}
+	}*/
 
-	else
+	//else
 	{
 		Health -= _fAttackValue;
-		if (Health < 0)
+		if (Health <= 0)
 		{
 			Health = 0;
+			ActionDie();
+			return false;
 		}
 		return true;
 	}
@@ -294,4 +269,40 @@ void ANP4CharacterBase::ActionHit(FVector _Dir)
 void ANP4CharacterBase::StopHit()
 {
 
+}
+
+void ANP4CharacterBase::ActionDie()
+{
+
+}
+
+void ANP4CharacterBase::StopDie()
+{
+
+}
+
+
+USphereComponent* ANP4CharacterBase::GetCollisionSphere(eCollisionType _CollType)
+{
+	if (_CollType == eCollisionType::eCollision_LeftPunch)
+	{
+		return m_pLeftPunchCapsule;
+	}
+
+	else if (_CollType == eCollisionType::eCollision_RightPunch)
+	{
+		return m_pRightPunchCapsule;
+	}
+
+	else if (_CollType == eCollisionType::eCollision_LeftKick)
+	{
+		return m_pLeftKickCapsule;
+	}
+
+	else if (_CollType == eCollisionType::eCollision_RightKick)
+	{
+		return m_pRightKickCapsule;
+	}
+
+	return nullptr;
 }
