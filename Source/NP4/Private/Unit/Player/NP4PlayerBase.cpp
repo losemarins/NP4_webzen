@@ -350,7 +350,6 @@ void ANP4PlayerBase::Request_MakeActionCamera(ECameraValue _CameraValue, AActor*
 	else
 	{
 		//CameraArray is not Empty
-		int a = 10;
 	}
 }
 
@@ -458,7 +457,6 @@ void ANP4PlayerBase::StartRunning()
 	}
 
 	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString::Printf(TEXT("Run")));
-	//SetRunning(true);
 	
 	/* Change State */
 	if(m_pPlayerState)
@@ -471,7 +469,6 @@ void ANP4PlayerBase::StartRunning()
 
 void ANP4PlayerBase::StopRunning()
 {
-	//SetRunning(false);
 	if (m_pPlayerState)
 		m_pPlayerState->SetPlayerState(eCharacterState::eNone);
 }
@@ -487,7 +484,6 @@ void ANP4PlayerBase::ActionAttack()
 	{
 		eWeaponType iWeaponType = GetCurrentWeapon() == NULL ? eWeaponType::eType_None : GetCurrentWeapon()->GetWeaponType();
 		float fAnimDuationVal = 0.0f;
-		//SetRunning(false);
 
 		UAnimMontage* pAttackAnim = NULL;
 		pAttackAnim = (m_ArrAnimMontage)[eCharacterState::eAttack + (int)iWeaponType];;
@@ -500,14 +496,6 @@ void ANP4PlayerBase::ActionAttack()
 
 			//Request_MakeActionCamera(ECameraValue::eAction_1, this, fAnimDuationVal);
 
-			///* Collision Active */
-			//if(m_pCurrentEquipWeapon)
-			//	Super::SetColliderEnabled(true);
-
-			//else
-			//{
-				//SetColliderEnabled(true);
-			//}
 		}
 
 
@@ -715,9 +703,7 @@ void ANP4PlayerBase::SheathWeapon(int32 _InvenIdx)
 		if (pSheath_Anim)
 		{
 			GetMesh()->AnimScriptInstance->Montage_Stop(0.0f); /* Stop All Montage Anim */
-			//SetRunning(false);
 			PlayAnimMontage_CheckCurrent(pSheath_Anim, eCharacterState::eSkilling);
-			//SetSkilling(true);
 			if (m_pPlayerState)
 				m_pPlayerState->SetPlayerState(eCharacterState::eSkilling);
 		}
