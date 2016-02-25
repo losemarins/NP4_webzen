@@ -25,6 +25,9 @@ public:
 	EGameplayState::Type GameplayState;
 	// 게임의 난이도를 설정
 	void SetGameDifficulty(EGameDifficulty::Type NewDifficulty);
+	//아이템에 대한 정보를 가지고 있는 로드 매니저.
+	ANP4ItemManager* m_pItemLoadManager;
+
 	// 게임 상태 머신 시작 
 	void StartGameplayStateMachine();
 	// 게임 시작 
@@ -33,6 +36,9 @@ public:
 	void SetGameplayState(EGameplayState::Type NewState);
 	// 게임의 레벨을 설정(맵)
 	void SetGameMap(EGameMapState::Type NewState);
+	//아이템 로드 매니저 Init & Get
+	void InitItemLoadManager();
+	ANP4ItemManager* GetItemLoadManager();
 
 public:
 	// tile

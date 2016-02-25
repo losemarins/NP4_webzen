@@ -25,3 +25,17 @@ void AItemBase::Tick( float DeltaTime )
 
 }
 
+int32 AItemBase::GetDataBaseKey()
+{
+	return m_iDBKey;
+}
+
+FName AItemBase::GetItemName()
+{
+	return m_sItemName;
+}
+
+eItemID AItemBase::GetItemID()
+{
+	return m_eItemID;
+}

@@ -60,3 +60,20 @@ FPlayerData* ANP4GameState::GetPlayerData(uint8 TeamNum) const
 
 	return nullptr;
 }
+
+void ANP4GameState::InitItemLoadManager()
+{
+	UObject* ClassPackage = ANY_PACKAGE;
+	ANP4ItemManager* pItemLoadManager = NULL;
+	UClass* BPClass = StaticLoadClass(UObject::StaticClass(), NULL, TEXT("/Game/Blueprint/NP4ItemLoadManager.NP4ItemLoadManager_C"), NULL, LOAD_None, NULL);
+
+	if (BPClass)
+	{
+		m_pItemLoadManager = Cast<ANP4ItemManager>(BPClass->GetDefaultObject());
+	}
+}
+
+ANP4ItemManager* ANP4GameState::GetItemLoadManager()
+{
+	return m_pItemLoadManager;
+}

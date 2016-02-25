@@ -6,6 +6,7 @@
 #include "NP4PlayerState.h"
 #include "NP4CameraManager.h"
 #include "WeaponBase.h"
+#include "Inventory.h"
 #include "NP4PlayerBase.generated.h"
 
 class ANP4HeroController;
@@ -34,7 +35,7 @@ class NP4_API ANP4PlayerBase : public ANP4CharacterBase
 	GENERATED_BODY()
 public:
 	ANP4PlayerBase();
-	
+
 public:
 	/* Mesh Setting Value */
 	static const FRotator msBaseRotation;
@@ -45,6 +46,7 @@ public:
 
 	UPROPERTY()
 	ANP4PlayerState* m_pPlayerState;
+	UInventory* m_pPlayerInventory;
 
 	/* Camera Value  */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -118,8 +120,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	float DrawWeapon();
 	UFUNCTION(BlueprintCallable,Category = "Inventory")
-	void SheathWeapon(int32 _InvenIdx);
-	void TempSheathWeapon();
+	void SheathWeapon(int32 _UniqueItemID);
 	virtual void ActionDie();
 	virtual void StopDie();
 
@@ -133,4 +134,8 @@ public:
 
 	/* 무기 착용을 위한 임시 변수 */
 	int tempidx;
+
+	/* 아이템 인벤 */
+	void OnEqipWeapon_byInventoryIndex(int _UniqueItemID);
+	void InitWeapon_TempFunction(); //임시
 };

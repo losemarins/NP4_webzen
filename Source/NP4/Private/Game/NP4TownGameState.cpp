@@ -94,3 +94,20 @@ void ANP4TownGameState::CreateBuilding(FVector SpawnPos, EBuilding::Type Buildin
 	m_BuildingArray.Add(pBuilding);
 	
 }
+
+void ANP4TownGameState::InitItemLoadManager()
+{
+	UObject* ClassPackage = ANY_PACKAGE;
+	ANP4ItemManager* pItemLoadManager = NULL;
+	UClass* BPClass = StaticLoadClass(UObject::StaticClass(), NULL, TEXT("/Game/Blueprint/NP4ItemLoadManager.NP4ItemLoadManager_C"), NULL, LOAD_None, NULL);
+
+	if (BPClass)
+	{
+		m_pItemLoadManager = Cast<ANP4ItemManager>(BPClass->GetDefaultObject());
+	}
+}
+
+ANP4ItemManager* ANP4TownGameState::GetItemLoadManager()
+{
+	return m_pItemLoadManager;
+}

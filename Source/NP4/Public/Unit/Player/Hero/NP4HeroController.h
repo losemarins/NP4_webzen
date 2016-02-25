@@ -90,7 +90,7 @@ public:
 	void ActionSkill_1();
 	void ActionSkill_2();
 	void DrawWeapon();
-	void SheathWeapon();
+	void SheathWeapon(int _ItemUniqueID);
 
 	//////////////////////테스트용
 	void FORCEINLINE TestTestTest()

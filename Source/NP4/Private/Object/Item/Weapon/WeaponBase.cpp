@@ -103,17 +103,8 @@ void AWeaponBase::NotifyActorBeginOverlap(AActor* OtherActor)
 
 	if (IsColliderEnabled())
 	{
-		//TArray<UPrimitiveComponent*> tArr;
-		//OtherActor->GetOverlappingComponents(tArr);
-
-		//for (int iIdx = 0; iIdx < tArr.Num(); ++iIdx)
-		//{
-			//if (m_pCollisionCapsule == tArr[iIdx])
-			{
-				//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, m_pCollisionCapsule->GetName());
-				GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, OtherActor->GetName());
-			}
-		//}
+		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, m_pCollisionCapsule->GetName());
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Black, OtherActor->GetName());
 
 		m_pCollisionBox->SetVisibility(true);
 	}

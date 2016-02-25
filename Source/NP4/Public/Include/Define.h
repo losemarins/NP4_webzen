@@ -3,6 +3,13 @@
 
 #pragma once
 
+UENUM()
+enum class eItemID : uint8
+{
+	BlackTwoHandSword = 1,
+	WhiteAxe = 2
+};
+
 namespace EMinionUpgrade
 {
 	enum Type
