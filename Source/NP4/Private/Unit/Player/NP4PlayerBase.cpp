@@ -150,9 +150,24 @@ void ANP4PlayerBase::BeginPlay()
 		m_pPlayerState->SetStateOwner(this);
 	}
 
+	if (!m_pPlayerInventory)
+	{
+		m_pPlayerInventory = NewObject<UInventory>(UInventory::StaticClass());
+		/* 여기서 GameInstance에서 원래 있던 아이템의 정보를 얻어와야 한다. */
+		/* BeginPlay는 레벨 이동시마다 계속 호출 된다. */
+		/* 레벨 전환 시 m_pPlayerInventory는 NULL값이 되어, 다시 BeginPlay 호출 시 재생성 된다*/
+		/* NewObject시에 가비지컬렉터를 막기 위한 오브젝트 플레그 설정이 가능하다. = EObjectFlags */
+	}
+
 	//임시로 무기를 인벤토리에 생성한다.
 	InitWeapon_TempFunction();
 	m_AttackValue = 10;
+}
+
+void ANP4PlayerBase::BeginDestroy()
+{
+	Super::BeginDestroy();
+
 }
 
 void ANP4PlayerBase::Tick(float DeltaTime)
@@ -868,11 +883,11 @@ void ANP4PlayerBase::InitWeapon_TempFunction()
 
 		if (pMgr)
 		{
-			pItem = pMgr->Spawn_NewWeaponItem(eItemID::BlackTwoHandSword);
+			pItem = pMgr->Spawn_NewWeaponItem(this->GetWorld(),eItemID::BlackTwoHandSword);
 			if(pItem)
 				m_pPlayerInventory->AddWeapon_ToInven(pItem);
 
-			pItem = pMgr->Spawn_NewWeaponItem(eItemID::WhiteAxe);
+			pItem = pMgr->Spawn_NewWeaponItem(this->GetWorld(),eItemID::WhiteAxe);
 			if(pItem)
 				m_pPlayerInventory->AddWeapon_ToInven(pItem);
 		}

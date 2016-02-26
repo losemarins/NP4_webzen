@@ -41,15 +41,17 @@ TSubclassOf<class AWeaponBase> ANP4ItemManager::GetItemByName(FName _ItemName)
 	return NULL;
 }
 
-AWeaponBase* ANP4ItemManager::Spawn_NewWeaponItem(eItemID _ItemID)
+AWeaponBase* ANP4ItemManager::Spawn_NewWeaponItem(UWorld* pWorld, eItemID _ItemID)
 {
+	if (!pWorld) return NULL;
+
 	AWeaponBase* pNewItem = NULL;
 	for (int i = 0; i < m_ArrDefaultItem.Num(); ++i)
 	{
 		if (m_ArrDefaultItem[i].GetDefaultObject()->GetItemID() == _ItemID)
 		{
 			FActorSpawnParameters SpawnInfo;
-			pNewItem = (AWeaponBase*)GetWorld()->SpawnActor<AWeaponBase>(m_ArrDefaultItem[i], SpawnInfo);
+			pNewItem = (AWeaponBase*)pWorld->SpawnActor<AWeaponBase>(m_ArrDefaultItem[i], SpawnInfo);
 
 			if (pNewItem)
 			{

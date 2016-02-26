@@ -24,6 +24,6 @@ public:
 	int GetItemArrNum();
 	TSubclassOf<class AWeaponBase> GetItemByIndex(int _idx);
 	TSubclassOf<class AWeaponBase> GetItemByName(FName ItemName);
-	AWeaponBase* Spawn_NewWeaponItem(eItemID _ItemID);
+	AWeaponBase* Spawn_NewWeaponItem(UWorld* pWorld, eItemID _ItemID);
 	
 };

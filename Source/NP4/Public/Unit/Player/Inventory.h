@@ -14,6 +14,7 @@ class NP4_API UInventory : public UObject
 {
 	GENERATED_BODY()
 
+public:
 	UInventory();
 	
 public:
