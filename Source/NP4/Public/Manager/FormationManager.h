@@ -12,8 +12,11 @@ class NP4_API UFormationManager : public UObject
 
 public :
 	TArray<class ANP4CharacterBase*> UnitList;
-	
+	TArray<FVector> Indian_FilePos;
+
 public :
+	UFormationManager();
 	void AddUnitList(ANP4CharacterBase* unit);
 	TArray<class ANP4CharacterBase*> GetUnitList();
+	TArray<FVector> GetIndianFilePos();
 };

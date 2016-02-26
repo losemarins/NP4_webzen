@@ -23,6 +23,8 @@ class NP4_API AAIController_Minion : public AAIController_Base
 	FName IsDie;
 	FName IsMove;
 	FName Strategy;
+	FName MoveLoc;
+
 	virtual void Possess(class APawn* InPawn);
 	virtual void UnPossess() override;
 
@@ -33,6 +35,7 @@ public:
 	void SetIsDie(bool value);
 	void SetIsMove(bool value);
 	void SetStrategyType(uint8 type);
+	void SetMoveLoc(FVector Loc);
 
 public :
 	AAIController_Minion(const FObjectInitializer& ObjectInitializer);

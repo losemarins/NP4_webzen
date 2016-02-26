@@ -18,5 +18,3 @@ void UAIAction::Activate()
 {
 
 }
-
-
