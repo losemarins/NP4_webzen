@@ -29,6 +29,7 @@ class NP4_API ACharacter_Minion : public ANP4CharacterBase
 	float AttackStartTime;
 	bool bSensedTarget;
 	bool isDie;
+
 protected :
 	//UPROPERTY(VisibleAnywhere, Category = "Attacking")
 	//UCapsuleComponent* MeleeCollisionComp;
@@ -82,4 +83,8 @@ public :
 	virtual void StopHit();
 	virtual void ActionDie();
 	virtual void StopDie();
+
+	/*Strategy*/
+	UFUNCTION(BlueprintCallable, Category = "Strategy")
+	void RePosition_IndianFile();
 };

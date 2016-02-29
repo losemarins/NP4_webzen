@@ -77,7 +77,7 @@ void ANP4HeroController::BeginPlay()
 		InitializeActionCameraArray();
 	}
 	
-	//Formation = Cast<ANP4GameState>(GetWorld()->GetGameState())->FormationManager;
+	Formation = Cast<ANP4GameState>(GetWorld()->GetGameState())->FormationManager;
 	/*PlayerSpawn();
 	EnemySpawn();*/
 }
@@ -406,13 +406,15 @@ void ANP4HeroController::Formation2()
 void ANP4HeroController::Formation3()
 {
 	Formation = Cast<ANP4GameState>(GetWorld()->GetGameState())->FormationManager;
+	//FVector_NetQuantize pos = GetSelectActor(MousePos).ImpactPoint;
 	TArray<class ANP4CharacterBase*> list = Formation->GetUnitList();
+	TArray<IndianFile_Info> Info = Formation->GetIndianFileInfo();
 
-	FVector2D MousePos = GetMousePos();
-	FVector_NetQuantize pos = GetSelectActor(MousePos).ImpactPoint;
-
-	/*for (int32 i = 0; i < list.Num(); i++)
+	for (int32 i = 0; i < list.Num(); i++)
 	{
-	Cast<AAIController_Minion>(list[i]->GetController())->SetTargetEnemy(TargetActor);
-	}*/
+		Cast<AAIController_Minion>(list[i]->GetController())->SetStrategyType((uint8)EGameStrategy::Indian_File);
+		Info[i].Pos += m_pPossessCharacter->GetActorLocation();
+		Info[i].Pos.Z = 0;
+		Cast<AAIController_Minion>(list[i]->GetController())->SetMoveLoc(Info[i].Pos);
+	}
 }

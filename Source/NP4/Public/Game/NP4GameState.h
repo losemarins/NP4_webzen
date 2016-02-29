@@ -47,5 +47,6 @@ protected:
 
 public :
 	ANP4GameState(const FObjectInitializer& ObjectInitializer);
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
 	class UFormationManager* FormationManager;
 };

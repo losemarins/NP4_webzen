@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "define.h"
 #include "GameFramework/Actor.h"
 #include "FormationManager.generated.h"
 
@@ -12,8 +13,14 @@ class NP4_API UFormationManager : public UObject
 
 public :
 	TArray<class ANP4CharacterBase*> UnitList;
-	
+	TArray<IndianFile_Info> IndianFileInfoArr;
+	uint8 ArraySize;
+	uint8 Interval;
 public :
+	UFormationManager();
 	void AddUnitList(ANP4CharacterBase* unit);
 	TArray<class ANP4CharacterBase*> GetUnitList();
+	TArray<IndianFile_Info> GetIndianFileInfo();
+	void LineUp();
+
 };
