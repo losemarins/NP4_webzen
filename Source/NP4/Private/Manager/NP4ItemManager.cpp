@@ -62,3 +62,16 @@ AWeaponBase* ANP4ItemManager::Spawn_NewWeaponItem(UWorld* pWorld, eItemID _ItemI
 
 	return NULL;
 }
+
+TSubclassOf<class ANP4SkillBase> ANP4ItemManager::GetSkillByIndex(FName _ItemName)
+{
+	for (int i = 0; i < m_ArrDefaultSkill.Num(); ++i)
+	{
+		if (m_ArrDefaultSkill[i].GetDefaultObject()->GetSkillName() == _ItemName)
+		{
+			return m_ArrDefaultSkill[i];
+		}
+	}
+
+	return NULL;
+}

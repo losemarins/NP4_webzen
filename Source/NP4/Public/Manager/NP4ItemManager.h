@@ -4,6 +4,7 @@
 
 #include "GameFramework/Actor.h"
 #include "WeaponBase.h"
+#include "NP4SkillBase.h"
 #include "NP4ItemManager.generated.h"
 
 UCLASS()
@@ -19,6 +20,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Inventory)
 	TArray<TSubclassOf<class AWeaponBase>> m_ArrDefaultItem;
 
+	UPROPERTY(EditDefaultsOnly, Category = Skill)
+	TArray<TSubclassOf<class ANP4SkillBase>> m_ArrDefaultSkill;
+
 public:
 	void InitItemManager();
 	int GetItemArrNum();
@@ -26,4 +30,5 @@ public:
 	TSubclassOf<class AWeaponBase> GetItemByName(FName ItemName);
 	AWeaponBase* Spawn_NewWeaponItem(UWorld* pWorld, eItemID _ItemID);
 	
+	TSubclassOf<class ANP4SkillBase> GetSkillByIndex(FName _ItemName);
 };
