@@ -77,6 +77,7 @@ public :
 	virtual void Tick(float DeltaSeconds) override;
 	float AttackSecond;
 	void Damaged(float Second, AActor* OtherActor);
+	void AttackInvalidate();
 
 	/* Action */
 	virtual void ActionHit(FVector _Dir = FVector(0, 0, 0));

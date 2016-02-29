@@ -31,11 +31,12 @@ class NP4_API AAIController_Minion : public AAIController_Base
 public:
 	void SetTargetEnemy(AActor* NewTarget);
 	void SetEnemyCastle(ABuilding_Castle* EnemyCastle);
-	UObject* GetTargetEnemy();
 	void SetIsDie(bool value);
 	void SetIsMove(bool value);
 	void SetStrategyType(uint8 type);
 	void SetMoveLoc(FVector Loc);
+	UObject* GetTargetEnemy();
+	uint8 GetStrategyType();
 
 public :
 	AAIController_Minion(const FObjectInitializer& ObjectInitializer);

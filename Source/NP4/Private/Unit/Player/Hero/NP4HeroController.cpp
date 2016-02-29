@@ -12,14 +12,14 @@
 #include "FormationManager.h"
 #include "Character_Minion.h"
 #include "AIController_Minion.h"
+#include "AITypes.h"
+
 ANP4HeroController::ANP4HeroController()
 {
 	//ANP4PlayerController::ANP4PlayerController();
-	
 	PlayerCameraManagerClass = ANP4CameraManager::StaticClass();
 	//GetWorld()->SpawnActor<ANP4CharacterBase>(Owner->CharClass, Loc, Owner->GetActorRotation(), SpawnInfo);
 	
-
 	m_bZoomingIn = false;
 	m_bMouseRightClk = false;
 
@@ -409,12 +409,33 @@ void ANP4HeroController::Formation3()
 	//FVector_NetQuantize pos = GetSelectActor(MousePos).ImpactPoint;
 	TArray<class ANP4CharacterBase*> list = Formation->GetUnitList();
 	TArray<IndianFile_Info> Info = Formation->GetIndianFileInfo();
+	int j = 0;
 
 	for (int32 i = 0; i < list.Num(); i++)
 	{
 		Cast<AAIController_Minion>(list[i]->GetController())->SetStrategyType((uint8)EGameStrategy::Indian_File);
-		Info[i].Pos += m_pPossessCharacter->GetActorLocation();
-		Info[i].Pos.Z = 0;
-		Cast<AAIController_Minion>(list[i]->GetController())->SetMoveLoc(Info[i].Pos);
+
+		while (1)
+		{
+			if (i + j > Formation->GetArraySize())
+				break;
+
+			FVector Pos = Info[i + j].Pos;
+			Pos += m_pPossessCharacter->GetActorLocation();
+			Pos.Z = 0;
+			UNavigationSystem* NavSys = UNavigationSystem::GetCurrent(GetWorld());
+			const FNavAgentProperties& AgentProps = GetNavAgentPropertiesRef();
+			FNavLocation ProjectedLocation;
+
+			if (NavSys && !NavSys->ProjectPointToNavigation(Pos, ProjectedLocation, AgentProps.GetExtent(), &AgentProps))
+				j++;
+
+			else
+			{
+				Cast<ACharacter_Minion>(list[i])->AttackInvalidate();
+				Cast<AAIController_Minion>(list[i]->GetController())->SetMoveLoc(Pos);
+				break;
+			}
+		}
 	}
 }

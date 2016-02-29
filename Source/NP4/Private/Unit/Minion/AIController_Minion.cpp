@@ -115,3 +115,13 @@ void AAIController_Minion::SetMoveLoc(FVector Loc)
 		BlackboardComp->SetValueAsVector(MoveLoc, Loc);
 	}
 }
+
+uint8 AAIController_Minion::GetStrategyType()
+{
+	if (BlackboardComp)
+	{
+		return BlackboardComp->GetValueAsEnum(Strategy);
+	}
+
+	return (uint8)EGameStrategy::Defualt;
+}

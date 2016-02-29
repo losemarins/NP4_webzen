@@ -16,11 +16,12 @@ public :
 	TArray<IndianFile_Info> IndianFileInfoArr;
 	uint8 ArraySize;
 	uint8 Interval;
+
 public :
 	UFormationManager();
 	void AddUnitList(ANP4CharacterBase* unit);
 	TArray<class ANP4CharacterBase*> GetUnitList();
 	TArray<IndianFile_Info> GetIndianFileInfo();
 	void LineUp();
-
+	uint8 GetArraySize();
 };

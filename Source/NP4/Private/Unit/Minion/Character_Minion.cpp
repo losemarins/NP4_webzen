@@ -5,6 +5,8 @@
 #include "AIController_Minion.h"
 #include "MyPawnSensingComponent.h"
 #include "FormationManager.h"
+#include "Dungeon_Building.h"
+
 ACharacter_Minion::ACharacter_Minion()
 {
 	PrimaryActorTick.bCanEverTick = true;	
@@ -59,7 +61,6 @@ void ACharacter_Minion::BeginPlay()
 
 	//MinionController = Cast<AAIController_Minion>(GetController());
 	UpdatePawnData();
-
 	GetCharacterMovement()->MaxWalkSpeed = 100;
 	FRotator Rot = GetActorRotation();
 	
@@ -115,10 +116,8 @@ void ACharacter_Minion::SetCollisionChannel(uint8 TeamNum)
 	{
 		//m_pRightPunchCapsule->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel3);
 		MeleeCollisionComp->SetCollisionObjectType(ECollisionChannel::ECC_EngineTraceChannel4);
-
 		MeleeCollisionComp->SetCollisionResponseToAllChannels(ECR_Ignore);
 		//m_pRightPunchCapsule->SetCollisionResponseToAllChannels(ECR_Ignore);
-
 		//m_pRightPunchCapsule->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 		//m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel1, ECollisionResponse::ECR_Overlap);
 		//m_pRightPunchCapsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_EngineTraceChannel2, ECollisionResponse::ECR_Overlap);
@@ -140,6 +139,9 @@ void ACharacter_Minion::Tick(float DeltaSeconds)
 		AAIController_Minion* MinionController = Cast<AAIController_Minion>(GetController());
 		if (MinionController)
 		{
+			if (MinionController->GetStrategyType() == (uint8)EGameStrategy::Converging_Attack)
+				return;
+
 			MinionController->SetTargetEnemy(nullptr);
 			//if (!AnimInstance->Montage_IsPlaying(MeleeAnimMontage))
 				//MinionController->SetIsClose(false);
@@ -163,12 +165,12 @@ void ACharacter_Minion::UpdatePawnData()
 void ACharacter_Minion::OnSeeEnemy(APawn* Pawn)
 {
 	AAIController_Minion* MinionController = Cast<AAIController_Minion>(GetController());
-
 	if (!IsAlive() || MinionController->GetTargetEnemy())
 		return;
 
 	if (MyTeamNum == Cast<ANP4CharacterBase>(Pawn)->GetTeamNum())
 		return;
+
 	//사운드설정
 	/*if (!bSensedTarget)
 	{
@@ -192,23 +194,38 @@ void ACharacter_Minion::OnMeleeCompBeginOverlap(class AActor* OtherActor, class 
 	GetWorldTimerManager().SetTimer(TimerHandle_MeleeAttack, this, &ACharacter_Minion::OnRetriggerMeleeStrike, MeleeStrikeCooldown, true);
 }
 
+void ACharacter_Minion::AttackInvalidate()
+{
+	TimerHandle_MeleeAttack.Invalidate();
+}
+
 void ACharacter_Minion::OnRetriggerMeleeStrike()
 {
 	/* Apply damage to a single random pawn in range. */
 	TArray<AActor*> Overlaps;
 	MeleeCollisionComp->GetOverlappingActors(Overlaps, ANP4CharacterBase::StaticClass());
 	
-	for (int32 i = 0; i < Overlaps.Num(); i++)
+	if (Overlaps.Num() == 0)
 	{
-		ANP4CharacterBase* OverlappingPawn = Cast<ANP4CharacterBase>(Overlaps[i]);
-		if (OverlappingPawn)
+		MeleeCollisionComp->GetOverlappingActors(Overlaps, ADungeon_Building::StaticClass());
+		for (int32 i = 0; i < Overlaps.Num(); i++)
 		{
-			PerformMeleeStrike(OverlappingPawn);
-			//break; /* Uncomment to only attack one pawn maximum */
+			ADungeon_Building* OverlappingPawn = Cast<ADungeon_Building>(Overlaps[i]);
+			if (OverlappingPawn)
+				PerformMeleeStrike(OverlappingPawn);
 		}
 	}
 
-	/* No pawns in range, cancel the retrigger timer */
+	else
+	{ 
+		for (int32 i = 0; i < Overlaps.Num(); i++)
+		{
+			ANP4CharacterBase* OverlappingPawn = Cast<ANP4CharacterBase>(Overlaps[i]);
+			if (OverlappingPawn)
+				PerformMeleeStrike(OverlappingPawn);
+		}
+	}
+
 	if (Overlaps.Num() == 0)
 	{
 		TimerHandle_MeleeAttack.Invalidate();
@@ -232,33 +249,30 @@ void ACharacter_Minion::PerformMeleeStrike(AActor* HitActor)
 	if (HitActor && HitActor != this && IsAlive())
 	{
 		ACharacter* OtherPawn = Cast<ACharacter>(HitActor);
+
 		if (OtherPawn)
 		{
-			/*ASPlayerState* MyPS = Cast<ASPlayerState>(PlayerState);
-			ASPlayerState* OtherPS = Cast<ASPlayerState>(OtherPawn->PlayerState);
-
-			if (MyPS && OtherPS)
-			{*/
 			if (MyTeamNum == Cast<ANP4CharacterBase>(OtherPawn)->GetTeamNum())
-				{
-					/* Do not attack other zombies. */
-					return;
-				}
+				return;
 
-				/* Set to prevent a zombie to attack multiple times in a very short time */
-				LastMeleeAttackTime = GetWorld()->GetTimeSeconds();
-
-				//FPointDamageEvent DmgEvent;
-				//DmgEvent.DamageTypeClass = PunchDamageType;
-				//DmgEvent.Damage = MeleeDamage;
-
-				//HitActor->TakeDamage(DmgEvent.Damage, DmgEvent, GetController(), this);
-		
-				//AAIController_Minion* MinionController = Cast<AAIController_Minion>(GetController());
-				//MinionController->StopMovement();
-				SimulateMeleeStrike();
-		//	}
+			FRotator Rot = GetActorRotation();
+			FVector ToEnemyDir = OtherPawn->GetActorLocation() - GetActorLocation();
+			float angle = FMath::RadiansToDegrees(FMath::Atan2(ToEnemyDir.Y, ToEnemyDir.X));
+			Rot.Yaw = angle;
+			SetActorRotation(Rot);
 		}
+
+		else
+		{
+			AActor* OtherPawn = Cast<AActor>(HitActor);
+			if (MyTeamNum == Cast<ADungeon_Building>(OtherPawn)->GetTeamNum())
+				return;
+		}
+
+		//float angle = FMath::RadiansToDegrees(atan2(dx, dy)) - 90.0f;
+
+		LastMeleeAttackTime = GetWorld()->GetTimeSeconds();
+		SimulateMeleeStrike();
 	}
 }
 
@@ -331,5 +345,4 @@ void ACharacter_Minion::StopDie()
 void ACharacter_Minion::RePosition_IndianFile()
 {
 	UFormationManager* Formation = Cast<ANP4GameState>(GetWorld()->GetGameState())->FormationManager;
-
 }
