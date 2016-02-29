@@ -4,7 +4,7 @@
 #include "Character_Minion.h"
 #include "AIController_Minion.h"
 #include "MyPawnSensingComponent.h"
-
+#include "FormationManager.h"
 ACharacter_Minion::ACharacter_Minion()
 {
 	PrimaryActorTick.bCanEverTick = true;	
@@ -326,4 +326,10 @@ void ACharacter_Minion::ActionDie()
 void ACharacter_Minion::StopDie()
 {
 	
+}
+
+void ACharacter_Minion::RePosition_IndianFile()
+{
+	UFormationManager* Formation = Cast<ANP4GameState>(GetWorld()->GetGameState())->FormationManager;
+
 }

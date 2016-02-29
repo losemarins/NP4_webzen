@@ -3,6 +3,13 @@
 
 #pragma once
 
+struct IndianFile_Info
+{
+	/** current resources */
+	FVector Pos;
+	class ANP4CharacterBase* Character;
+};
+
 UENUM()
 enum class eItemID : uint8
 {

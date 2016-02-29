@@ -19,6 +19,7 @@ AAIController_Minion::AAIController_Minion(const FObjectInitializer& ObjectIniti
 	IsDie = "IsDie";
 	IsMove = "IsMove";
 	Strategy = "Strategy";
+	MoveLoc = "MoveLoc";
 }
 
 void AAIController_Minion::Possess(class APawn* InPawn)
@@ -104,5 +105,13 @@ void AAIController_Minion::SetStrategyType(uint8 type)
 	if (BlackboardComp)
 	{
 		BlackboardComp->SetValueAsEnum(Strategy, type);
+	}
+}
+
+void AAIController_Minion::SetMoveLoc(FVector Loc)
+{
+	if (BlackboardComp)
+	{
+		BlackboardComp->SetValueAsVector(MoveLoc, Loc);
 	}
 }
