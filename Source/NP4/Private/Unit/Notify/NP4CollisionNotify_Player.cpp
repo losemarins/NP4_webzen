@@ -38,28 +38,31 @@ void UNP4CollisionNotify_Player::Notify(USkeletalMeshComponent* MeshComp, UAnimS
 
 					pMyCast->GetWorld()->SweepMultiByObjectType(AllResult, Start, End, Qut,
 						FCollisionObjectQueryParams::AllObjects,
-						FCollisionShape::MakeBox(BoxExtent/2), Param);
+						FCollisionShape::MakeBox(BoxExtent), Param);
 
-					//for (int i = 0; i < AllResult.Num(); i++)
-					//{
-					//	if (AllResult[i].GetComponent()->GetName() == TEXT("MeleeCollision"))
-					//	{
-					//		ANP4CharacterBase* pCastOther = Cast<ANP4CharacterBase>(AllResult[i].GetActor());
+					for (int i = 0; i < AllResult.Num(); i++)
+					{
+						if (AllResult[i].GetComponent()->GetName() == TEXT("MeleeCollision"))
+						{
+							ANP4CharacterBase* pCastOther = Cast<ANP4CharacterBase>(AllResult[i].GetActor());
 
-					//		int32 id = pCastOther->GetUniqeID();
+							int32 id = pCastOther->GetUniqeID();
 
-					//		if (pCastOther->GetTeamNum() != pMyCast->GetTeamNum()
-					//			&& IsAlreadyActorInArray(id) == INDEX_NONE/* && pCastOther->IsHit*/)
-					//		{
-					//			FVector HitDir = pCastOther->GetActorLocation() - pMyCast->GetActorLocation();
-					//			HitDir.Normalize();
+							if (pCastOther->GetTeamNum() != pMyCast->GetTeamNum()
+								&& IsAlreadyActorInArray(id) == INDEX_NONE/* && pCastOther->IsHit*/)
+							{
+								FVector HitDir = pCastOther->GetActorLocation() - pMyCast->GetActorLocation();
+								HitDir.Normalize();
 
-					//			pCastOther->Damaged_Call(5);
-					//			PushAlreadyDamageArray(id);
-					//			pCastOther->ActionHit(HitDir);
-					//		}
-					//	}
-					//}
+								pCastOther->Damaged_Call(5);
+								PushAlreadyDamageArray(id);
+								pCastOther->ActionHit(HitDir);
+
+								//pCastOther->LaunchCharacter(pMyCast->GetActorForwardVector() * 100,true,true);
+								pCastOther->GetCharacterMovement()->AddImpulse(pMyCast->GetActorForwardVector() * 100);
+							}
+						}
+					}
 				}
 
 				else

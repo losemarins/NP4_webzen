@@ -26,6 +26,7 @@ ANP4HeroController::ANP4HeroController()
 	m_bUseCameraAction = false;
 	m_bActionCameraActive = false;
 	TargetActor = NULL;
+
 }
 
 void ANP4HeroController::SetupInputComponent()
@@ -107,7 +108,7 @@ void ANP4HeroController::Tick(float _DeltaTime)
 	else
 	{
 		if (m_pPossessCharacter)
-			m_pPossessCharacter->ZoomTickFunc(_DeltaTime, m_bZoomingIn);
+			ZoomTickFunc(_DeltaTime, m_bZoomingIn);
 	}
 	
 	//ÀÓ½Ã·Î
@@ -273,6 +274,28 @@ void ANP4HeroController::Lookup(float _AxisValue)
 		m_pPossessCharacter->AddControllerPitchInput(_AxisValue);
 	}
 }
+
+void ANP4HeroController::ZoomTickFunc(float _DeltaTime, bool _bZoomIn)
+{
+	//Ä«¸Þ¶ó ÁÜÀÎ,ÁÜ¾Æ¿ô
+	if (_bZoomIn)
+	{
+		m_ZoomFactor += _DeltaTime / 0.9f;         //0.5 ÃÊ¿¡ °ÉÃÄ ÁÜÀÎ
+	}
+	else
+	{
+		m_ZoomFactor -= _DeltaTime / 0.25f;        //0.25 ÃÊ¿¡ °ÉÃÄ ÁÜ¾Æ¿ô
+	}
+
+	float Min = 0.f;
+	float Max = 0.f;
+	m_pPossessCharacter->GetSpringArmLength(Max, Min);
+
+	m_ZoomFactor = FMath::Clamp<float>(m_ZoomFactor, 0.0f, 1.0f);
+	m_pPossessCharacter->GetCameraComponent()->FieldOfView = FMath::Lerp<float>(90.0f, 60.0f, m_ZoomFactor);
+	m_pPossessCharacter->GetSpringArmCompoennt()->TargetArmLength = FMath::Lerp<float>(Max, Min, m_ZoomFactor);
+}
+
 
 void ANP4HeroController::ZoomIn()
 {

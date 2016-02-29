@@ -37,6 +37,10 @@ public:
 	/* About Camera Check Value */
 	bool m_bMouseRightClk;
 	bool m_bZoomingIn;
+	float m_ZoomFactor;
+	
+
+
 	AActor* TargetActor; //나중에 델리게이트로 바꾸면서 삭제할거
 
 public:
@@ -53,6 +57,7 @@ public:
 	void Lookup(float AxisValue);
 	void ZoomIn();
 	void ZoomOut();
+	void ZoomTickFunc(float _DeltaTime, bool _bZoomIn);
 
 	/* About Mouse Right Clk Function */
 	void MouseRightClk();

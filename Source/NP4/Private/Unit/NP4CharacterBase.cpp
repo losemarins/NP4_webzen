@@ -18,6 +18,12 @@ ANP4CharacterBase::ANP4CharacterBase()
 	m_pCurrentEquipWeapon = NULL;
 }
 
+void ANP4CharacterBase::Tick(float _fDeltaTime)
+{
+	Super::Tick(_fDeltaTime);
+}
+
+
 void ANP4CharacterBase::SetTeamNum(uint8 NewTeamNum)
 {
 	MyTeamNum = NewTeamNum;

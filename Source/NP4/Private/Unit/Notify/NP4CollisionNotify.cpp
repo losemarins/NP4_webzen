@@ -74,6 +74,7 @@ void UNP4CollisionNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequence
 
 							PushAlreadyDamageArray(id);
 							pCastOther->ActionHit(HitDir);
+							pCastOther->LaunchCharacter(pMyCast->GetActorForwardVector() * 500, true, true);
 						}
 					}
 				}

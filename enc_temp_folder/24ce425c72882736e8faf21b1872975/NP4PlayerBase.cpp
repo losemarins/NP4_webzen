@@ -493,8 +493,6 @@ void ANP4PlayerBase::ActionAttack()
 			if(m_pPlayerState)
 				m_pPlayerState->SetPlayerState(eCharacterState::eAttack);
 			//Request_MakeActionCamera(ECameraValue::eAction_1, this, fAnimDuationVal);
-
-			//LaunchCharacter(GetActorForwardVector() * 1000,true,true);
 		}
 
 		else
