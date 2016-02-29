@@ -3,6 +3,7 @@
 #include "NP4.h"
 #include "NP4CollisionNotify.h"
 #include "NP4CharacterBase.h"
+#include "Dungeon_Building.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
 
 UNP4CollisionNotify::UNP4CollisionNotify()
@@ -53,28 +54,37 @@ void UNP4CollisionNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequence
 					{
 						ANP4CharacterBase* pCastOther = Cast<ANP4CharacterBase>(AllResult[i].GetActor());
 						
-						int32 id = pCastOther->GetUniqeID();
-
-						if (pCastOther->GetTeamNum() != pMyCast->GetTeamNum()
-							&& IsAlreadyActorInArray(id) == INDEX_NONE/* && pCastOther->IsHit*/)
+						if (pCastOther)
 						{
-							FVector HitDir = pCastOther->GetActorLocation() - pMyCast->GetActorLocation();
-							HitDir.Normalize();
+							int32 id = pCastOther->GetUniqeID();
 
+							if (pCastOther->GetTeamNum() != pMyCast->GetTeamNum()
+								&& IsAlreadyActorInArray(id) == INDEX_NONE/* && pCastOther->IsHit*/)
+							{
+								FVector HitDir = pCastOther->GetActorLocation() - pMyCast->GetActorLocation();
+								HitDir.Normalize();
+
+								float AttVal = pMyCast->GetDefaultAttackValue();
+								if (AttVal == 0)
+								{
+									//Create Error Message(AttackValue is Zero)
+								}
+
+								else
+								{
+									pCastOther->Damaged_Call(AttVal);
+								}
+
+								PushAlreadyDamageArray(id);
+								pCastOther->ActionHit(HitDir);
+								pCastOther->LaunchCharacter(pMyCast->GetActorForwardVector() * 500, true, true);
+							}	
+						}
+						else
+						{
+							ADungeon_Building*  pCastOther = Cast<ADungeon_Building>(AllResult[i].GetActor());
 							float AttVal = pMyCast->GetDefaultAttackValue();
-							if (AttVal == 0)
-							{
-								//Create Error Message(AttackValue is Zero)
-							}
-
-							else
-							{
-								pCastOther->Damaged_Call(AttVal);
-							}
-
-							PushAlreadyDamageArray(id);
-							pCastOther->ActionHit(HitDir);
-							pCastOther->LaunchCharacter(pMyCast->GetActorForwardVector() * 500, true, true);
+							//pCastOther->Damaged_Call(AttVal);
 						}
 					}
 				}

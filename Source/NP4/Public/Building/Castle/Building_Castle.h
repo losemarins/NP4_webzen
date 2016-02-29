@@ -19,6 +19,8 @@ class NP4_API ABuilding_Castle : public ADungeon_Building
 	
 private :
 	UAIDirector* AIDirector;
+	UPROPERTY(VisibleAnywhere, Category = "Hit")
+	USphereComponent* MeleeCollisionComp;
 
 public :
 	TSubclassOf<ANP4CharacterBase> CharClass;
@@ -31,6 +33,5 @@ public:
 	void OnGameplayStateChange(EGameplayState::Type NewState);
 	UAIDirector* GetAIDirector() const { return AIDirector; }
 	virtual void SetTeamNum(uint8 NewTeamNum);
-	//void SpawnMinions();
-	
+	void SetChannel(uint8 TeamNum);
 };

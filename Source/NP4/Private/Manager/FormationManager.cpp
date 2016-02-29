@@ -6,7 +6,7 @@
 
 UFormationManager::UFormationManager()
 {
-	ArraySize = 4;
+	ArraySize = 10;
 	Interval = 100;
 	IndianFile_Info Info;
 
@@ -58,4 +58,9 @@ TArray<IndianFile_Info> UFormationManager::GetIndianFileInfo()
 void UFormationManager::LineUp()
 {
 
+}
+
+uint8 UFormationManager::GetArraySize()
+{
+	return ArraySize * (ArraySize / 2);
 }

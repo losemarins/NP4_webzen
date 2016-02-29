@@ -74,7 +74,6 @@ void UNP4HeroMeleeAttackNotify::NotifyEnd(USkeletalMeshComponent * MeshComp, UAn
 
 		}
 	}
-	
 }
 
 

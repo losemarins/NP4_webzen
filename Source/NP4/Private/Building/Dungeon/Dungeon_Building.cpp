@@ -41,3 +41,7 @@ FPlayerData* ADungeon_Building::GetTeamData() const
 	return nullptr;
 }
 
+uint8 ADungeon_Building::GetTeamNum()
+{
+	return MyTeamNum;
+}
