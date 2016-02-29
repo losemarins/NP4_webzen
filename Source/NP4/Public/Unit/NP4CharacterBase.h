@@ -99,4 +99,7 @@ public:
 	virtual void StopHit();
 	virtual void ActionDie();
 	virtual void StopDie();
+
+	void NP4AddForce(FVector _vForceDir, float _fForceVal, float fForceTime);
+	virtual void Tick(float _fDeltaTime) override;
 };

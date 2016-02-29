@@ -77,3 +77,16 @@ ANP4ItemManager* ANP4GameState::GetItemLoadManager()
 {
 	return m_pItemLoadManager;
 }
+
+void ANP4GameState::InitMathManager()
+{
+	if (!m_pMathManager)
+	{
+		m_pMathManager = NewObject<UNP4MathManager>(UNP4MathManager::StaticClass());
+	}
+}
+
+UNP4MathManager* ANP4GameState::GetMathManager()
+{
+	return m_pMathManager;
+}

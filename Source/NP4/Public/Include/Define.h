@@ -11,6 +11,14 @@ struct IndianFile_Info
 };
 
 UENUM()
+enum class eSkillID : uint8
+{
+	eNone = 0,
+	eIcebolt = 1,
+	eFirebolt = 2
+};
+
+UENUM()
 enum class eItemID : uint8
 {
 	BlackTwoHandSword = 1,

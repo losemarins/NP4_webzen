@@ -25,5 +25,6 @@ public:
 	virtual void PostInitializeComponents() override;
 	ADungeon_Building(const FObjectInitializer& ObjectInitializer);
 	virtual void SetTeamNum(uint8 NewTeamNum);
+	uint8 GetTeamNum();
 	FPlayerData* GetTeamData() const;
 };

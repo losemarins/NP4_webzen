@@ -44,6 +44,7 @@ void ANP4GameMode::InitGameState()
 		// start the game!
 		GameState->StartGameplayStateMachine();
 		GameState->InitItemLoadManager();
+		GameState->InitMathManager();
 	}
 }
 

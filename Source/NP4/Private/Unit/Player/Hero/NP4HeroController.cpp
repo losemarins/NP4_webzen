@@ -12,20 +12,21 @@
 #include "FormationManager.h"
 #include "Character_Minion.h"
 #include "AIController_Minion.h"
+#include "AITypes.h"
+
 ANP4HeroController::ANP4HeroController()
 {
 	//ANP4PlayerController::ANP4PlayerController();
-	
 	PlayerCameraManagerClass = ANP4CameraManager::StaticClass();
 	//GetWorld()->SpawnActor<ANP4CharacterBase>(Owner->CharClass, Loc, Owner->GetActorRotation(), SpawnInfo);
 	
-
 	m_bZoomingIn = false;
 	m_bMouseRightClk = false;
 
 	m_bUseCameraAction = false;
 	m_bActionCameraActive = false;
 	TargetActor = NULL;
+
 }
 
 void ANP4HeroController::SetupInputComponent()
@@ -107,7 +108,7 @@ void ANP4HeroController::Tick(float _DeltaTime)
 	else
 	{
 		if (m_pPossessCharacter)
-			m_pPossessCharacter->ZoomTickFunc(_DeltaTime, m_bZoomingIn);
+			ZoomTickFunc(_DeltaTime, m_bZoomingIn);
 	}
 	
 	//ÀÓ½Ã·Î
@@ -274,6 +275,28 @@ void ANP4HeroController::Lookup(float _AxisValue)
 	}
 }
 
+void ANP4HeroController::ZoomTickFunc(float _DeltaTime, bool _bZoomIn)
+{
+	//Ä«¸Þ¶ó ÁÜÀÎ,ÁÜ¾Æ¿ô
+	if (_bZoomIn)
+	{
+		m_ZoomFactor += _DeltaTime / 0.9f;         //0.5 ÃÊ¿¡ °ÉÃÄ ÁÜÀÎ
+	}
+	else
+	{
+		m_ZoomFactor -= _DeltaTime / 0.25f;        //0.25 ÃÊ¿¡ °ÉÃÄ ÁÜ¾Æ¿ô
+	}
+
+	float Min = 0.f;
+	float Max = 0.f;
+	m_pPossessCharacter->GetSpringArmLength(Max, Min);
+
+	m_ZoomFactor = FMath::Clamp<float>(m_ZoomFactor, 0.0f, 1.0f);
+	m_pPossessCharacter->GetCameraComponent()->FieldOfView = FMath::Lerp<float>(90.0f, 60.0f, m_ZoomFactor);
+	m_pPossessCharacter->GetSpringArmCompoennt()->TargetArmLength = FMath::Lerp<float>(Max, Min, m_ZoomFactor);
+}
+
+
 void ANP4HeroController::ZoomIn()
 {
 	m_bZoomingIn = true;
@@ -409,12 +432,33 @@ void ANP4HeroController::Formation3()
 	//FVector_NetQuantize pos = GetSelectActor(MousePos).ImpactPoint;
 	TArray<class ANP4CharacterBase*> list = Formation->GetUnitList();
 	TArray<IndianFile_Info> Info = Formation->GetIndianFileInfo();
+	int j = 0;
 
 	for (int32 i = 0; i < list.Num(); i++)
 	{
 		Cast<AAIController_Minion>(list[i]->GetController())->SetStrategyType((uint8)EGameStrategy::Indian_File);
-		Info[i].Pos += m_pPossessCharacter->GetActorLocation();
-		Info[i].Pos.Z = 0;
-		Cast<AAIController_Minion>(list[i]->GetController())->SetMoveLoc(Info[i].Pos);
+
+		while (1)
+		{
+			if (i + j > Formation->GetArraySize())
+				break;
+
+			FVector Pos = Info[i + j].Pos;
+			Pos += m_pPossessCharacter->GetActorLocation();
+			Pos.Z = 0;
+			UNavigationSystem* NavSys = UNavigationSystem::GetCurrent(GetWorld());
+			const FNavAgentProperties& AgentProps = GetNavAgentPropertiesRef();
+			FNavLocation ProjectedLocation;
+
+			if (NavSys && !NavSys->ProjectPointToNavigation(Pos, ProjectedLocation, AgentProps.GetExtent(), &AgentProps))
+				j++;
+
+			else
+			{
+				Cast<ACharacter_Minion>(list[i])->AttackInvalidate();
+				Cast<AAIController_Minion>(list[i]->GetController())->SetMoveLoc(Pos);
+				break;
+			}
+		}
 	}
 }

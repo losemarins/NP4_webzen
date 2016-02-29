@@ -5,6 +5,7 @@
 #include "GameFramework/GameState.h"
 #include "Define.h"
 #include "NP4ItemManager.h"
+#include "NP4MathManager.h"
 #include "NP4GameState.generated.h"
 
 /**
@@ -23,6 +24,7 @@ public:
 	EGameplayState::Type GameplayState;
 	//아이템에 대한 정보를 가지고 있는 로드 매니저.
 	ANP4ItemManager* m_pItemLoadManager;
+	UNP4MathManager* m_pMathManager;
 
 	// 게임의 난이도를 설정
 	void SetGameDifficulty(EGameDifficulty::Type NewDifficulty);
@@ -39,6 +41,9 @@ public:
 	//아이템 로드 매니저 Init & Get
 	void InitItemLoadManager();
 	ANP4ItemManager* GetItemLoadManager();
+	//수학 관련 매니저 Init
+	void InitMathManager();
+	UNP4MathManager* GetMathManager();
 	
 protected:
 	// @todo, get rid of mutable?
